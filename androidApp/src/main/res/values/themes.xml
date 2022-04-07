@@ -1,0 +1,56 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Messenger" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorBlue</item>
+        <item name="colorPrimaryVariant">@color/colorBlue2</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorBlue2</item>
+        <item name="colorSecondaryVariant">@color/colorBlue2</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark2BlueColor</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Messenger.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DriverLicense.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DriverLicense.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TopBarStyle">
+        <item name="background">@color/dark2BlueColor</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
+    <style name="Theme.Messenger.ProgressBar">
+        <item name="colorPrimary">@color/greenMainText</item>
+        <item name="colorPrimaryVariant">@color/greenMainText</item>
+        <item name="colorOnPrimary">@color/greenMainText</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/greenMainText</item>
+        <item name="colorSecondaryVariant">@color/greenMainText</item>
+        <item name="colorOnSecondary">@color/greenMainText</item>
+    </style>
+
+    <style name="TopBarLogoStyle">
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">12dp</item>
+        <item name="android:scaleType">fitStart</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="Theme.Messenger.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Messenger.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sirius-sdk-kotlin-jvm-1.0-SNAPSHOT">
+    <output-path>E:\Repository\SocialSiriusMessenger\sirius-sdk-kotlin\build\libs</output-path>
+    <root id="archive" name="sirius-sdk-kotlin-jvm-1.0-SNAPSHOT.jar">
+      <element id="module-output" name="SocialSiriusMessenger.sirius-sdk-kotlin.jvmMain" />
+    </root>
+  </artifact>
+</component>

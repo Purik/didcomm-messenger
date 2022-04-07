@@ -1,0 +1,20 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="common_gap_16">16dp</dimen>
+    <dimen name="common_gap_1">1dp</dimen>
+    <dimen name="common_gap_8">8dp</dimen>
+    <dimen name="common_gap_32">32dp</dimen>
+    <dimen name="common_gap_24">24dp</dimen>
+    <dimen name="common_gap_64">64dp</dimen>
+    <dimen name="common_gap_40">40dp</dimen>
+    <dimen name="common_gap_48">48dp</dimen>
+    <dimen name="common_button_size">56dp</dimen>
+    <dimen name="calculator_button_size">56dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+
+
+</resources>

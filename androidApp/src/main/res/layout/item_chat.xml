@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground">
+
+    <com.socialsirius.messenger.design.AvatarView
+        android:id="@+id/avatarImageView"
+        android:layout_width="@dimen/common_gap_40"
+        android:layout_height="@dimen/common_gap_40"
+        app:mode="large"
+        app:showStatus="true"
+        android:layout_marginBottom="@dimen/common_gap_16"
+        android:layout_marginTop="@dimen/common_gap_16"
+        android:layout_marginStart="@dimen/common_gap_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/topContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="@dimen/common_gap_8"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginStart="@dimen/common_gap_16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/timeTextView"
+        app:layout_constraintBottom_toTopOf="@+id/senderTextView"
+        app:layout_constraintStart_toEndOf="@+id/avatarImageView">
+
+        <TextView
+            android:id="@+id/nameTextView"
+            style="@style/Headline6"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            tools:text="Jessica jhgjsdfsdfdsfdsfsdfsdf"
+
+            android:lines="1"/>
+
+        <ImageView
+            android:id="@+id/mutedImageView"
+            android:layout_width="@dimen/common_gap_16"
+            android:layout_height="@dimen/common_gap_16"
+            android:src="@drawable/ic_mute"
+            android:scaleType="fitXY"
+            android:layout_marginStart="@dimen/common_gap_8"/>
+
+        <ImageView
+            android:id="@+id/lockedImageView"
+            android:layout_width="@dimen/common_gap_16"
+            android:layout_height="@dimen/common_gap_16"
+            android:src="@drawable/ic_lock"
+            android:scaleType="fitXY"
+            android:layout_marginStart="@dimen/common_gap_8"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/timeTextView"
+
+        android:textColor="@color/hintColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="now"
+        android:lines="1"
+        android:layout_marginEnd="@dimen/common_gap_16"
+        app:layout_constraintTop_toTopOf="@+id/topContainer"
+        app:layout_constraintBottom_toBottomOf="@+id/topContainer"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/senderTextView"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Jessica:"
+        android:lines="1"
+        app:layout_constraintTop_toBottomOf="@+id/topContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/topContainer"/>
+
+    <ImageView
+        android:id="@+id/typingImageView"
+        android:layout_width="@dimen/common_gap_16"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_typing"
+        android:scaleType="fitXY"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/senderTextView"
+        app:layout_constraintTop_toTopOf="@+id/senderTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/senderTextView"/>
+
+    <TextView
+        android:id="@+id/senderMessageTextView"
+        style="@style/Body2"
+        android:textColor="@color/hintColor"
+        android:layout_width="0dp"
+        android:ellipsize="end"
+        android:layout_height="wrap_content"
+        tools:text="JK hkjsdhf sh dfkjhs jhd dfd fgd jhk jds dfkj fdsf"
+        android:layout_marginEnd="@dimen/common_gap_16"
+        android:lines="1"
+        app:layout_constraintTop_toTopOf="@+id/senderTextView"
+        app:layout_constraintEnd_toStartOf="@+id/messageStatusView"
+        app:layout_constraintStart_toEndOf="@+id/typingImageView"/>
+
+
+    <LinearLayout
+        android:id="@+id/messageStatusView"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/common_gap_16"
+        android:layout_marginStart="@dimen/common_gap_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/senderMessageTextView"
+        app:layout_constraintTop_toTopOf="@+id/senderMessageTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/senderMessageTextView">
+
+        <TextView
+            android:id="@+id/unreadTextView"
+            style="@style/Body2"
+            android:textColor="@color/backgroundColor"
+            android:background="@drawable/bg_accent_rounded_button_disabled"
+            android:layout_width="wrap_content"
+            android:paddingStart="5.5dp"
+            android:paddingEnd="5.5dp"
+            android:layout_height="wrap_content"
+            tools:text="3"
+            android:lines="1"/>
+
+        <ImageView
+            android:id="@+id/sentStatusImageView"
+            android:layout_width="@dimen/common_gap_16"
+            android:layout_height="@dimen/common_gap_16"
+            android:src="@drawable/ic_sent_and_read"
+            android:visibility="gone"
+            android:scaleType="fitXY"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/lightDividerColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

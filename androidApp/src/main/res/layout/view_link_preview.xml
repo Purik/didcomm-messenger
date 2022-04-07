@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:minWidth="200dp"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/lineView"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@color/defaultColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginEnd="@dimen/common_gap_8"
+        android:layout_marginStart="@dimen/common_gap_16"
+        app:layout_constraintEnd_toStartOf="@+id/logoView"
+        app:layout_constraintStart_toEndOf="@id/lineView"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/headerTextView"
+            style="@style/Subtitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            tools:text="Header!" />
+
+        <TextView
+            android:id="@+id/descTextView"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lines="2"
+            android:maxLines="2"
+            android:textColor="@color/hintColor"
+            tools:text="bjhsdk skg dkgk dgdfgdjgkjfkgdl kfjgdl fjgdkfgj ldfkgjd lkgjlkfdjg dk jgkldjflkg jdfkgjldkj gldkfjg ldkfjgdkfjglk dhkshglk glsdjglsjdl gjsldgjslkdjgl!" />
+
+        <TextView
+            android:id="@+id/linkTextView"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_gap_8"
+            android:singleLine="true"
+            android:autoLink="all"
+            android:textColorLink="@color/defaultColor"
+            android:maxLines="1"
+            android:textColor="@color/defaultColor"
+            tools:text="http://hhh.sdfsdf" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/logoView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        tools:background="@color/defaultColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

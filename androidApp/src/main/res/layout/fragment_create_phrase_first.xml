@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseFirstViewModel" />
+    </data>
+    <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                   xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:tint="@color/colorPrimary"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_data_backup"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Bold22"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:text="@string/auth_tutorial_phrase_title"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Regular16"
+            android:text="@string/auth_tutorial_create_text"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Regular16"
+            android:layout_marginTop="8dp"
+            android:text="@string/auth_tutorial_create_phrase_hint"/>
+
+        <TextView
+            android:id="@+id/nextBtn"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:layout_margin="32dp"
+            style="@style/AccentButtonRoundedBigCorners"
+            android:onClick="@{viewModel::onStartClick}"
+            android:text="@string/auth_btn_phrase"
+            />
+
+
+    </LinearLayout>
+</layout>

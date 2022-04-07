@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.socialsirius.messenger.ui.inviteUser.InviteUserViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
+
+    <!--    <LinearLayout
+            android:id="@+id/topView"
+            style="@style/TopBarStyle"
+            android:background="@color/backgroundColor"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                style="@style/BackButton"
+                android:src="@drawable/ic_close"
+                android:layout_width="@dimen/common_button_size"
+                android:layout_height="@dimen/common_button_size"
+                android:onClick="@{viewModel::onBackButtonClick}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_button_size"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/groupNameTextView"
+                    style="@style/Headline6"
+                    android:focusedByDefault="true"
+                    android:focusableInTouchMode="true"
+                    android:focusable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialog_invite" />
+
+            </LinearLayout>
+
+        </LinearLayout>-->
+
+        <TextView
+            android:id="@+id/qrCodeHint"
+            style="@style/Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_gap_24"
+            android:text="@string/scan_qrcode_hint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        
+        <ImageView
+            android:id="@+id/qrCodeImageView"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="@dimen/common_gap_16"
+            app:layout_constraintTop_toBottomOf="@+id/qrCodeHint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/shareButton"
+            style="@style/AccentButton"
+            android:text="@string/send_share"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="24dp"
+            android:onClick="@{viewModel::onShareButtonClick}"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

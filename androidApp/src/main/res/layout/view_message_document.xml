@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="@dimen/common_gap_40"
+        android:layout_height="@dimen/common_gap_40"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="50"
+        android:background="@drawable/bg_progress_circle_background"
+        android:progressDrawable="@drawable/bg_progress_circle_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/documentIcon"
+        android:layout_width="@dimen/common_gap_24"
+        android:layout_height="@dimen/common_gap_24"
+        android:padding="4dp"
+        app:tint="@color/defaultColor"
+        android:src="@drawable/ic_file"
+        app:layout_constraintTop_toTopOf="@+id/progressBar"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"/>
+
+    <ImageView
+        android:id="@+id/progressIcon"
+        android:layout_width="@dimen/common_gap_24"
+        android:layout_height="@dimen/common_gap_24"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:tint="@color/defaultColor"
+        app:layout_constraintTop_toTopOf="@+id/progressBar"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"/>
+
+    <TextView
+        style="@style/Subtitle1"
+        android:id="@+id/documentName"
+        android:layout_width="wrap_content"
+        android:maxWidth="180dp"
+        android:layout_height="wrap_content"
+        tools:text="274 hjskf jksdhkj kjfgkdfjglk jg ldjfgkgjlkfgjl dfkgjf"
+        app:layout_constraintStart_toEndOf="@+id/documentIcon"
+        android:layout_marginStart="@dimen/common_gap_16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

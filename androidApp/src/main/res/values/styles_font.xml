@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="FontRegular">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="FontMedium">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+
+    <style name="FontBold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="FontSFBold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FontSFMedium">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+
+</resources>

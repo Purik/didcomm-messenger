@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_create_group"
+            android:icon="@drawable/nav_create_group"
+            android:title="@string/menu_group" />
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/nav_contact"
+            android:title="@string/menu_contacts" />
+        <item
+            android:id="@+id/nav_calls"
+            android:icon="@drawable/nav_callse"
+            android:title="@string/menu_calls" />
+
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/nav_favorite"
+            android:title="@string/menu_favorites" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/nav_settings"
+            android:title="@string/menu_settings" />
+
+        <item
+            android:id="@+id/nav_invite"
+            android:icon="@drawable/nav_add_contact"
+            android:title="@string/menu_invite" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/nav_about"
+            android:title="@string/menu_about" />
+    </group>
+</menu>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.socialsirius.messenger.design.chat.PlayButtonView
+        android:id="@+id/playButtonView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:whiteBackground="false" />
+
+    <ProgressBar
+        android:id="@+id/progressBarDownload"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="50"
+        android:visibility="gone"
+        android:background="@drawable/bg_progress_circle_background"
+        android:progressDrawable="@drawable/bg_progress_circle_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <com.socialsirius.messenger.design.PlayerVisualizerSeekbar
+        android:id="@+id/seekBarV"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/playButtonView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ProgressBar
+        android:progressDrawable="@drawable/bg_audio_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:progress="0"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        app:layout_constraintStart_toStartOf="@+id/seekBarV"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarV"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarV"/>
+
+    <TextView
+        android:id="@+id/audioProgressTextView"
+
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintStart_toStartOf="@+id/seekBar"
+        tools:text="10:33"/>
+
+    <TextView
+        android:id="@+id/audioTotalTextView"
+
+        android:layout_marginTop="2dp"
+        android:textColor="@color/hintColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar"
+        tools:text="10:36"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:visibility="gone"
+        android:progress="68"
+        android:background="@drawable/bg_progress_circle_background"
+        android:progressDrawable="@drawable/bg_progress_circle_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/playButtonView"
+        app:layout_constraintStart_toStartOf="@+id/playButtonView"
+        app:layout_constraintEnd_toEndOf="@+id/playButtonView"
+        app:layout_constraintTop_toTopOf="@+id/playButtonView" />
+
+    <ImageView
+        android:id="@+id/progressIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:tint="@color/defaultColor"
+        app:layout_constraintTop_toTopOf="@+id/progressBar"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

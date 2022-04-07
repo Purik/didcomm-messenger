@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PageIndicator">
+        <attr name="indicatorSize" format="dimension" />
+        <attr name="indicatorSelectedSize" format="dimension" />
+        <attr name="indicatorSpacing" format="dimension" />
+        <attr name="indicatorColor" format="color" />
+        <attr name="indicatorSelectedColor" format="color" />
+    </declare-styleable>
+
+
+    <declare-styleable name="IndicatorView">
+        <attr name="ivFilledColor" format="color" />
+        <attr name="ivErrorColor" format="color" />
+        <attr name="ivCountFilled" format="integer" />
+        <attr name="ivCountAll" format="integer" />
+        <attr name="ivIndicatorPadding" format="dimension" />
+        <attr name="ivIndicatorEmptySize" format="dimension" />
+        <attr name="ivIndicatorFilledSize" format="dimension" />
+        <attr name="ivStroke" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="AvatarView">
+        <attr name="showStatus" format="boolean" />
+        <attr name="ownerStatus" format="boolean" />
+        <attr name="showBorders" format="boolean" />
+        <attr name="borderColorAvatar" format="color" />
+        <attr name="mode" format="enum">
+            <enum name="large" value="0" />
+            <enum name="medium" value="1" />
+            <enum name="small" value="2" />
+            <enum name="extraLarge" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="UsersPackView">
+        <attr name="maxCount" format="integer" />
+        <attr name="showOwner" format="boolean" />
+        <attr name="packMode" format="enum">
+            <enum name="leftToRight" value="0" />
+            <enum name="rightToLeft" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PlayButtonView">
+        <attr name="whiteBackground" format="boolean" />
+    </declare-styleable>
+</resources>

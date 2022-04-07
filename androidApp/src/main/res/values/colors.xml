@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue2">#A8B4D1</color>
+    <color name="colorPrimary">#000743</color>
+    <color name="colorBlueLight">#5c71b3</color>
+    <color name="colorBlue">#5c71b3</color>
+    <color name="colorBlue2">#3b4663</color>
+
+    <color name="grey">#E4E4E4</color>
+    <color name="grey3">#D2D2D2</color>
+    <color name="red">#C64A34</color>
+    <color name="blue">#12145A</color>
+    <color name="yellow">#F0BE53</color>
+
+    <color name="green">#6FCF97</color>
+
+    <color name="defaultColor">#000743</color>
+    <color name="defaultColor_10">#AA000743</color>
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundColorWithAlpha">#BBFFFFFF</color>
+    <color name="hintColor">#8DA1BE</color>
+    <color name="disableColor">#DADADA</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="blue_light">#50acd2</color>
+    <color name="grey2">#c9c9ca</color>
+
+    <color name="lightDividerColor">#10212121</color>
+    <color name="dividerColor">#9194AC</color>
+    <color name="cardConnectionCredentials">#53366C</color>
+
+    <color name="errorColor">#B00020</color>
+    <color name="darkBlueColor">#181c2f</color>
+    <color name="dark1BlueColor">#20263f</color>
+    <color name="dark2BlueColor">#20255a</color>
+    <color name="grayText">#5d6177</color>
+    <color name="redBackText">#fff2ee</color>
+    <color name="redMainText">#ff5e2b</color>
+    <color name="yellowBackText">#fffaea</color>
+    <color name="yellowMainText">#ffc206</color>
+    <color name="greenBackText">#f9fcf6</color>
+    <color name="greenMainText">#a5d175</color>
+    <color name="grayBackText">#f2f4fe</color>
+    <color name="blueText">#20263f</color>
+
+
+    <color name="userViolet">#ba68c8</color>
+    <color name="userRed">#EB5757</color>
+    <color name="userYellow">#F2C94C</color>
+</resources>

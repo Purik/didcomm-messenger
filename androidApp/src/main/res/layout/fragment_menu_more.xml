@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.socialsirius.messenger.ui.more.MenuMoreViewModel" />
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/backgroundColor">
+
+        <LinearLayout
+            android:id="@+id/topView"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/backgroundColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                style="@style/TopBarLogoStyle"
+                android:id="@+id/logoView"
+                android:layout_weight="1" />
+
+            <ImageButton
+                style="@style/NotAccentButton"
+                android:layout_width="@dimen/common_gap_48"
+                android:layout_height="56dp"
+                android:onClick="@{viewModel::onSettingsButtonClick}"
+                android:src="@drawable/ic_settings" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                
+                <com.socialsirius.messenger.design.AvatarView
+                    android:id="@+id/avatarView"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:onClick="@{viewModel::onAvatarClick}"
+                    app:mode="extraLarge" />
+
+                <TextView
+                    android:id="@+id/nameView"
+                    style="@style/Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_gap_16"
+                    tools:text="KJShdkjsa hdsjkakhdJSHkjdha"/>
+
+                <TextView
+                    android:id="@+id/nicknameView"
+                    style="@style/Body1"
+                    android:textColor="@color/hintColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_gap_8"
+                    tools:text="KJShdkjsa"/>
+
+                <TextView
+                    android:id="@+id/phoneView"
+                    style="@style/Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="KJShdkjsa hdsjkakhdJSHkjdha"
+                    android:layout_marginBottom="@dimen/common_gap_24"/>
+
+                <TextView
+                    android:id="@+id/lastConnectionsPlaceholder"
+                    style="@style/Body2"
+                    android:textColor="@color/hintColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                   />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

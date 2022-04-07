@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="Bold12" parent="FontBold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <style name="Medium8" parent="FontMedium">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+
+    <style name="Medium12" parent="FontMedium">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+    <style name="Regular8" parent="FontRegular">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="Regular14" parent="FontRegular">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/hintColor</item>
+        <item name="itemTextColor">@color/hintColor</item>
+
+    </style>
+
+    <style name="Regular14Inactive" parent="Regular14">
+        <item name="android:textColor">@color/yellow</item>
+        <item name="itemTextColor">@color/yellow</item>
+    </style>
+
+    <style name="Regular14Active" parent="Regular14">
+        <item name="android:textColor">@color/yellow</item>
+    </style>
+
+    <style name="Regular15" parent="FontRegular">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/defaultColor</item>
+    </style>
+    <style name="Regular16" parent="FontRegular">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/defaultColor</item>
+    </style>
+
+    <style name="Regular19" parent="FontRegular">
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/defaultColor</item>
+    </style>
+
+    <style name="Regular18" parent="FontRegular">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/defaultColor</item>
+    </style>
+
+    <style name="Bold22" parent="FontBold">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/defaultColor</item>
+    </style>
+
+
+    <style name="SFBold15" parent="FontSFBold">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="SFMedium12" parent="FontSFBold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CommonText">
+        <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/defaultColor</item>
+    </style>
+
+    <style name="Button" parent="CommonText">
+
+        <item name="android:textSize">17sp</item>
+        <item name="android:background">@color/transparent</item>
+
+
+    </style>
+
+    <style name="Body2" parent="CommonText">
+
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">10sp</item>
+    </style>
+
+    <style name="AccentButton" parent="Button">
+        <item name="android:layout_height">17sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_accent_button</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+    </style>
+
+
+    <style name="NotAccentButton" parent="AccentButton">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/selector_calc_button</item>
+    </style>
+
+    <style name="BackButton" parent="NotAccentButton">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/defaultColor</item>
+        <item name="android:src">@drawable/ic_arrow_back</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="AccentButtonRoundedCorners" parent="AccentButton">
+        <item name="android:background">@drawable/selector_accent_rounded_button</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+        <item name="android:minWidth">190dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+    <style name="AccentButtonRoundedBigCorners" parent="AccentButton">
+        <item name="android:background">@drawable/bg_accent_rounded_button_big_corners</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+    <style name="Subtitle1" parent="CommonText">
+
+        <item name="android:textSize">@dimen/subtitle1_size</item>
+        <item name="android:lineSpacingExtra">@dimen/subtitle1_line_spacing</item>
+    </style>
+
+    <style name="Subtitle2" parent="CommonText">
+
+        <item name="android:textSize">@dimen/subtitle2_size</item>
+        <item name="android:lineSpacingExtra">@dimen/subtitle2_line_spacing</item>
+    </style>
+
+    <style name="Body1" parent="CommonText">
+
+        <item name="android:textSize">@dimen/body1_text_size</item>
+        <item name="android:lineSpacingExtra">@dimen/body1_text_line_spacing</item>
+    </style>
+
+    <style name="Headline6" parent="CommonText">
+        <item name="android:textSize">@dimen/headline6_size</item>
+        <item name="android:lineSpacingExtra">@dimen/headline6_line_spacing</item>
+    </style>
+
+
+    <style name="RoundImageCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CalculatorButton" parent="Headline4">
+        <item name="android:background">@drawable/selector_calc_button</item>
+        <item name="android:textColor">@color/selector_calc_button</item>
+        <item name="android:tint">@color/selector_calc_button</item>
+        <item name="android:layout_height">@dimen/calculator_button_size</item>
+        <item name="android:layout_width">@dimen/calculator_button_size</item>
+    </style>
+
+    <style name="Headline4" parent="CommonText">
+
+        <item name="android:textSize">@dimen/headline4_size</item>
+        <item name="android:lineSpacingExtra">@dimen/headline4_line_spacing</item>
+    </style>
+
+</resources>

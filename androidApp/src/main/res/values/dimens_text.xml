@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="headline1_size">96sp</dimen>
+    <dimen name="headline1_line_spacing">16sp</dimen>
+
+    <dimen name="headline2_size">60sp</dimen>
+    <dimen name="headline2_line_spacing">12sp</dimen>
+
+    <dimen name="headline3_size">48sp</dimen>
+    <dimen name="headline3_line_spacing">8sp</dimen>
+
+    <dimen name="headline4_size">34sp</dimen>
+    <dimen name="headline4_line_spacing">2sp</dimen>
+
+    <dimen name="headline5_size">24sp</dimen>
+    <dimen name="headline5_line_spacing">0sp</dimen>
+
+    <dimen name="headline6_size">20sp</dimen>
+    <dimen name="headline6_line_spacing">4sp</dimen>
+
+    <dimen name="subtitle1_size">16sp</dimen>
+    <dimen name="subtitle1_line_spacing">8sp</dimen>
+
+    <dimen name="subtitle2_size">14sp</dimen>
+    <dimen name="subtitle2_line_spacing">10sp</dimen>
+
+    <dimen name="body1_text_size">16sp</dimen>
+    <dimen name="body1_text_line_spacing">8sp</dimen>
+
+    <dimen name="body2_text_size">14sp</dimen>
+    <dimen name="body2_text_line_spacing">10sp</dimen>
+
+    <dimen name="button_text_size">14sp</dimen>
+    <dimen name="button_text_line_spacing">2sp</dimen>
+
+    <dimen name="caption_size">12sp</dimen>
+    <dimen name="caption_line_spacing">4sp</dimen>
+
+    <dimen name="overline_size">10sp</dimen>
+    <dimen name="overline_line_spacing">6sp</dimen>
+
+</resources>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.socialsirius.messenger.design.AvatarView
+        android:id="@+id/avatarImageView"
+        android:layout_width="@dimen/common_gap_32"
+        android:layout_height="@dimen/common_gap_32"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/mainView"
+        app:layout_constraintStart_toEndOf="@+id/leftSpace"
+        app:mode="medium"
+        app:showStatus="false" />
+
+    <Space
+        android:id="@+id/avatarSpace"
+        android:layout_width="@dimen/common_gap_8"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/mainView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/rightSpace"
+        app:layout_constraintStart_toEndOf="@+id/avatarSpace"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/mainPanelView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_message_rounded_left_corner"
+            android:longClickable="true"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/common_gap_16"
+            android:paddingTop="@dimen/common_gap_8"
+            android:paddingEnd="@dimen/common_gap_16"
+            android:paddingBottom="@dimen/common_gap_8">
+
+            <TextView
+                android:id="@+id/userNameTextView"
+                style="@style/Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                tools:text="Lacy Liss" />
+
+            <ImageView
+                android:id="@+id/typingImageView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_gap_8"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_typing"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/messageTextView"
+                style="@style/Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Lsdkfjlks djf  sdkfsjss" />
+
+            <TextView
+                android:id="@+id/messageCommentTextView"
+
+                android:textColor="@color/hintColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                tools:text="Lsdkfjlks djf  sdkfsjss" />
+            <LinearLayout
+                android:id="@+id/messageExpireLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:id="@+id/messageExpireTitleTextView"
+                    style="@style/Body1"
+                    android:textColor="@color/hintColor"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+
+                    android:layout_height="wrap_content"
+                    tools:text="expireTi" />
+                <TextView
+                    android:id="@+id/messageExpireTimeTextView"
+                    style="@style/Body1"
+
+                    android:layout_marginLeft="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="11:22" />
+            </LinearLayout>
+
+
+            <com.socialsirius.messenger.design.chat.LinkPreviewView
+                android:id="@+id/linkPreviewView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+            <WebView
+                android:id="@+id/htmlView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none" />
+
+            <com.socialsirius.messenger.design.chat.VideoImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageVideoView"/>
+       <!--     <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/photoImageView"
+                    android:layout_width="250dp"
+                    android:layout_height="170dp"
+                    android:background="@color/dividerColor"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:id="@+id/playBtn"
+                    android:layout_width="@dimen/common_gap_80"
+                    android:layout_height="@dimen/common_gap_80"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_play_circle_light"
+                    android:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/bg_progress_circle_background"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:layout_gravity="center"
+                    android:progress="68"
+                    android:progressDrawable="@drawable/bg_progress_circle_dark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="visible"/>
+
+                <ImageView
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:padding="20dp"
+                    android:src="@drawable/ic_close"
+                    android:visibility="visible" />
+            </FrameLayout>-->
+
+
+            <FrameLayout
+                android:id="@+id/audioView"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_gap_8" />
+
+            <com.socialsirius.messenger.design.chat.DocumentMessageView
+                android:id="@+id/fileView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/messageStatusView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_gap_8"
+        android:layout_marginBottom="@dimen/common_gap_8"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/mainView"
+        app:layout_constraintStart_toStartOf="@+id/mainView"
+        app:layout_constraintTop_toBottomOf="@+id/mainView">
+
+        <ImageView
+            android:id="@+id/messageStatusImageView"
+            android:layout_width="@dimen/common_gap_16"
+            android:layout_height="@dimen/common_gap_16"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_sent_and_read" />
+
+        <TextView
+            android:id="@+id/messageStatus2TextView"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hintColor"
+            android:visibility="visible"
+            tools:text="10:35" />
+
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/rightSpace"
+        android:layout_width="@dimen/common_gap_40"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Space
+        android:id="@+id/leftSpace"
+        android:layout_width="@dimen/common_gap_40"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

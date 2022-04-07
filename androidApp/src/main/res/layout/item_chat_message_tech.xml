@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/common_gap_16"
+    android:paddingLeft="@dimen/common_gap_64"
+    android:paddingRight="@dimen/common_gap_64"
+    android:paddingTop="@dimen/common_gap_16">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rounded_second_16"
+        android:paddingEnd="@dimen/common_gap_16"
+        android:paddingTop="@dimen/common_gap_8"
+        android:paddingBottom="@dimen/common_gap_8"
+        android:paddingStart="@dimen/common_gap_16">
+
+        <TextView
+            android:id="@+id/techTextView"
+            style="@style/Body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/backgroundColor"
+            tools:text="kjshf jdshfkjsdhfks jdhfiushkd jfhkjsdhfiu dhsjkjnsbdfsdfb kjsdbf" />
+
+        <TextView
+            android:id="@+id/timeTechTextView"
+
+            android:textColor="@color/backgroundColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:layout_gravity="end"
+            tools:text="25.10" />
+
+    </LinearLayout>
+
+</FrameLayout>

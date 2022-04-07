@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SocialSirius Messenger</string>
+    <string name="ok_button">ok</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+
+    <string name="messenger">Messenger</string>
+    <string name="tutorial_start">Get started</string>
+    <string name="tutorial_title_1">Welcome aboard!</string>
+    <string name="tutorial_text_1">Social Sirius Messenger - is a new way to connect people. This is the messenger with unlimited storage of your secrets, with absolutely anonymous without phone, email or other confirmation.</string>
+    <string name="tutorial_title_2">Data Protection</string>
+    <string name="tutorial_text_2">All your data is only yours! We dont have access to any data your share - text, image, video or any other files. Why?</string>
+    <string name="tutorial_title_3">No cloud or server transaction</string>
+    <string name="tutorial_text_3">We dont use cloud or server storage for your data. All your data is on your phone. Only peer-to-peer encrypted connection between participants. Only you has access to your data. Prove?</string>
+    <string name="tutorial_title_4">Open Sourced</string>
+    <string name="tutorial_text_4">We have nothing to hide. All our code is open sourced. You can check yourself or read more about us on Web. If you interested in check our website or source code </string>
+
+    <string name="auth_first_title">Introduce yourself</string>
+    <string name="auth_first_title_hint">Please, introduce yourself. This name will be visible to other people in our system</string>
+
+    <string name="auth_btn_start_chat">Start chat</string>
+    <string name="auth_btn_phrase">Continue</string>
+    <string name="auth_btn_phrase_show_now">Show now</string>
+
+    <string name="auth_tutorial_phrase_title">Make a backup of your wallet now!</string>
+
+    <string name="auth_tutorial_create_text">On the next step you will see 12 words, this is the passphrase of your wallet, please save it somewhere in secure place.</string>
+    <string name="auth_tutorial_create_phrase_hint">To make it easier for you, we will create a code that you can save and read  later in the application to restore your wallet </string>
+
+    <string name="auth_tutorial_phrase_title2">Your secret passpharse</string>
+    <string name="auth_tutorial_phrase_text2">Write or copy yhis words in right order and save it in secure place</string>
+
+    <string name="all_chats_hint">Start to chat here</string>
+
+    <string name="all_chats_hint_start_chat_or">or</string>
+    <string name="all_chats_hint_start_invite">Invite user</string>
+    <string name="all_chats_hint_start_scan_qr">Scan QR</string>
+    <string name="all_chats_hint_button">New chat</string>
+    <string name="message">Message</string>
+    <string name="user_profile">Profile</string>
+    <string name="user_start_chat">Start chat</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="alert_confirm">Confirm</string>
+    <string name="lock_screen_title_pf_not_created_wallet">Create a PIN code for the secure store</string>
+    <string name="request_add_to_contact">%s is not in your list of contacts. Want to add %s to your contact list?</string>
+    <string name="lock_screen_title_pf_not_created_wallet_hint">Remember this code, without it you won’t be able to access your sensitive data stored in the secure storage</string>
+    <string name="lock_screen_title_try_count_pf">Attempts left: </string>
+    <string name="exit">Logout</string>
+    <string name="lock_screen_title_pf">Input pin code</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="drawer_accaunt">Account</string>
+    <string name="profile_public">Public account</string>
+    <string name="user_sync_contacts">Sync contacts</string>
+    <string name="update_notifications">Notifications</string>
+    <string name="settings_new_message">New message</string>
+    <string name="settings_reminder_task">Task reminder</string>
+    <string name="navigation_organizier">Organizer</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_safety">Security</string>
+    <string name="change_pin">Change pin</string>
+    <string name="ask_pin">Ask pin code</string>
+    <string name="delete_wallet_and_create">Delete and create new secure storage</string>
+    <string name="backup_wallet_and_messages">Backup secure storage and messages</string>
+    <string name="settings_backup_and_restore">Backup and restore</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="user_logout_are_you_sure">Do you really want to exit this profile?</string>
+    <string name="settings_delete_wallet">Your current secret storage with all data will be deleted and a new one will be created instead</string>
+    <string name="settings_restore_wallet_hint">When restoring from a backup, your current secret storage with all data will be deleted and a new one with data from the backup will be created.</string>
+    <string name="never">Never</string>
+    <string name="lastname">Last Name</string>
+    <string name="periodic_backup">Do backup </string>
+    <string name="restore_wallet_and_messages">Restore secure storage and messages from backup</string>
+    <string name="remind_after">Remind me after</string>
+    <string name="profile_application">Application</string>
+    <string name="user_logout_title">Logout</string>
+    <string name="warning_with_point">Attention!</string>
+    <string name="profile_about">About</string>
+    <string name="nick">Nickname</string>
+    <string name="check_sync_contacts_error">To synchronize contacts, you must provide the necessary permissions to the application</string>
+    <string name="check_file_permission_error">To send photos, videos, files, you must provide the necessary permissions to the application</string>
+    <string name="check_audio_permission_error">To send voice messages, you must grant the necessary permissions to the application</string>
+    <string name="backup_wallet_and_messages_last_time">last backup:</string>
+    <string name="first_middle_name">Name Patronymic name</string>
+    <string name="lock_screen_title_try_count_pf_hint">After 3 unsuccessful attempts to enter a password, for your safety, your secure with data will be deleted and application will exit.</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="menu_group">Create group</string>
+    <string name="menu_contacts">Contacts</string>
+    <string name="menu_calls">Calls</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_invite">Invite people</string>
+    <string name="menu_about">About</string>
+
+    <string name="dialog_invite">Invite</string>
+    <string name="dialog_scan_invitation">Scan invitation</string>
+    <string name="dialog_analysis_invitation">Invitation Analysis</string>
+    <string name="scan_qrcode_hint">Scan a QR on another device and send business card. Send a link by clicking “SHARE”.</string>
+    <string name="send_share">Share</string>
+    <string name="invite_qr_scan_hint_error">The scanned QR code is not an invitation, please scan another QR code.</string>
+    <string name="camera_qr_scan_permission">For scan Qr you need to give permissions</string>
+    <string name="send_share_via">Share via...</string>
+
+    <string name="passhrase_hint">A 12-word passphrase will be automatically generated for you. You can view, record or save it later in the settings. This passphrase is needed if you want to log into your account on another device or when reinstalling the application.</string>
+</resources>
