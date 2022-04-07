@@ -1,8 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="multiplatform-crypto-libsodium-bindings-jvm-0.8.5-SNAPSHOT">
-    <output-path>E:\Repository\SocialSiriusMessenger\sirius-sdk-kotlin\multiplatform-crypto-libsodium-bindings\build\libs</output-path>
-    <root id="archive" name="multiplatform-crypto-libsodium-bindings-jvm-0.8.5-SNAPSHOT.jar">
-      <element id="module-output" name="SocialSiriusMessenger.sirius-sdk-kotlin.multiplatform-crypto-libsodium-bindings.jvmMain" />
-    </root>
+    <output-path>E:\Repository\SocialSiriusMessenger3\sirius-sdk-kotlin\multiplatform-crypto-libsodium-bindings\build\libs</output-path>
+    <root id="archive" name="multiplatform-crypto-libsodium-bindings-jvm-0.8.5-SNAPSHOT.jar" />
   </artifact>
 </component>
