@@ -8,7 +8,10 @@ import androidx.lifecycle.Observer
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.databinding.FragmentCreatePinBinding
+import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
+import com.socialsirius.messenger.ui.activities.main.MainActivity
 import com.socialsirius.messenger.ui.pinEnter.BasePinFragment
+
 
 
 class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinViewModel>() {
@@ -16,38 +19,42 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
     override fun getLayoutRes() = R.layout.fragment_create_pin
 
     override fun initDagger() {
-       // App.getInstance().appComponent.inject(this)
+        App.getInstance().appComponent.inject(this)
     }
 
     override fun setModel() {
-       // dataBinding!!.viewModel = model
+        dataBinding!!.viewModel = model
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    /*    calculatorView.setOnDigitClickListener { model.onDigitClick(it) }
-        calculatorView.setDeleteClickListener { model.onDeleteDigitClick() }
-        calculatorView.setDeleteLongClickListener { model.onDeleteLongDigitClick() }
-        calculatorView.setIdentifyClickListener { model.onIdentityClick() }
-        model.countForDigit = indicatorView.countIndicatorAll
-        calculatorView.enableIdentityButton(false)
-        mainLayout.setOnClickListener(View.OnClickListener {  })
-        Utils.hideKeyboardWitoutAnimWithView(activity, rootView)*/
+       dataBinding.calculatorView.setOnDigitClickListener { model.onDigitClick(it) }
+        dataBinding. calculatorView.setDeleteClickListener { model.onDeleteDigitClick() }
+        dataBinding. calculatorView.setDeleteLongClickListener { model.onDeleteLongDigitClick() }
+        dataBinding.  calculatorView.setIdentifyClickListener { model.onIdentityClick() }
+        model.countForDigit = dataBinding.indicatorView.countIndicatorAll
+        dataBinding.  calculatorView.enableIdentityButton(false)
+        dataBinding.   mainLayout.setOnClickListener(View.OnClickListener {  })
+       // Utils.hideKeyboardWitoutAnimWithView(activity, rootView)
     }
 
     override fun subscribe() {
-     /*   model.indicatorCodeLiveData.observe(this, Observer { indicatorView.setupNumberFilled(it.length) })
-        model.indicatorErrorLiveData.observe(this, Observer { indicatorView.setupError() })
-        model.nextButtonClick.observe(this, Observer { model.createWallet() })
-        model.indicatorCodeFillLiveData.observe(this, Observer { nextButton.isEnabled = it })
+       model.indicatorCodeLiveData.observe(this, Observer { dataBinding.indicatorView.setupNumberFilled(it.length) })
+        model.indicatorErrorLiveData.observe(this, Observer { dataBinding.indicatorView.setupError() })
+        model.nextButtonClick.observe(this, Observer {
+            model.createWallet()
+            baseActivity.finishAffinity()
+            LoaderActivity.newInstance(requireContext())
+        })
+        model.indicatorCodeFillLiveData.observe(this, Observer { dataBinding.nextButton.isEnabled = it })
         model.indicatorSuccessLiveData.observe(this, Observer {
             if (it) {
-                onWalletOpenListener?.OnWalletOpen()
+               // onWalletOpenListener?.OnWalletOpen()
                 deletePinFragment()
             } else {
                 Toast.makeText(App.getContext(), App.getContext().getString(R.string.error), Toast.LENGTH_SHORT).show()
             }
-        })*/
+        })
     }
 
     private fun deletePinFragment() {

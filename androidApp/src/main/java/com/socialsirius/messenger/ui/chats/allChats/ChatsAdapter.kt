@@ -1,31 +1,36 @@
 package  com.socialsirius.messenger.ui.chats.allChats
 
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.socialsirius.messenger.R
-import com.socialsirius.messenger.design.AvatarView
+import com.socialsirius.messenger.base.ui.SimpleBaseRecyclerViewAdapter
+import com.socialsirius.messenger.databinding.ItemChatBinding
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.repository.models.LocalMessage
+import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chat.MessagesAdapter
+import com.socialsirius.messenger.utils.DateUtils
 
 import kotlinx.android.extensions.LayoutContainer
 
 import java.util.*
 
-class ChatsAdapter(val onChatClick: (Chats) -> Unit) : Adapter<ChatsAdapter.ChatsViewHolder>() {
+class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBaseRecyclerViewAdapter<Chats, ChatsAdapter.ChatsViewHolder>() {
 
-    private var items: MutableList<Chats> = mutableListOf()
 
-    fun setItems(items: List<Chats>) {
-     /*   this.items = items.toMutableList()
-        Collections.sort(this.items, Chats.lastMessageComparator)
-        notifyDataSetChanged()*/
+
+    override fun getViewHolder(parent: ViewGroup?, layoutRes: Int, viewType: Int): ChatsViewHolder {
+        return ChatsViewHolder(getInflatedView(layoutRes,parent))
     }
+
+    override fun onBind(holder: ChatsViewHolder, item : Chats , position: Int) {
+        super.onBind(holder, item, position)
+        holder.bind(item)
+    }
+
 
     fun updateItem(item: Chats) {
     /*    for (i in 0 until items.size) {
@@ -38,11 +43,11 @@ class ChatsAdapter(val onChatClick: (Chats) -> Unit) : Adapter<ChatsAdapter.Chat
         }
         addItem(item)*/
     }
-    var statusMap : Map<String,Boolean> = HashMap<String,Boolean>()
+   // var statusMap : Map<String,Boolean> = HashMap<String,Boolean>()
 
 
     fun updateActivityStatus(status: Map<String, Boolean>) {
-        statusMap = status
+     //   statusMap = status
         notifyDataSetChanged()
      /*   val index = items.indexOfFirst { !it.isRoom && it.user?.jid == status.first }
         if (index >= 0) {
@@ -50,17 +55,17 @@ class ChatsAdapter(val onChatClick: (Chats) -> Unit) : Adapter<ChatsAdapter.Chat
         }*/
     }
 
-    fun deleteAllItems(notify: Boolean = true) {
+/*    fun deleteAllItems(notify: Boolean = true) {
         this.items.clear()
         if(notify){
             notifyDataSetChanged()
         }
-    }
+    }*/
     
-    fun deleteItem(index: Int) {
+  /*  fun deleteItem(index: Int) {
         this.items.removeAt(index)
         notifyItemRemoved(index)
-    }
+    }*/
 
     fun addItem(item: Chats) {
   /*      this.items.add(item)
@@ -89,53 +94,35 @@ class ChatsAdapter(val onChatClick: (Chats) -> Unit) : Adapter<ChatsAdapter.Chat
         notifyDataSetChanged()*/
     }
 
-    override fun getItemCount() = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
-        return ChatsViewHolder(view)
-    }
 
-    override fun onBindViewHolder(holder: ChatsViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
-
-    override fun onBindViewHolder(holder: ChatsViewHolder, position: Int, payloads: MutableList<Any>) {
+  /*  override fun onBindViewHolder(holder: ChatsViewHolder, position: Int, payloads: MutableList<Any>) {
         when (val payload = payloads.firstOrNull()) {
             is MessagesAdapter.StatusPayload -> holder.updateActivityStatus(payload.isOnline)
             else              -> holder.bind(items[position])
         }
-    }
+    }*/
 
-    inner class ChatsViewHolder(itemView: View) : ViewHolder(itemView), LayoutContainer {
-        var avatarImageView : AvatarView?
-        var nameTextView : TextView?
-        var senderTextView : TextView?
-        var senderMessageTextView : TextView?
-        var timeTextView : TextView?
-        var unreadTextView : TextView?
-        var sentStatusImageView : ImageView?
-        var mutedImageView : ImageView?
-        var lockedImageView : ImageView?
-        var typingImageView : ImageView?
+    inner class ChatsViewHolder(itemView: View) : SimpleViewHolder<ItemChatBinding,Chats>(itemView) {
 
-        override val containerView: View?
-            get() = itemView
-        init {
-            avatarImageView =   containerView?.findViewById(R.id.avatarImageView)
-            nameTextView =   containerView?.findViewById(R.id.nameTextView)
-            senderTextView =   containerView?.findViewById(R.id.senderTextView)
-            senderMessageTextView =   containerView?.findViewById(R.id.senderMessageTextView)
-            timeTextView =   containerView?.findViewById(R.id.timeTextView)
-            unreadTextView =   containerView?.findViewById(R.id.unreadTextView)
-            sentStatusImageView =   containerView?.findViewById(R.id.sentStatusImageView)
-            mutedImageView =   containerView?.findViewById(R.id.mutedImageView)
-            lockedImageView =   containerView?.findViewById(R.id.lockedImageView)
-            typingImageView =   containerView?.findViewById(R.id.typingImageView)
-        }
 
-        fun bind(chat: Chats) {
-        /*    nameTextView?.text = chat.title
+
+        override fun bind(chat: Chats) {
+            binding?.nameTextView?.text = chat.title
+            if (chat.unreadMessageNotInDB > 0) {
+                binding?.unreadTextView?.visibility = View.VISIBLE
+                binding?.unreadTextView?.text = chat.unreadMessageNotInDB.toString()
+            } else {
+                binding?.unreadTextView?.visibility = View.GONE
+            }
+
+            binding?.typingImageView?.visibility = View.GONE
+            binding?.mutedImageView?.visibility = if (chat.isInSilentMode) View.VISIBLE else View.GONE
+            binding?.avatarImageView?.update(chat)
+            val local = LocalMessageTransform.toBaseItemMessage(chat.lastMessage)
+            binding?.senderMessageTextView?.text = local.getText()
+            binding?.timeTextView?.text = DateUtils.dateToHHmmss(chat.lastMessage?.sentTime);
+        /*
             val userName = chat.getUserFromMembers(chat.lastMessage?.msg_from)?.contactName.orEmpty()
             val showName = chat.lastMessage?.contentType != ContentType.service  //Todo Other type?
             if (userName.isNotEmpty() && chat.isRoom && showName ) {
@@ -150,12 +137,7 @@ class ChatsAdapter(val onChatClick: (Chats) -> Unit) : Adapter<ChatsAdapter.Chat
             timeTextView?.text = DateUtils.dateToChatTimeHHmm(chat.lastMessage?.created_utc_timestamp?.toLong()?.let { Date(it) });
             Log.d("mylog20767", "dateTRext = "+ timeTextView?.text.toString())
             avatarImageView?.updateStatus(statusMap[chat.id] ?:false)
-            if (chat.unreadMessageNotInDB > 0) {
-                unreadTextView?.visibility = View.VISIBLE
-                unreadTextView?.text = chat.unreadMessageNotInDB.toString()
-            } else {
-                unreadTextView?.visibility = View.GONE
-            }
+
 
             val isMine = BaseMessageNew.MessageUserType.OutComing == chat.lastMessage?.messageUserType
             if(isMine){
@@ -196,5 +178,7 @@ class ChatsAdapter(val onChatClick: (Chats) -> Unit) : Adapter<ChatsAdapter.Chat
         fun updateActivityStatus(isOnline: Boolean) {
           //  itemView.avatarImageView.updateStatus(isOnline)
         }
+
     }
+
 }

@@ -116,11 +116,45 @@
     <string name="dialog_invite">Invite</string>
     <string name="dialog_scan_invitation">Scan invitation</string>
     <string name="dialog_analysis_invitation">Invitation Analysis</string>
-    <string name="scan_qrcode_hint">Scan a QR on another device and send business card. Send a link by clicking “SHARE”.</string>
+    <string name="scan_qrcode_hint">Scan a QR on another device and start chat. Send a link by clicking “SHARE”.</string>
     <string name="send_share">Share</string>
     <string name="invite_qr_scan_hint_error">The scanned QR code is not an invitation, please scan another QR code.</string>
     <string name="camera_qr_scan_permission">For scan Qr you need to give permissions</string>
     <string name="send_share_via">Share via...</string>
 
     <string name="passhrase_hint">A 12-word passphrase will be automatically generated for you. You can view, record or save it later in the settings. This passphrase is needed if you want to log into your account on another device or when reinstalling the application.</string>
+    <string name="pin_create_hint">You can create a PIN code for additional protection of your data now or set it up later when you need it.</string>
+
+
+    <string name="auth_second_title">Your privacy</string>
+    <string name="auth_second_create_pin_btn">Create Pin</string>
+
+    <string name="save_as_qr_btn">Save as QR-code</string>
+    <string name="error">Error</string>
+
+    <!--Строки для настроек-->
+
+    <string name="settings_messages_notification">Message Notifications</string>
+    <string name="settings_request_notification">Request Notifications</string>
+    <string name="settings_activity_notification">Task Notifications</string>
+    <string name="settings_reminder_notification">Reminder notifications</string>
+    <string name="settings_audio_vibration">Sound and vibration mode</string>
+    <string name="settings_audio_only">Sound only mode</string>
+    <string name="settings_vibration_only">Vibration only mode</string>
+    <string name="settings_no_sound">Silent mode</string>
+
+    <string name="title_settings">Settings</string>
+    <string name="tab_main_settings">Main</string>
+    <string name="tab_account_settings">Accounts</string>
+    <string name="title_settings_sound_alarm">Sound notifications</string>
+    <string name="title_settings_vibro_alarm">Vibro notifications</string>
+    <string name="title_settings_push_alarm">Push notifications</string>
+    <string name="title_settings_speech_recognition">Speech recognition</string>
+    <string name="title_other_settings">Other settings</string>
+    <string name="title_pingpong_settings">Ping Pong counters</string>
+    <string name="settings_ended_task">Completing your tasks</string>
+    <string name="settings_on_push_alarm">Enable Push Notifications</string>
+    <string name="settings_in_message">In messages</string>
+    <string name="settings_in_comments">In comments</string>
+    <string name="settings_view_dialogs">Show Conversations for </string>
 </resources>

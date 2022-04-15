@@ -10,7 +10,7 @@ class ChatMessageItem private constructor(
        // private val baseMessageRef: BaseMessageNew,
      //   val user: RosterUser?,
         val isGroupMessage: Boolean
-) : IChatItem {
+) : IChatItem() {
 
     companion object {
        // @JvmStatic
@@ -23,7 +23,7 @@ class ChatMessageItem private constructor(
             )
         }*/
     }
-    override val timeInMillis = 0.0
+    override var timeInMillis = 0.0
 /*
     val id = baseMessageRef.id.orEmpty()
     val isMine = baseMessageRef.messageUserType == BaseMessageNew.MessageUserType.OutComing

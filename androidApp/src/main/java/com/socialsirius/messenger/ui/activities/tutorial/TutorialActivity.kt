@@ -89,13 +89,13 @@ class TutorialActivity : BaseActivity<ActivityTutorialBinding, TutorialActivityM
             if(it){
                 model.startClickLiveData.value = false
                 finish()
-               // AppPref.getInstance().setTutorialDone(true)
+                AppPref.getInstance().setTutorialDone(true)
                 AuthActivity.newInstance(this)
             }
 
         })
       model.itemListLiveData.observe(this, Observer {
-            adapter.setDataList(it)
+            adapter.dataList = it.toMutableList()
             adapter.notifyDataSetChanged()
           //  dataBinding.indicator.setPages(it.size)
         })

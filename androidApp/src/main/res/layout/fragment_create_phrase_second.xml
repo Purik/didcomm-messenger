@@ -27,12 +27,7 @@
             android:gravity="center"
             android:layout_margin="32dp"
             android:text="@string/auth_tutorial_phrase_title2"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Regular18"
-            android:layout_marginBottom="16dp"
-            android:text="@string/auth_tutorial_phrase_text2"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,11 +36,6 @@
             tools:listitem="@layout/item_passphrase"
            />
 
-        <ImageView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:src="@drawable/sample_qr"/>
         <TextView
             android:id="@+id/nextBtn"
 
@@ -58,7 +48,7 @@
             android:layout_margin="32dp"
             style="@style/AccentButtonRoundedBigCorners"
             android:onClick="@{viewModel::onStartClick}"
-            android:text="@string/auth_btn_phrase"
+            android:text="@string/save_as_qr_btn"
             />
 
 

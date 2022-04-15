@@ -74,31 +74,7 @@
                  />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/passhrase_hint"
-            style="@style/FontBold"
-            android:textSize="16sp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/colorBlue2"/>
 
-        <TextView
-            android:id="@+id/showBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:padding="8dp"
-            android:textSize="14sp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/colorBlue2"
-            style="@style/AccentButtonRoundedCorners"
-            android:onClick="@{viewModel::showNow}"
-            android:text="@string/auth_btn_phrase_show_now"
-            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,7 +92,7 @@
             android:layout_margin="32dp"
             style="@style/AccentButtonRoundedBigCorners"
             android:onClick="@{viewModel::onStartClick}"
-            android:text="@string/auth_btn_start_chat"
+            android:text="@string/auth_btn_phrase"
             />
 
 

@@ -6,8 +6,8 @@ class TechMessageItem private constructor(
     val text: String,
     val dateTime: String,
     val id: String,
-    override val timeInMillis: Double
-) : IChatItem {
+    override var timeInMillis: Double
+) : IChatItem() {
     companion object {
   /*      @JvmStatic
         fun map(baseMessage: BaseMessageNew): TechMessageItem {

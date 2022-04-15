@@ -4,12 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivityModel
+import com.socialsirius.messenger.ui.activities.invite.InviteActivityModel
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivityModel
 import com.socialsirius.messenger.ui.activities.main.MainActivityModel
+import com.socialsirius.messenger.ui.activities.message.MessageActivityModel
+import com.socialsirius.messenger.ui.activities.scan.ScanActivityModel
+import com.socialsirius.messenger.ui.activities.settings.SettingsActivityModel
 
 import com.socialsirius.messenger.ui.activities.splash.SplashActivityModel
 
 import com.socialsirius.messenger.ui.activities.tutorial.TutorialActivityModel
+import com.socialsirius.messenger.ui.auth.AuthSecurityViewModel
 import com.socialsirius.messenger.ui.auth.AuthViewModel
 import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseFirstViewModel
 import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseSecondViewModel
@@ -20,7 +25,9 @@ import com.socialsirius.messenger.ui.chats.userProfile.UserProfileViewModel
 import com.socialsirius.messenger.ui.inviteUser.InviteUserViewModel
 import com.socialsirius.messenger.ui.main.MainViewModel
 import com.socialsirius.messenger.ui.more.MenuMoreViewModel
-import com.socialsirius.messenger.ui.scan.HandleWebInviteViewModel
+import com.socialsirius.messenger.ui.pinCreate.CreatePinViewModel
+import com.socialsirius.messenger.ui.pinEnter.EnterPinViewModel
+
 import com.socialsirius.messenger.ui.scan.MenuScanQrViewModel
 import com.socialsirius.messenger.ui.tutorial.SplashViewModel
 import com.socialsirius.messenger.ui.userSettings.UserSettingsViewModel
@@ -84,6 +91,11 @@ abstract class ViewModelModule {
     @ViewModelKey(MainActivityModel::class)
     internal abstract fun bindMainActivityModel(viewModel: MainActivityModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(MessageActivityModel::class)
+    internal abstract fun bindMessageActivityModel(viewModel: MessageActivityModel): ViewModel
+
 
 
 
@@ -113,6 +125,25 @@ abstract class ViewModelModule {
      @ViewModelKey(AuthActivityModel::class)
      internal abstract fun bindAuthActivityModel(viewModel: AuthActivityModel): ViewModel
 
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(InviteActivityModel::class)
+    internal abstract fun bindInviteActivityModel(viewModel: InviteActivityModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsActivityModel::class)
+    internal abstract fun bindSettingsActivityModel(viewModel: SettingsActivityModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ScanActivityModel::class)
+    internal abstract fun bindScanActivityModel(viewModel: ScanActivityModel): ViewModel
+
+
+
     /**
      * Fragments viewModel Here
      */
@@ -133,6 +164,14 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AuthViewModel::class)
     internal abstract fun bindAuthViewModel(viewModel: AuthViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AuthSecurityViewModel::class)
+    internal abstract fun bindAuthSecurityViewModel(viewModel: AuthSecurityViewModel): ViewModel
+
+
+
 
     @Binds
     @IntoMap
@@ -186,16 +225,23 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(InviteUserViewModel::class)
     internal abstract fun bindInviteUserViewModel(viewModel: InviteUserViewModel): ViewModel
-    @Binds
+ /*   @Binds
     @IntoMap
     @ViewModelKey(HandleWebInviteViewModel::class)
     internal abstract fun bindHandleWebInviteViewModel(viewModel: HandleWebInviteViewModel): ViewModel
+*/
+    @Binds
+    @IntoMap
+    @ViewModelKey(CreatePinViewModel::class)
+    internal abstract fun bindCreatePinViewModel(viewModel: CreatePinViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EnterPinViewModel::class)
+    internal abstract fun bindEnterPinViewModel(viewModel: EnterPinViewModel): ViewModel
 
 
-    /*   @Binds
-       @IntoMap
-       @ViewModelKey(AuthZeroViewModel::class)
-       internal abstract fun bindAuthZeroViewModel(viewModel: AuthZeroViewModel): ViewModel
+    /*
 
 
        @Binds

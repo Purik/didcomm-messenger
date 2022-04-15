@@ -1,3 +1,4 @@
+/*
 package com.socialsirius.messenger.ui.scan
 
 import android.content.Intent
@@ -48,16 +49,18 @@ class HandleWebInviteFragment : BaseFragment<FragmentMenuHandleInviteBinding, Ha
         model.goToNewSecretChatLiveData.observe(this, Observer {
             it?.let {
                 Log.d("mylog2080", "goToNewSecretChatLiveData=" + it);
-              /*  (baseActivity as? MainActivity)?.showChats()
+              */
+/*  (baseActivity as? MainActivity)?.showChats()
                 val messageIntent = Intent(context, MessageActivity::class.java).apply {
                     putExtra(StaticFields.BUNDLE_CHAT, it)
                 }
                 startActivity(messageIntent)
-                model.goToNewSecretChatLiveData.postValue(null)*/
+                model.goToNewSecretChatLiveData.postValue(null)*//*
+
             }
         })
 
 
     }
 
-}
+}*/

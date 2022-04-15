@@ -1,13 +1,27 @@
 package com.socialsirius.messenger.utils
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.WindowManager
+import com.socialsirius.messenger.ui.auth.AuthSecurityFragment
 import java.io.FileOutputStream
 import java.io.InputStream
 
 
 class Utils {
     companion object {
+
+        fun makeScreenshotUnavailable(activity: Activity?) {
+            if (activity != null) {
+                val window = activity.window
+                window?.setFlags(
+                    WindowManager.LayoutParams.FLAG_SECURE,
+                    WindowManager.LayoutParams.FLAG_SECURE
+                )
+            }
+        }
+
         fun copyRawFile(context: Context, rawRes: Int, filepath: String) {
             val `in`: InputStream = context.getResources().openRawResource(rawRes)
             val out = FileOutputStream(filepath)
@@ -27,7 +41,7 @@ class Utils {
 
         fun logLongText(TAG: String?, sb: String?) {
             if (sb == null) {
-                Log.v(TAG, sb?:"")
+                Log.v(TAG, sb ?: "")
                 return
             }
             if (sb.length > 2900) {

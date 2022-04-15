@@ -21,13 +21,19 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
+import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentChatBinding
+import com.socialsirius.messenger.design.chat.ChatPanelView
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.models.ui.ItemContacts
+import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
+import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
 import com.socialsirius.messenger.utils.Utils
 
 import java.io.File
 
 private const val CHAT_ITEM = "CHAT_ITEM"
+private const val CHATS_ITEM = "CHATS_ITEM"
 private const val CAMERA_PERMISSION_CODE = 1080
 private const val SOUND_PERMISSION_CODE = 1070
 
@@ -35,7 +41,7 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
     companion object {
         @JvmStatic
-        fun newInstance(chat: Chats) = ChatFragment().apply {
+        fun newInstance(chat: Chats?) = ChatFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(CHAT_ITEM, chat)
             }
@@ -56,16 +62,31 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         App.getInstance().appComponent.inject(this)
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-     /*   model.setChat(arguments?.getSerializable(CHAT_ITEM) as Chats)
+        model.setChat(arguments?.getSerializable(CHAT_ITEM) as? Chats)
         super.onViewCreated(view, savedInstanceState)
-        adapter = MessagesAdapter( dataBinding.chatRecyclerView,model.messageUseCase, model::getOriginalMessages,{erro,type->
+        dataBinding.chatPanelView.onSendClick = (object : ChatPanelView.OnSendClick {
+            override fun onMessageSend(message: String) {
+                model.sendMessageText(message)
+            }
 
-        },
-                this::onImageClick, this::onDocumentClick, model::onMessageShortClick, model::onMessageLongClick,
-                model::onConnectionClick, model::onMessageCancelDownloadUploadClick)
+            override fun onSoundSend(time: Long, type: ChatPanelView.SendType) {
+               // model.sendSound(time, type)
+            }
+        })
+
+        adapter = MessagesAdapter()
+        adapter!!.onCustomBtnClick = object :  OnCustomBtnClick<IChatItem> {
+            override fun onBtnClick(btnId: Int, item: IChatItem?, position: Int) {
+                if(btnId==-1){
+                //    model.readUnread(item?.getMessageId())
+                }
+            }
+
+        }
         dataBinding.chatRecyclerView.adapter = adapter
-
         dataBinding.chatRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {
                 stackFromEnd = true
@@ -77,20 +98,15 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val position = (dataBinding.chatRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if (position <= 3) model.rangeLoadMessages()
+                 //   if (position <= 3) model.rangeLoadMessages()
                 }
             }
-        })*/
-
-       /* chatPanelView.onSendClick = (object : ChatPanelView.OnSendClick {
-            override fun onMessageSend(message: String) {
-                model.sendMessageText(message)
-            }
-
-            override fun onSoundSend(time: Long, type: ChatPanelView.SendType) {
-                model.sendSound(time, type)
-            }
         })
+     /*
+
+        */
+
+       /*
 
         chatPanelView.onSoundListener = (object : ChatPanelView.OnSoundListener {
             override fun onSoundStart(): Boolean {
@@ -138,8 +154,38 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         // botButtonRecycler.layoutManager = GridLayoutManager(context,)
     }
 
-    override fun subscribe() {
+    private fun updateAdapter(data: List<BaseItemMessage>) {
+        adapter?.dataList = data.toMutableList()
+        adapter?.notifyDataSetChanged()
+    }
 
+
+    override fun subscribe() {
+        model.adapterListLiveData.observe(this, Observer {
+            updateAdapter(it)
+            dataBinding.chatRecyclerView.postDelayed({
+                dataBinding.chatRecyclerView.scrollToPosition((adapter?.itemCount?:1-1)?:0)
+            }, 200)
+        })
+        model.chatLiveData.observe(this, Observer {
+            //NotificationsUtils.removeMessageNotify(activity, model.chatLiveData.value?.id ?: "")
+            dataBinding.topBarView.text = it.title
+            dataBinding.avatarView.update(it)
+         //   model.updateLastActivity()
+           // model.showHideAcceptedBtn()
+          //  model.loadMessagesIfEMpty()
+        })
+
+        model.clearTextLiveData.observe(this, Observer {
+            if (it) {
+                model.clearTextLiveData.value = false
+                dataBinding.chatPanelView.setMessage("")
+            }
+        })
+        model.eventStoreLiveData.observe(this, Observer {
+            model.updateList()
+
+        })
 /*
         model.onBackClickLiveData.observe(this, Observer { onBackPressed() })
         model.chatLiveData.observe(this, Observer {

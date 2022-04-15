@@ -22,7 +22,8 @@
             android:text="@string/exit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-
+            android:layout_height="48dp"
+            android:onClick="@{viewModel::onExitButtonClick}"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView

@@ -1,5 +1,6 @@
 package com.socialsirius.messenger.ui.inviteUser
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config.RGB_565
@@ -18,6 +19,7 @@ import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.databinding.FragmentInviteUserBinding
+import com.socialsirius.messenger.ui.activities.message.MessageActivity
 
 import java.util.EnumMap
 
@@ -43,7 +45,7 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
         super.onViewCreated(view, savedInstanceState)
 
     }
-
+    var dialog: AlertDialog? = null
     override fun subscribe() {
         model.onBackClickLiveData.observe(this, Observer {
             baseActivity.popPage()
@@ -76,6 +78,46 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
             }
         })*/
 
+        model.invitationStartLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationStartLiveData.value = null
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Connecting...")
+                builder.setMessage("Please wait,secure connection is being established")
+                builder.setCancelable(false)
+                dialog = builder.show()
+            }
+        })
+
+        model.invitationErrorLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationErrorLiveData.value = null
+                dialog?.cancel()
+                model.onShowToastLiveData.postValue(it.second)
+            }
+
+        })
+
+        model.invitationSuccessLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationSuccessLiveData.value = null
+                val item = model.getMessage(it)
+                dialog?.cancel()
+
+                //   popPage(ChatsFragment.newInstance(item))
+            }
+        })
+
+        model.invitationPolicemanSuccessLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationPolicemanSuccessLiveData.value = null
+                val item = model.getMessage(it)
+                dialog?.cancel()
+                baseActivity.finish()
+                MessageActivity.newInstance(requireContext(),item)
+                //  popPage(DocumentShareFragment.newInstance(item))
+            }
+        })
     }
 
     private fun updateQrCode(qrCode: String) {

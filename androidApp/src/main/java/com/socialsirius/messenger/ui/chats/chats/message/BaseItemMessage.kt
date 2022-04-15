@@ -10,11 +10,12 @@ import com.sirius.library.messaging.Message
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
+import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
 import com.socialsirius.messenger.utils.DateUtils
 
 import java.util.*
 
-abstract class BaseItemMessage {
+abstract class BaseItemMessage : IChatItem {
 
     interface NotifyDataListener{
         fun notifyData()

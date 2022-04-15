@@ -87,6 +87,24 @@ class AppPref {
         return getDeviceId().substring(5)
     }
 
+    fun setPin(pin: String?) {
+        //  editor.putString("token", encryption.encryptOrNull(userModel.getToken()))
+        with(prefs.edit()) {
+            putString(
+                getEncryptionDefault().encryptOrNull("pin") ?: "",
+                getEncryptionDefault().encryptOrNull(pin) ?: ""
+            )
+            apply()
+        }
+    }
+
+    fun getPin(): String {
+        val tokenKey = getEncryptionDefault().encryptOrNull("pin") ?: ""
+        val string = prefs.getString(tokenKey, "") ?: ""
+        return getEncryptionDefault().decryptOrNull(string)
+    }
+
+
     fun setToken(token: String?) {
         //  editor.putString("token", encryption.encryptOrNull(userModel.getToken()))
         with(prefs.edit()) {
@@ -138,37 +156,6 @@ class AppPref {
         Log.d("mylog2090","getUser()?.uid="+getUser()?.uid)
         Log.d("mylog2090","getUser()?.name="+getUser()?.name)
         Log.d("mylog2090","getUser()?.pass="+getUser()?.pass)
-        return isLoggedIn
-    }
-
-
-    fun setPoliceUser(user: User?) {
-        val userKey = getEncryptionDefault().encryptOrNull("user_police") ?: ""
-        val userJson = Gson().toJson(user)
-        with(prefs.edit()) {
-            putString(userKey, getEncryptionDefault().encryptOrNull(userJson) ?: "")
-            apply()
-        }
-    }
-
-    fun getPoliceUser(): User? {
-        try {
-            val userKey = getEncryptionDefault().encryptOrNull("user_police") ?: ""
-            val userJsonCrypt = prefs.getString(userKey, "")
-            val userJson = getEncryptionDefault().decryptOrNull(userJsonCrypt)
-            return Gson().fromJson(
-                userJson,
-                User::class.java
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-
-    fun isPoliceLoggedIn(): Boolean {
-        val isLoggedIn = getPoliceUser()?.uid != null
         return isLoggedIn
     }
 

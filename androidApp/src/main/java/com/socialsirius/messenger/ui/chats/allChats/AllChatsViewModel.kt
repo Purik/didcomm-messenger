@@ -3,10 +3,14 @@ package  com.socialsirius.messenger.ui.chats.allChats
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.models.ui.ItemContacts
+import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.UserRepository
+import com.socialsirius.messenger.transform.PairwiseTransform
 
 import javax.inject.Inject
 
@@ -14,10 +18,10 @@ class AllChatsViewModel @Inject constructor(
     resourcesProvider: ResourcesProvider,
    // val chatsRepository: ChatsRepository,
     val userRepository: UserRepository,
-  //  val messagesRepository: MessagesRepository,
+    val messageRepository: MessageRepository
  //   val uiUseCase: UIUseCase
 ) : BaseViewModel() {
-
+    val eventStoreLiveData = messageRepository.eventStoreLiveData
     val emptyStateLiveData = MutableLiveData<Boolean>()
    // val chatsLiveData = chatsRepository.result
     val chatsListLiveData = MutableLiveData<List<Chats>>(listOf())
@@ -36,9 +40,8 @@ class AllChatsViewModel @Inject constructor(
     val scanQrLiveData = MutableLiveData<Boolean>()
 
     override fun onViewCreated() {
-
         super.onViewCreated()
-        emptyStateLiveData.value = false
+
    /*     chatsRepository.getAllChats()
         repositoryCreatedLiveData.observeUntilDestroy(this) {
             it?.let {
@@ -51,7 +54,17 @@ class AllChatsViewModel @Inject constructor(
                 updateChatWithJid(it.id)
             }
         }*/
+    //    getChatList()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        getChatList()
+    }
+
+    fun getChatList() {
+        val list: List<Chats> = createList()
+        updateList(list)
     }
 
     fun onSelectChat(chat: Chats) {
@@ -80,6 +93,10 @@ class AllChatsViewModel @Inject constructor(
       //  chatsRepository.getAllChats(false)
     }
 
+    fun updateList(list : List<Chats>){
+        emptyStateLiveData.postValue(list.isEmpty())
+        chatsListLiveData.postValue(list)
+    }
   //  fun filterWith(filter: FilterChipsModel?) {
        /* val list = originalList?.filter { chats ->
             filter?.let {
@@ -126,4 +143,17 @@ class AllChatsViewModel @Inject constructor(
     fun onScanQrClick(v: View){
         scanQrLiveData.postValue(true)
     }
+
+    private fun createList(): List<Chats> {
+        val pairwises = PairwiseHelper.getInstance().getAllPairwise()
+        val list = pairwises.map {
+           val lastMess =  messageRepository.getLastMessagesForPairwiseDid2(it.their.did?:"")
+           val unreadCount =  messageRepository.getUnreadcountForDid(it.their.did?:"")
+            val chats = PairwiseTransform.pairwiseToItemContacts(it,lastMess)
+            chats.unreadMessageNotInDB = unreadCount
+            return@map chats
+        }.filter { it.title != "Mediator" }
+        return list
+    }
+
 }

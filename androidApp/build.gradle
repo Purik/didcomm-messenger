@@ -60,6 +60,8 @@ dependencies {
     implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     implementation project(':sirius-sdk-kotlin')
 
+   // implementation 'com.github.Sirius-social.sirius-sdk-kotlin:library:0.9.1'
+   //MAVEN LOCAL  implementation 'com.sirius.library:sdkkotlin-android:0.9.1'
     implementation "cash.z.ecc.android:kotlin-bip39:1.0.2"
 }
 

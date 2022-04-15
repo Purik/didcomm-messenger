@@ -28,6 +28,18 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
         return ArrayList()
     }
 
+    fun getLastMessagesForDid(did: String): LocalMessage? {
+        try {
+            val list =  getMainDao().queryBuilder().orderBy("sentTime",false).
+            limit(1).where().
+            eq("pairwiseDid", did).query()
+            return list.firstOrNull()
+        } catch (throwables: SQLException) {
+            throwables.printStackTrace()
+        }
+        return null
+    }
+
     fun getIdUpdateBuilder(id: String): UpdateBuilder<LocalMessage, String> {
         val builder = getUpdateBuilder()
         builder.where().idEq(id)
@@ -42,6 +54,16 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
         }catch (e : Exception){
             e.printStackTrace()
         }
+    }
+
+    fun getUnreadMessages(did : String): Long {
+        try {
+            return getQueryeBuilder().where().eq("isAccepted", false).and().eq("pairwiseDid", did)
+               .countOf()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return 0
     }
 
     fun getMainActionsMessages(): List<LocalMessage> {

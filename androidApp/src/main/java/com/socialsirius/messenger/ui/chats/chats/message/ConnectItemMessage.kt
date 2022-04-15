@@ -101,10 +101,12 @@ class ConnectItemMessage : BaseItemMessage {
     }
 
     override fun getText(): String {
-        return "Sample did label"
+        return "You are in chat with $name, start first "
     }
 
     override fun getTitle(): String {
         return name
     }
+
+
 }

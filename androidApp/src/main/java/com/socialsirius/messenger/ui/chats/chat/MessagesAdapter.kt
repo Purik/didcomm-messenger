@@ -8,10 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.socialsirius.messenger.R
+import com.socialsirius.messenger.base.ui.BaseRecyclerViewAdapter
 import com.socialsirius.messenger.design.chat.AudioMessageView
 import com.socialsirius.messenger.ui.chats.chat.item.*
+import com.socialsirius.messenger.ui.chats.chats.message.ConnectItemMessage
+import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
+import com.socialsirius.messenger.utils.DateUtils
 
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_chat_message.view.*
 
 import kotlinx.android.synthetic.main.item_chat_message_date.view.*
 import kotlinx.android.synthetic.main.item_chat_message_tech.view.*
@@ -24,18 +29,7 @@ private const val SECRET_INVITE_MESSAGE_ITEM = 4
 private const val CONNECTION_MESSAGE_ITEM = 5
 private const val MAX_AUDIO_CACHE_SIZE = 200
 
-class MessagesAdapter(
-    private val recycler: RecyclerView,
-  //  private val messagesUseCase: MessagesUseCase,
-    private val getItems: () -> List<IChatItem>,
- //   private val messageReadAction: (String, ConnectionsWrapper.ConnectionType) -> Unit,
-    private val imageClickAction: (ChatMessageItem) -> Unit,
-    private val documentClickAction: (ChatMessageItem) -> Unit,
-    private val shortClickAction: (ChatMessageItem) -> Unit,
-    private val longClickAction: (ChatMessageItem) -> Unit,
-  //  private val connectionClickAction: (ChatConnectionItem) -> Unit,
-    private val messageCancelUploadClickAction: (ChatMessageItem) -> Unit
-) : Adapter<ViewHolder>() {
+class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.BaseMessagesViewHolder>() {
 
     val audioMessages = mutableMapOf<String, AudioMessageView>()
 
@@ -54,12 +48,12 @@ class MessagesAdapter(
     fun update(indexes: List<Int>) {
         //Какие то проблемы с TECHMESSAGEHOLDER
         //   indexes.forEach { notifyItemChanged(it, CornerPayload()) }
-        indexes.forEach {
-            val items = getItems()[it]
+     /*   indexes.forEach {
+            val items = dataList?[it]
             Log.d("mylog209000","items="+items.getMessageId())
         }
 
-        notifyDataSetChanged()
+        notifyDataSetChanged()*/
     }
 
     fun updateActivityStatus(idStatusPair: Pair<String, Boolean>) {
@@ -72,14 +66,14 @@ class MessagesAdapter(
         }*/
     }
 
-    fun getItem(index: Int): IChatItem? {
+    /*fun getItem(index: Int): IChatItem? {
         return try {
             getItems()[index]
         } catch (e: Exception) {
             null
         }
     }
-
+*/
     fun releaseAllMediaPlayers() {
         stopAllMediaPlayers("")
         audioMessages.forEach {
@@ -97,23 +91,25 @@ class MessagesAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is ChatMessageItem -> CHAT_MESSAGE_ITEM
+           // is ChatMessageItem -> CHAT_MESSAGE_ITEM
             is TechMessageItem -> TECH_MESSAGE_ITEM
             is ChatDateItem -> DATE_MESSAGE_ITEM
-            is SecretInviteItem -> SECRET_INVITE_MESSAGE_ITEM
+         //   is SecretInviteItem -> SECRET_INVITE_MESSAGE_ITEM
+            is TextItemMessage ->CHAT_MESSAGE_ITEM
+            is ConnectItemMessage -> SECRET_INVITE_MESSAGE_ITEM
             //is ChatConnectionItem -> CONNECTION_MESSAGE_ITEM
             else -> 0
         }
     }
 
-    override fun getItemCount() = getItems().size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseMessagesViewHolder {
         return when (viewType) {
             CHAT_MESSAGE_ITEM -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_message, parent, false)
                 MessagesViewHolder(view)
             }
+
             SECRET_INVITE_MESSAGE_ITEM -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_secret_invite, parent, false)
                 SecretInviteViewHolder(view)
@@ -133,57 +129,73 @@ class MessagesAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseMessagesViewHolder, position: Int) {
+        val item = getItem(position)
         when (holder) {
             is MessagesViewHolder -> {
-                val item = getItems()[position] as ChatMessageItem
+                val item = item as TextItemMessage
             //    Log.d("mylog20031","onBindViewHolder item"+item.text +" item.status="+item.status)
                 holder.bind(item)
             }
-            is TechMessagesViewHolder -> holder.bind(getItems()[position] as TechMessageItem)
-            is DateMessagesViewHolder -> holder.bind(getItems()[position] as ChatDateItem)
-            is SecretInviteViewHolder -> holder.bind(getItems()[position] as SecretInviteItem)
+            is TechMessagesViewHolder -> holder.bind(item as TechMessageItem)
+            is DateMessagesViewHolder -> holder.bind(item as ChatDateItem)
+            is SecretInviteViewHolder -> holder.bind(item as ConnectItemMessage)
           //  is ChatConnectionViewHolder -> holder.bind(getItems()[position] as ChatConnectionItem)
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+  /*  override fun onBindViewHolder(holder: BaseMessagesViewHolder, position: Int, payloads: MutableList<Any>) {
+        val item = getItem(position)
         when (holder) {
             is MessagesViewHolder -> {
                 Log.d("mylog20031","onBindViewHolder Payloads ")
-                val item = getItems()[position] as ChatMessageItem
+                val item = item as TextItemMessage
            //     Log.d("mylog2003","onBindViewHolder item"+item.text +" item.status="+item.status)
                 holder.bind(item)
                 when (val payload = payloads.firstOrNull()) {
-                 /*   is CornerPayload -> {
+                 *//*   is CornerPayload -> {
                         val items =getItems()[position] as ChatMessageItem
                         holder.updateCornerAndStatus(items)
 
                     }
-                    is PercentPayload -> holder.updateProgress(getItems()[position] as ChatMessageItem)*/
+                    is PercentPayload -> holder.updateProgress(getItems()[position] as ChatMessageItem)*//*
                     is StatusPayload -> holder.updateActivityStatus(payload.isOnline)
-                    /*else -> {
+                    *//*else -> {
                         val item = getItems()[position] as ChatMessageItem
                         Log.d("mylog2003","onBindViewHolder item"+item.text +" item.status="+item.status)
                         holder.bind(item)
-                    }*/
+                    }*//*
                 }
             }
-            is TechMessagesViewHolder -> holder.bind(getItems()[position] as TechMessageItem)
-            is DateMessagesViewHolder -> holder.bind(getItems()[position] as ChatDateItem)
-            is SecretInviteViewHolder -> holder.bind(getItems()[position] as SecretInviteItem)
+            is TechMessagesViewHolder -> holder.bind(item as TechMessageItem)
+            is DateMessagesViewHolder -> holder.bind(item as ChatDateItem)
+            is SecretInviteViewHolder -> holder.bind(item as SecretInviteItem)
          //   is ChatConnectionViewHolder -> holder.bind(getItems()[position] as ChatConnectionItem)
         }
-    }
+    }*/
 
-    inner class MessagesViewHolder(itemView: View) : ViewHolder(itemView), LayoutContainer {
+    inner class MessagesViewHolder(itemView: View) : BaseMessagesViewHolder(itemView), LayoutContainer {
 
         override val containerView: View?
             get() = itemView
 
-        fun bind(message: ChatMessageItem) {
-            val nextItem = getItem(adapterPosition + 1) as? ChatMessageItem
-            val prevItem = getItem(adapterPosition - 1) as? ChatMessageItem
+        fun bind(message: TextItemMessage) {
+            itemView.chatMessageView.isMine = message.isMine
+            itemView.chatMessageView.setMessage(message.getText(), message)
+            val isShowCorner =  false
+            itemView.chatMessageView.showCorner = isShowCorner
+            itemView.chatMessageView.setDateTime(DateUtils.dateToHHmmss(message.date))
+
+
+           // if (message.canBeRead()) {
+                //отправляем статус что прочитано
+         //       messageReadAction.invoke(message.id, ConnectionsWrapper.ConnectionType.defaultType)
+            //}
+
+
+            // itemView.chatMessageView.setMessageType(message.messageType)
+         //   val nextItem = getItem(adapterPosition + 1) as? TextItemMessage
+          //  val prevItem = getItem(adapterPosition - 1) as? TextItemMessage
          /*   val user = message.user ?: RosterUser()
 
             itemView.chatMessageView.isMine = message.isMine
@@ -282,7 +294,12 @@ class MessagesAdapter(
         }
     }
 
-    inner class TechMessagesViewHolder(itemView: View) : ViewHolder(itemView), LayoutContainer {
+    open inner class BaseMessagesViewHolder(itemView: View) : ViewHolder(itemView), LayoutContainer {
+        override val containerView: View?
+            get() = itemView
+    }
+
+    inner class TechMessagesViewHolder(itemView: View) : BaseMessagesViewHolder(itemView), LayoutContainer {
 
         override val containerView: View?
             get() = itemView
@@ -293,7 +310,7 @@ class MessagesAdapter(
         }
     }
 
-    inner class DateMessagesViewHolder(itemView: View) : ViewHolder(itemView), LayoutContainer {
+    inner class DateMessagesViewHolder(itemView: View) : BaseMessagesViewHolder(itemView), LayoutContainer {
 
         override val containerView: View?
             get() = itemView
@@ -303,13 +320,13 @@ class MessagesAdapter(
         }
     }
 
-    inner class SecretInviteViewHolder(itemView: View) : ViewHolder(itemView), LayoutContainer {
+    inner class SecretInviteViewHolder(itemView: View) : BaseMessagesViewHolder(itemView), LayoutContainer {
 
         override val containerView: View?
             get() = itemView
 
-        fun bind(message: SecretInviteItem) {
-            itemView.infoTextView.text = message.text
+        fun bind(message: ConnectItemMessage) {
+            itemView.infoTextView.text = message.getText()
         }
     }
 /*

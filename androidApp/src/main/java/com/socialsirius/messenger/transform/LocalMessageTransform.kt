@@ -15,6 +15,7 @@ import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
 import com.socialsirius.messenger.ui.chats.chats.message.*
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
+import com.socialsirius.messenger.models.Chats
 
 
 import java.util.*
@@ -22,9 +23,9 @@ import java.util.*
 class LocalMessageTransform {
 
     companion object {
-        fun toItemContacts(localMessage: LocalMessage?): ItemContacts {
+        fun toItemContacts(localMessage: LocalMessage?): Chats {
             if (localMessage == null) {
-                return ItemContacts()
+                return Chats()
             }
             val message = localMessage.message()
             var title = ""
@@ -37,7 +38,7 @@ class LocalMessageTransform {
                 id = localMessage.pairwiseDid
                 title = pairwise.their.label ?:""
             }
-            val contact = ItemContacts(id ?: "", title, Date())
+            val contact = Chats(id ?: "", title, Date())
             return contact
         }
 
@@ -112,7 +113,7 @@ class LocalMessageTransform {
 
 
         fun toLocalMessage(
-            itemContacts: ItemContacts?,
+            itemContacts: Chats?,
             messageRepository: MessageRepository
         ): LiveData<LocalMessage?> {
             return messageRepository.getItemById(itemContacts?.id ?: "")

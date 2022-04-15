@@ -8,14 +8,16 @@ import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.databinding.ItemPassphraseBinding
 import com.socialsirius.messenger.models.ui.PassPhraseItem
+import com.socialsirius.messenger.repository.UserRepository
+import java.nio.charset.Charset
 import javax.inject.Inject
 
-class CreatePhraseSecondViewModel @Inject constructor() : BaseViewModel() {
+class CreatePhraseSecondViewModel @Inject constructor(val userRepository: UserRepository) : BaseViewModel() {
 
     val startClickLiveData = MutableLiveData<Boolean>()
-    var authName = MutableLiveData<String>("")
     val passPhraseListLiveData = MutableLiveData<List<PassPhraseItem>>()
-    val mnemonicCode: Mnemonics.MnemonicCode = Mnemonics.MnemonicCode(AppPref.getInstance().getDeviceId().toByteArray())
+    val mnemonicCode: Mnemonics.MnemonicCode = Mnemonics.MnemonicCode(userRepository.myUser.pass!!.toByteArray(Charset.defaultCharset()))
+
     fun onStartClick(v: View) {
         startClickLiveData.postValue(true)
     }
@@ -26,10 +28,6 @@ class CreatePhraseSecondViewModel @Inject constructor() : BaseViewModel() {
         passPhraseListLiveData.postValue(list)
     }
 
-    fun createPhrase() {
-
-        mnemonicCode.toSeed()
-    }
 
     fun createList(): List<PassPhraseItem> {
         val list: MutableList<PassPhraseItem> = mutableListOf()

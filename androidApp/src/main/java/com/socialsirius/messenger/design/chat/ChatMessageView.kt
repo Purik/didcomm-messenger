@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
+import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
 
 
 import java.io.File
@@ -189,19 +190,19 @@ class ChatMessageView @JvmOverloads constructor(
         avatarImageView.updateStatus(isOnline)
     }
 
-  //  fun setMessage(message: String?, parent: ChatMessageItem, updateMetadataAction: (MetaData?) -> Unit) {
-       /* if (parent.messageType == ContentType.text || parent.messageType == ContentType.services || parent.messageType == ContentType.answer) {
+   fun setMessage(message: String?, parent: TextItemMessage) {
+    //   if (parent.messageType == ContentType.text || parent.messageType == ContentType.services || parent.messageType == ContentType.answer) {
             messageTextView.text = message
             messageTextView.setLinkTextColor(ContextCompat.getColor(this.context,
                     if (isMine) R.color.backgroundColor else R.color.defaultColor))
             Linkify.addLinks(messageTextView, Linkify.ALL)
             mainPanelView.layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 
-            val firstUrl = parent.urlMetadata?.url
+    /*        val firstUrl = parent.urlMetadata?.url
                     ?: messageTextView.urls?.firstOrNull { it.url.startsWith("http") }?.url.orEmpty()
-            Log.d("mylog29999", "message=" + message + " firstUrl=" + firstUrl)
-            linkPreviewView.setIsOnDarkBackground(isMine)
-            if(firstUrl.isEmpty()){
+            Log.d("mylog29999", "message=" + message + " firstUrl=" + firstUrl)*/
+            //linkPreviewView.setIsOnDarkBackground(isMine)
+            /*if(firstUrl.isEmpty()){
                 linkPreviewView.updateWithMetadata(null)
             }else if (parent.urlMetadata != null) {
                 linkPreviewView.updateWithMetadata(parent.urlMetadata)
@@ -212,9 +213,9 @@ class ChatMessageView @JvmOverloads constructor(
                         updateMetadataAction(it)
                     }
                 }
-            }
-        }*/
-   // }
+            }*/
+      //  }
+    }
 
 
     fun setComment(comment: String?) {

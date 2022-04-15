@@ -9,7 +9,7 @@ import com.socialsirius.messenger.base.ui.SimpleBaseRecyclerViewAdapter
 import com.socialsirius.messenger.databinding.ItemPassphraseBinding
 import com.socialsirius.messenger.models.ui.PassPhraseItem
 
-class PassPhraseAdapter :
+class PassPhraseAdapter(override val layoutRes: Int = R.layout.item_passphrase) :
     SimpleBaseRecyclerViewAdapter<PassPhraseItem, PassPhraseAdapter.PassPhraseViewHolder>() {
 
 
@@ -20,20 +20,18 @@ class PassPhraseAdapter :
         }
     }
 
-    override fun getLayoutRes(): Int {
-        return R.layout.item_passphrase
-    }
+
 
     override fun getViewHolder(
         parent: ViewGroup?,
         layoutRes: Int,
         viewType: Int
     ): PassPhraseViewHolder {
-        return PassPhraseViewHolder(getInflatedView(getLayoutRes()))
+        return PassPhraseViewHolder(getInflatedView(layoutRes,parent))
     }
 
-    override fun onBind(holder: PassPhraseViewHolder?, position: Int) {
+    override fun onBind(holder: PassPhraseViewHolder, item: PassPhraseItem, position: Int) {
         val item = getItem(position)
-        holder?.bind(item)
+        holder.bind(item)
     }
 }

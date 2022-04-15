@@ -32,7 +32,8 @@ class UserRepository @Inject constructor(private val appExecutors: AppExecutors)
 
     fun logout(){
         AppPref.getInstance().setUser(null)
-         myUser = User()
+        AppPref.getInstance().setPin(null)
+        myUser = User()
     }
 
 }

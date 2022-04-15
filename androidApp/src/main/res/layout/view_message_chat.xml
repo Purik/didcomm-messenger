@@ -50,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
+                android:visibility="gone"
                 tools:text="Lacy Liss" />
 
             <ImageView
@@ -107,7 +108,7 @@
                 android:id="@+id/linkPreviewView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <WebView
                 android:id="@+id/htmlView"
@@ -115,12 +116,14 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:nestedScrollingEnabled="false"
+                android:visibility="gone"
                 android:scrollbars="none" />
 
             <com.socialsirius.messenger.design.chat.VideoImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageVideoView"/>
+                android:id="@+id/imageVideoView"
+                android:visibility="gone"/>
        <!--     <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -176,7 +179,8 @@
             <com.socialsirius.messenger.design.chat.DocumentMessageView
                 android:id="@+id/fileView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

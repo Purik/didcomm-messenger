@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.socialsirius.messenger.R
+import com.socialsirius.messenger.models.Chats
 
 
 class AvatarView @JvmOverloads constructor(
@@ -112,29 +113,29 @@ class AvatarView @JvmOverloads constructor(
         }
     }*/
 
-   /* fun update(chat: Chats) {
+   fun update(chat: Chats) {
         imageView.setImageDrawable(null)
         if (chat.isRoom) {
             imageView.setPadding(0, 0, 0, 0)
-            val names = chat.title.split(" ")
-            update(chat.title, names.getOrNull(1), chat.icon, null)
+            val names = chat.title?.split(" ")
+           // update(chat.title, names.getOrNull(1), chat.icon, null)
             activeStatusView.visibility = View.GONE
         } else {
-            val members = chat.members?.filter { it.jid != AppPref.getUserJid() }
+          /*  val members = chat.members?.filter { it.jid != AppPref.getUserJid() }
             if (!members.isNullOrEmpty()) {
                 val user = members[0]
                 connectedRosterUser = user
                 update(user)
-            } else {
+            } else {*/
                 val names = chat.title?.split(" ")
                 var name = ""
                 if(names?.size?:0 >0){
                     name = names!![0]
                 }
                 update(name, names?.getOrNull(1))
-            }
+         //   }
         }
-    }*/
+    }
 
     fun update(name: String, surname: String?, imageUrl: String? = null) {
         update(name, surname, imageUrl, null)

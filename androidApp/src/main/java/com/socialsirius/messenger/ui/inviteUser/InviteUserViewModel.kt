@@ -1,24 +1,40 @@
 package com.socialsirius.messenger.ui.inviteUser
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.models.ui.ItemContacts
+import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
+import com.socialsirius.messenger.transform.LocalMessageTransform
 
 import javax.inject.Inject
 
 class InviteUserViewModel @Inject constructor(
-    val resourcesProvider: ResourcesProvider
+    val resourcesProvider: ResourcesProvider,
+    val sdkUseCase: SDKUseCase,
+    val messageRepository: MessageRepository
    // val messageUseCase: MessagesUseCase,
   //  val chatsRepository: ChatsRepository
 ) : BaseViewModel( ) {
     //val repositoryCreatedLiveData = chatsRepository.oneChatCreatedUpdateLiveData
     val qrCodeLiveData = MutableLiveData<String>()
     val shareButtonAction = MutableLiveData<String>()
+    val invitationStartLiveData = messageRepository.invitationStartLiveData
+    val invitationErrorLiveData = messageRepository.invitationErrorLiveData
+    val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
+
+    val invitationPolicemanSuccessLiveData = messageRepository.invitationPolicemanSuccessLiveData
 
     override fun onViewCreated() {
         super.onViewCreated()
+        val inviteLink = sdkUseCase.generateInvitation() ?:""
+        Log.d("mylog200","inviteLink="+inviteLink)
+        qrCodeLiveData.value = inviteLink
       /* val inviteWrapper =  Feature0160(true).generateMyInvite()
         val messageInvite = inviteWrapper.indyMessageString
         val messageDid = inviteWrapper.indyMessage.firstRecipient
@@ -52,4 +68,11 @@ class InviteUserViewModel @Inject constructor(
     fun onShareButtonClick(v: View?) {
         shareButtonAction.value = qrCodeLiveData.value
     }
+
+    fun getMessage(id : String) : Chats {
+        val localMessage = messageRepository.getItemBy(id)
+        return LocalMessageTransform.toItemContacts(localMessage)
+    }
+
+
 }

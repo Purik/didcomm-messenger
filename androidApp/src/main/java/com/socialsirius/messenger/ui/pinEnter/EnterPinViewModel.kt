@@ -3,13 +3,16 @@ package  com.socialsirius.messenger.ui.pinEnter
 import android.os.Handler
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.repository.UserRepository
 
 import javax.inject.Inject
 
 class EnterPinViewModel @Inject constructor(
     val resourcesProvider: ResourcesProvider,
+    val userRepository: UserRepository
 /*    val pinCodeUseCase: PinCodeUseCase,
     val indyUseCase: IndyUseCase,
     val loginUseCase: LoginUseCase*/
@@ -33,21 +36,23 @@ class EnterPinViewModel @Inject constructor(
     }
 
     fun onDigitClick(digit: Int) {
-      /*  if (countForDigit > indicatorCodeLiveData.value?.length ?: 0) {
+        if (countForDigit > indicatorCodeLiveData.value?.length ?: 0) {
             indicatorCodeLiveData.value = indicatorCodeLiveData.value.orEmpty() + digit
         }
         if (countForDigit == indicatorCodeLiveData.value?.length ?: 0) {
             indicatorCodeFillLiveData.value = true
-        }*/
+        }
     }
 
     fun onSuccess() {
+        indicatorSuccesLiveData.postValue(true)
    /*     indyUseCase.setUserResoursesFromWallet()
         indicatorSuccesLiveData.postValue(true)*/
     }
 
     fun onFail() {
-     /*   hintTextLiveData.value = (resourceProvider.getString(R.string.pin_code_entered_error))
+        indicatorErrorLiveData.value = true
+       /*hintTextLiveData.value = (resourceProvider.getString(R.string.pin_code_entered_error))
         val countMinus = AppPref.getInstance().userCodeTryCount - 1
         if (countMinus < 0) {
             AppPref.getInstance().userCodeTryCount = 0
@@ -71,6 +76,8 @@ class EnterPinViewModel @Inject constructor(
 
 
     fun logout(forceLogout : Boolean){
+        userRepository.logout()
+
    /*     showProgressDialog()
         loginUseCase.logout(forceLogout)*/
     }
@@ -96,6 +103,12 @@ class EnterPinViewModel @Inject constructor(
     }
 
     fun openWallet() {
+        val mCode = indicatorCodeLiveData.value
+        if(AppPref.getInstance().getPin() == mCode){
+            onSuccess()
+        }else{
+            onFail()
+        }
       /*  val mCode = indicatorCodeLiveData.value
         showProgressDialog()
         val handler = Handler()

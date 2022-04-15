@@ -6,8 +6,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class ChatDateItem constructor(
-    override val timeInMillis: Double
-) : IChatItem {
+    override var timeInMillis: Double
+) : IChatItem() {
 
     override fun getMessageId(): String {
         return "date"

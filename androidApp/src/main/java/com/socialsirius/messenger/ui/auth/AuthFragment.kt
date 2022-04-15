@@ -21,8 +21,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding,AuthViewModel>() {
         model.startClickLiveData.observe(this, Observer {
             if(it){
                 model.startClickLiveData.value  = false
-                baseActivity.finishAffinity()
-                MainActivity.newInstance(requireContext())
+                baseActivity.pushPage(AuthSecurityFragment())
             }
         })
 
@@ -32,7 +31,6 @@ class AuthFragment : BaseFragment<FragmentAuthBinding,AuthViewModel>() {
                 model.showNowClickLiveData.value = false
                 baseActivity.pushPage(CreatePhraseSecondFragment())
             }
-
         })
 
         model.authName.observe(this, Observer {

@@ -14,7 +14,7 @@ import com.socialsirius.messenger.databinding.ActivityLoaderBinding
 import com.socialsirius.messenger.databinding.ActivitySplashBinding
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
-
+import com.socialsirius.messenger.ui.pinEnter.EnterPinFragment
 
 
 class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>() {
@@ -29,6 +29,9 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
         }
     }
 
+    override fun getRootFragmentId(): Int {
+        return R.id.mainLayout
+    }
 
     override fun getLayoutRes(): Int {
         return R.layout.activity_loader
@@ -47,7 +50,7 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
         super.subscribe()
         model.initEndLiveData.observe(this, Observer {
             finishAffinity()
-                MainActivity.newInstance(this)
+            MainActivity.newInstance(this)
         })
     }
 
@@ -55,9 +58,17 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
         super.setupViews()
 
     }
+
+    fun initSdk(){
+        model.initSdk(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        model.initSdk(this)
+        if(AppPref.getInstance().getPin().isNullOrEmpty()){
+            initSdk()
+        }else{
+            showPage(EnterPinFragment())
+        }
     }
 
 

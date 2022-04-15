@@ -9,60 +9,50 @@ import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.ui.PassPhraseItem
 import com.socialsirius.messenger.repository.UserRepository
+import java.nio.charset.Charset
 import javax.inject.Inject
 
-class AuthViewModel @Inject constructor( val userRepository: UserRepository): BaseViewModel() {
+class AuthViewModel @Inject constructor(val userRepository: UserRepository) : BaseViewModel() {
 
     val startClickLiveData = MutableLiveData<Boolean>()
     val showNowClickLiveData = MutableLiveData<Boolean>()
-    var authName  = MutableLiveData<String>("")
+    var authName = MutableLiveData<String>("")
 
-    fun saveUserName(){
+    fun saveUser() {
         userRepository.myUser.name = authName.value
+        userRepository.myUser.uid = AppPref.getInstance().getDeviceId()
+        userRepository.myUser.pass = createPhrase()
         userRepository.saveUserToPref()
     }
 
-    fun onStartClick(v : View){
+    fun onStartClick(v: View) {
+        saveUser()
         startClickLiveData.postValue(true)
-        saveUserName()
     }
 
-
-    val passPhraseListLiveData = MutableLiveData<List<PassPhraseItem>>()
-
-
-    override fun setupViews() {
-        super.setupViews()
-        createPhrase()
-       // val list = createList()
-   //     passPhraseListLiveData.postValue(list)
-    }
-
-    fun showNow(v : View){
+    fun showNow(v: View) {
         showNowClickLiveData.postValue(true)
     }
 
-    fun createPhrase() {
-        val mnemonicCode: Mnemonics.MnemonicCode = Mnemonics.MnemonicCode(AppPref.getInstance().getDeviceId().toByteArray())
+    fun createPhrase(): String {
+        val mnemonicCode: Mnemonics.MnemonicCode =
+            Mnemonics.MnemonicCode(Mnemonics.WordCount.COUNT_12)
         val list: MutableList<String> = mutableListOf()
-        mnemonicCode.words.forEach {
-            list.add(it.concatToString())
-        }
-        //t=[coral, private, atom, hover, glory, box, remain, era, curtain, offer, escape, skill, adapt, bird, this, town, glimpse, hawk, flip, idea, addict, craft, sheriff, club, goddess, ranch]
-      //  list=[coral, private, atom, hover, glory, box, remain, era, curtain, offer, escape, skill, adapt, bird, this, town, glimpse, hawk, flip, idea, addict, craft, sheriff, club, goddess, ranch]
-      Log.d("mylog2090","list="+list)
-      Log.d("mylog2090","AppPref.getInstance().getDeviceId()="+AppPref.getInstance().getDeviceId())
-    }
-
-   // fun createList(): List<PassPhraseItem> {
-
-     /*   val list: MutableList<PassPhraseItem> = mutableListOf()
         mnemonicCode.words.forEachIndexed { index, chars ->
-            val int =  index+1
-            list.add(PassPhraseItem(int.toString(), chars.concatToString()))
+            list.add(chars.concatToString())
         }
-        return list*/
- //   }
+        var string = ""
+        list.forEachIndexed { index, s ->
+            string = if (index == 0) {
+                s
+            } else {
+                "$string $s"
+            }
+        }
+        val pass = string
+        println("createPhrase pass=" + pass)
+        return pass
 
+    }
 
 }

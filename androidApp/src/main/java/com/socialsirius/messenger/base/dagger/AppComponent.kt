@@ -1,15 +1,21 @@
 package com.socialsirius.messenger.base.dagger;
 
 import android.app.Application
+import com.socialsirius.messenger.repository.UserRepository
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
+import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
+import com.socialsirius.messenger.ui.activities.message.MessageActivity
+import com.socialsirius.messenger.ui.activities.scan.ScanActivity
+import com.socialsirius.messenger.ui.activities.settings.SettingsActivity
 
 import com.socialsirius.messenger.ui.activities.splash.SplashActivity
 
 import com.socialsirius.messenger.ui.activities.tutorial.TutorialActivity
 import com.socialsirius.messenger.ui.auth.AuthFragment
+import com.socialsirius.messenger.ui.auth.AuthSecurityFragment
 import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseFirstFragment
 import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseSecondFragment
 import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseThirdFragment
@@ -19,7 +25,9 @@ import com.socialsirius.messenger.ui.chats.userProfile.UserProfileFragment
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.main.MainFragment
 import com.socialsirius.messenger.ui.more.MenuMoreFragment
-import com.socialsirius.messenger.ui.scan.HandleWebInviteFragment
+import com.socialsirius.messenger.ui.pinCreate.CreatePinFragment
+import com.socialsirius.messenger.ui.pinEnter.EnterPinFragment
+
 import com.socialsirius.messenger.ui.scan.MenuScanQrFragment
 import com.socialsirius.messenger.ui.tutorial.SplashFragment
 import com.socialsirius.messenger.ui.userSettings.UserSettingsFragment
@@ -55,7 +63,7 @@ interface AppComponent {
     }
 
     fun inject(activity: MainActivity)
- //   fun provideMessageRepository(): MessageRepository?
+    fun provideUserRepository(): UserRepository?
     /**
      * Add all fragment with ViewModel Here
      */
@@ -65,12 +73,17 @@ interface AppComponent {
     fun inject(activity: TutorialActivity)
     fun inject(activity: SplashActivity)
     fun inject(activity: LoaderActivity)
+    fun inject(activity: MessageActivity)
+    fun inject(activity: InviteActivity)
+    fun inject(activity: SettingsActivity)
+    fun inject(activity: ScanActivity)
 
 
     //Fragments
     fun inject(fragment: MainFragment)
     fun inject(fragment: SplashFragment)
     fun inject(fragment: AuthFragment)
+    fun inject(fragment: AuthSecurityFragment)
     fun inject(fragment: CreatePhraseFirstFragment)
     fun inject(fragment: CreatePhraseSecondFragment)
     fun inject(fragment: CreatePhraseThirdFragment)
@@ -82,7 +95,10 @@ interface AppComponent {
     fun inject(fragment: UserSettingsFragment)
     fun inject(fragment: MenuScanQrFragment)
     fun inject(fragment: InviteUserFragment)
-    fun inject(fragment: HandleWebInviteFragment)
+ //   fun inject(fragment: HandleWebInviteFragment)
+
+    fun inject(fragment: CreatePinFragment)
+    fun inject(fragment: EnterPinFragment)
 
 
 /*    fun inject(fragment: AuthZeroFragment)

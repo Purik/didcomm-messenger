@@ -309,6 +309,8 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
     }
 
     public void setupViews(){
-
+        if(model!=null){
+            model.setupViews();
+        }
     }
 }

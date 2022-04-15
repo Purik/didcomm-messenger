@@ -63,6 +63,7 @@ class SDKUseCase @Inject constructor(
         intent.setAction(WebSocketService.EXTRA_CONNECT)
         intent.putExtra("url", url)
         context.startService(intent)
+
     }
 
 
@@ -206,6 +207,8 @@ class SDKUseCase @Inject constructor(
             .addScenario("Prover", ProverScenarioImpl(messageRepository, eventRepository))
         ScenarioHelper.getInstance()
             .addScenario("Question", QuestionAnswerScenarioImp(messageRepository, eventRepository))
+        ScenarioHelper.getInstance()
+            .addScenario("Notification", NotificationScenarioImpl(messageRepository))
 
     }
 

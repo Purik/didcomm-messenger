@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,7 +10,7 @@
             type="com.socialsirius.messenger.ui.chats.allChats.AllChatsViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,14 +18,16 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_chat" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/newChatButton"
@@ -41,13 +44,13 @@
         <LinearLayout
             android:id="@+id/emptyStateView"
             android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:elevation="@dimen/common_gap_8"
             android:outlineProvider="none"
             android:background="@color/backgroundColor"
             android:gravity="center_horizontal"
-            android:visibility="visible"
+            android:visibility="gone"
             android:paddingStart="@dimen/common_gap_64"
             android:paddingEnd="@dimen/common_gap_64"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -96,6 +99,6 @@
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 </layout>

@@ -19,10 +19,14 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityMainBinding
+import com.socialsirius.messenger.ui.activities.invite.InviteActivity
+import com.socialsirius.messenger.ui.activities.scan.ScanActivity
+import com.socialsirius.messenger.ui.activities.settings.SettingsActivity
 import com.socialsirius.messenger.ui.chats.allChats.AllChatsFragment
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.scan.MenuScanQrFragment
 import com.socialsirius.messenger.ui.userSettings.UserSettingsFragment
+import com.socialsirius.messenger.utils.NotificationsUtils
 
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
@@ -50,6 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NotificationsUtils.createChannelsForNotifications()
      //   val drawerLayout: DrawerLayout = dataBinding.drawerLayout
         val navView: NavigationView = dataBinding.navView
       //  val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -101,10 +106,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
 
                 }
                 R.id.nav_settings -> {
-                    showPage(UserSettingsFragment())
+                    SettingsActivity.newInstance(this)
                 }
                 R.id.nav_invite -> {
-                    showPage(InviteUserFragment())
+                    InviteActivity.newInstance(this)
                 }
                 R.id.nav_about -> {
 
@@ -126,16 +131,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.action_scan_qr){
-            showPage(MenuScanQrFragment())
+          //  showPage(MenuScanQrFragment())
+            ScanActivity.newInstance(this)
         }
         return super.onOptionsItemSelected(item)
     }
     var dialog: AlertDialog? = null
     override fun subscribe() {
         super.subscribe()
-
-
-
+/*
         model.invitationStartLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationStartLiveData.value = null
@@ -161,7 +165,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
                 model.invitationSuccessLiveData.value = null
                 val item = model.getMessage(it)
                 dialog?.cancel()
-                //     popPage(ChatsFragment.newInstance(item))
+
+             //   popPage(ChatsFragment.newInstance(item))
             }
         })
 
@@ -172,7 +177,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
                 dialog?.cancel()
                 //  popPage(DocumentShareFragment.newInstance(item))
             }
-        })
+        })*/
     }
 
 

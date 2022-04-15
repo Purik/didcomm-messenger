@@ -1,5 +1,6 @@
 package com.socialsirius.messenger.ui.scan
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.databinding.FragmentMenuScanQrBinding
 import com.socialsirius.messenger.design.SiriusScannerView
 import com.socialsirius.messenger.ui.activities.main.MainActivity
+import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.utils.PermissionHelper
 
 import kotlinx.android.synthetic.main.fragment_menu_scan_qr.mScannerView
@@ -40,7 +42,7 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
         }
 
     }
-
+    var dialog: AlertDialog? = null
     override fun onResume() {
         super.onResume()
         mScannerView?.resumeCameraPreview(this)
@@ -75,6 +77,47 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
             }*/
 
 
+        })
+
+
+        model.invitationStartLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationStartLiveData.value = null
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Connecting...")
+                builder.setMessage("Please wait,secure connection is being established")
+                builder.setCancelable(false)
+                dialog = builder.show()
+            }
+        })
+
+        model.invitationErrorLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationErrorLiveData.value = null
+                dialog?.cancel()
+                model.onShowToastLiveData.postValue(it.second)
+            }
+
+        })
+
+        model.invitationSuccessLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationSuccessLiveData.value = null
+                val item = model.getMessage(it)
+                dialog?.cancel()
+                baseActivity.finish()
+                MessageActivity.newInstance(requireContext(),item)
+                //   popPage(ChatsFragment.newInstance(item))
+            }
+        })
+
+        model.invitationPolicemanSuccessLiveData.observe(this, Observer {
+            if (it != null) {
+                model.invitationPolicemanSuccessLiveData.value = null
+                val item = model.getMessage(it)
+                dialog?.cancel()
+                //  popPage(DocumentShareFragment.newInstance(item))
+            }
         })
 
 

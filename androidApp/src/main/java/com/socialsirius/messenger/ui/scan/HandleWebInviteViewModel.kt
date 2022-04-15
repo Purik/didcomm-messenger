@@ -1,18 +1,20 @@
+/*
 package com.socialsirius.messenger.ui.scan
 
 import android.os.Handler
 
 import com.socialsirius.messenger.base.providers.ResourcesProvider
+import com.socialsirius.messenger.repository.MessageRepository
 import javax.inject.Inject
 
 class HandleWebInviteViewModel @Inject constructor(
-    resourcesProvider: ResourcesProvider
+    resourcesProvider: ResourcesProvider,
  //   messagesUseCase: MessagesUseCase,
  //   chatsRepository: ChatsRepository,
- //   messagesRepository: MessagesRepository,
+    messageRepository: MessageRepository
  //   messageListenerUseCase: MessageListenerUseCase
 
-) : MenuScanQrViewModel(resourcesProvider) {
+) : MenuScanQrViewModel(resourcesProvider,messageRepository) {
 
 
     override fun onViewCreated() {
@@ -31,4 +33,4 @@ class HandleWebInviteViewModel @Inject constructor(
     }
 
 
-}
+}*/

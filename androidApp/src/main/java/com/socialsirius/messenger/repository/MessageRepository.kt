@@ -33,6 +33,18 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
         return getItemsBy("pairwiseDid", did)
     }
 
+
+    fun getLastMessagesForPairwiseDid(did: String): LiveData<LocalMessage?> {
+        val livedata = MutableLiveData<LocalMessage?>()
+        livedata.postValue(getDatabase().getLastMessagesForDid(did))
+        return livedata
+    }
+
+    fun getLastMessagesForPairwiseDid2(did: String): LocalMessage? {
+        return  getDatabase().getLastMessagesForDid(did)
+    }
+
+
     fun getAllUnacceptedMessages(): LiveData<List<LocalMessage>> {
         val livedata = MutableLiveData<List<LocalMessage>>()
         livedata.postValue(getDatabase().getMainActionsMessages())
@@ -43,6 +55,12 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
         map["type"] = false
         return getItemsBy(map)*/
     }
+
+    fun getUnreadcountForDid(did : String): Int {
+        return getDatabase().getUnreadMessages(did).toInt()
+
+    }
+
 
 
     override fun getDatabase(): MessageDatabase {

@@ -5,8 +5,8 @@ package  com.socialsirius.messenger.ui.chats.chat.item
 class SecretInviteItem private constructor(
         val id: String,
         val text: String,
-        override val timeInMillis: Double
-) : IChatItem {
+        override var timeInMillis: Double
+) : IChatItem() {
 
     companion object {
     /*    @JvmStatic

@@ -35,24 +35,20 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashActivityModel>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //   if (AppPref.getInstance().isLoggedIn()) {
-        //      LoaderActivity.newInstance(this, false)
-        //       } else {
-        //showPage(SplashFragment())
-        showPage(SplashFragment())
-        Handler().postDelayed({
+        if (AppPref.getInstance().isLoggedIn()) {
             finishAffinity()
-          //  MainActivity.newInstance(this)
-            TutorialActivity.newInstance(this)
-        }, 1000)
-        //       if(AppPref.getInstance().isTutorialDone()){
-
-        //      }else{
-        //          AuthActivity.newInstance(this)
-        //       }
-        //    }
-        //  finish()
+            LoaderActivity.newInstance(this)
+        } else {
+            showPage(SplashFragment())
+            Handler().postDelayed({
+                finishAffinity()
+                if (AppPref.getInstance().isTutorialDone()) {
+                    AuthActivity.newInstance(this)
+                } else {
+                    TutorialActivity.newInstance(this)
+                }
+            }, 1000)
+        }
     }
 
 }

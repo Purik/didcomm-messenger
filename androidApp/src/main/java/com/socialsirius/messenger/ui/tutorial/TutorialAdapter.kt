@@ -12,28 +12,22 @@ import com.socialsirius.messenger.databinding.ItemsTutorialBinding
 import com.socialsirius.messenger.models.ui.ItemTutorial
 
 
-class TutorialAdapter :
+class TutorialAdapter(override val layoutRes: Int = R.layout.items_tutorial) :
     SimpleBaseRecyclerViewAdapter<ItemTutorial, TutorialAdapter.TutorialViewHolder>() {
 
 
-    override fun onBind(holder: TutorialViewHolder?, position: Int) {
+    override fun onBind(holder: TutorialViewHolder, item: ItemTutorial, position: Int) {
         val item = getItem(position)
         holder?.bind(item)
     }
 
-
-    override fun getLayoutRes(): Int {
-        return R.layout.items_tutorial
-    }
 
     override fun getViewHolder(
         parent: ViewGroup?,
         layoutRes: Int,
         viewType: Int
     ): TutorialViewHolder {
-        val view =
-            LayoutInflater.from(parent?.context).inflate(getLayoutRes(), parent, false)
-        return TutorialViewHolder(view)
+        return TutorialViewHolder(getInflatedView(layoutRes,parent))
     }
 
     class TutorialViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

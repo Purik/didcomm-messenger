@@ -14,6 +14,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.models.ui.ItemContacts
+import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
+import com.socialsirius.messenger.transform.LocalMessageTransform
+import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
+import com.socialsirius.messenger.utils.extensions.observeOnce
 
 
 import retrofit2.Call
@@ -30,8 +37,9 @@ import kotlin.collections.HashMap
 const val MESSAGES_LIMIT = 20
 
 class ChatViewModel @Inject constructor(
-        val resourcesProvider: ResourcesProvider
-       // private val messagesRepository: MessagesRepository,
+        val resourcesProvider: ResourcesProvider,
+        private val messageRepository: MessageRepository,
+        val sdkUseCase: SDKUseCase
      //   private val userRepository: UserRepository,
      //   private val messageListenerUseCase: MessageListenerUseCase,
       //  private val favoritesRepository: FavoritesRepository,
@@ -40,106 +48,170 @@ class ChatViewModel @Inject constructor(
       //  val messageUseCase: MessagesUseCase,
      //   val downloadRepository: DownloadRepository
 ) : BaseViewModel() {
-
-  /*  private var currentChat: Chats? = null
-    private var isRangeLoading = false
-
-    val emptyStateLiveData = MutableLiveData<Boolean>()
-    val chatLiveData = MutableLiveData<Chats>()
-    val moreActionLiveData = MutableLiveData<List<String>>()
-    val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
-    val lastActivityLiveData = MutableLiveData<String>()
-    val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
-    val lastActivityAllLiveData = userRepository.statusListLiveData
-    val updateOneChatLiveData = chatsRepository.oneChatUpdateLiveData
-
-
-    val messagesSetLiveData = MutableLiveData<Int>()
-    val messagesAddLiveData = MutableLiveData<Triple<Int, Int, Boolean>>()
-    val messagesAddRangeLiveData = MutableLiveData<Pair<Int, Int>>()
-    val messagesUpdateLiveData = MutableLiveData<List<Int>>()
-    val showAcceptInviteButtonLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
-    val goToNewSecretChatLiveData = MutableLiveData<SecretChats>()
-    val goToNewSecretFromChatLiveData = chatsRepository.oneChatCreatedUpdateLiveData
-    val goToConnectionLiveData = MutableLiveData<ConnectionsWrapper>()
-    val messageTextLiveData = MutableLiveData<String>()
-    val bottomBotButtonList = MutableLiveData<List<BotButton>>()
-    val scrollToPositionLiveData = MutableLiveData<Int>()
-    private val originalMessages = mutableListOf<IChatItem>()
-
-
-    val addToContactListLayoutVisibilityLiveData = MutableLiveData<Int>(View.GONE)
-    val addToContactListTextLiveData = MutableLiveData<String>()
-
-    fun getOriginalMessages() = originalMessages
-    fun getCurrentChat() = chatLiveData.value
-    fun getRoomsResponseFromChats() = RoomsResponse(getCurrentChat())
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cancelTimer()
-        cancelAllCredProofTimer()
-        chatsRepository.currentOpenChatLiveData.value = null
-
-    }
-
-    fun getDownloadedPath(url: String): String {
-        return messageUseCase.getDownloadedFilePathFromUrl(url)
-    }
-
-    fun getFilename(url: String, text: String?): String {
-        return messageUseCase.getFilename(url, text)
-    }
-
-    fun updateUncompleteMessage(message: String?) {
-        chatsRepository.updateUncompleteMessage(getCurrentChat(), message)
-    }
-
-    override fun onViewCreated() {
-        super.onViewCreated()
-        currentChat?.let { chat ->
-            chatLiveData.value = chat
-            chatsRepository.currentOpenChatLiveData.value = chat
-            if (!chat.isRoom) {
-                userRepository.checkLastActivityStatus(chat.id ?: "")
-            }
-
-            val uncompleteMessage = chat.uncompleteMessage
-
-            messageTextLiveData.value = uncompleteMessage
-
-
-            showHideMenu()
-
-            messagesRepository.messagesInDBLiveData.observeUntilDestroy(this) {
-                if (isMessageCurrentChat(it.data)) {
-
-                    val items = mapMessages(listOfNotNull(it.data))
-                    when (it.action) {
-                        CHANGE -> updateMessages(items)
-                        UPDATE -> updateMessages(items)
-                        ADD -> {
-                            addMessage(items)
-                            downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
-                        }
-                        ADD_RANGE -> {
-                            addMessages(items)
-                            downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
-                        }
-                        DELETE -> deleteMessages(items)
-                        SET -> {
-                            setMessages(items)
-                            downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
-                        }
-                    }
-                    showHideQuestionMenu(it.data)
-                    startTimerForCredentialProofMessage1(items)
+        private var currentChat: Chats? = null
+        val chatLiveData = MutableLiveData<Chats>()
+        val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
+        val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
+        val eventStoreLiveData = messageRepository.eventStoreLiveData
+        fun setChat(chats: Chats?) {
+                currentChat = chats
+                currentChat?.let {
+                        chatLiveData.value = it
                 }
-            }
+                createList()
+        }
 
-            initialLoadMessages()
 
-            *//*  goToNewSecretFromChatLiveData.observeUntilDestroy(this) {
+        fun readUnread(id : String){
+                messageRepository.updateErrorAccepted(id,true,false,null,null)
+        }
+        private fun createList() {
+                messageRepository.getMessagesForPairwiseDid(currentChat?.id ?: "").observeOnce(this) {
+                        var list = it.map {
+                                LocalMessageTransform.toBaseItemMessage(it)
+                        }.toMutableList()
+
+                      /*  if (list.isEmpty()) {
+                                visibilityChatLiveData.postValue(View.GONE)
+                        } else {
+                                visibilityChatLiveData.postValue(View.VISIBLE)
+                        }*/
+
+                        if (list.isEmpty()) {
+                                LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
+                                        .observeOnce(this) {
+                                                val message = LocalMessageTransform.toBaseItemMessage(it)
+                                                list.add(message)
+                                                Collections.sort(
+                                                        list,
+                                                        kotlin.Comparator { o1, o2 ->
+                                                                o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
+                                                        })
+                                                adapterListLiveData.postValue(list)
+                                        }
+                        }else{
+                                Collections.sort(
+                                        list,
+                                        kotlin.Comparator { o1, o2 ->
+                                                o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
+                                        })
+                                adapterListLiveData.postValue(list)
+                        }
+                }
+        }
+
+        fun sendMessageText(messageText: String) {
+                val message = sdkUseCase.sendTextMessageForPairwise(currentChat?.id ?: "", messageText)
+                message?.let {
+                        messageRepository.createOrUpdateItem(it)
+                        // eventRepository.storeEvent(message.message()?.id ?: "", message, "text")
+                        clearTextLiveData.postValue(true)
+                }
+        }
+
+        fun updateList() {
+                createList()
+        }
+
+        /*
+          private var isRangeLoading = false
+
+          val emptyStateLiveData = MutableLiveData<Boolean>()
+
+          val moreActionLiveData = MutableLiveData<List<String>>()
+          val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
+          val lastActivityLiveData = MutableLiveData<String>()
+          val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
+          val lastActivityAllLiveData = userRepository.statusListLiveData
+          val updateOneChatLiveData = chatsRepository.oneChatUpdateLiveData
+
+
+          val messagesSetLiveData = MutableLiveData<Int>()
+          val messagesAddLiveData = MutableLiveData<Triple<Int, Int, Boolean>>()
+          val messagesAddRangeLiveData = MutableLiveData<Pair<Int, Int>>()
+          val messagesUpdateLiveData = MutableLiveData<List<Int>>()
+          val showAcceptInviteButtonLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
+          val goToNewSecretChatLiveData = MutableLiveData<SecretChats>()
+          val goToNewSecretFromChatLiveData = chatsRepository.oneChatCreatedUpdateLiveData
+          val goToConnectionLiveData = MutableLiveData<ConnectionsWrapper>()
+          val messageTextLiveData = MutableLiveData<String>()
+          val bottomBotButtonList = MutableLiveData<List<BotButton>>()
+          val scrollToPositionLiveData = MutableLiveData<Int>()
+          private val originalMessages = mutableListOf<IChatItem>()
+
+
+          val addToContactListLayoutVisibilityLiveData = MutableLiveData<Int>(View.GONE)
+          val addToContactListTextLiveData = MutableLiveData<String>()
+
+          fun getOriginalMessages() = originalMessages
+          fun getCurrentChat() = chatLiveData.value
+          fun getRoomsResponseFromChats() = RoomsResponse(getCurrentChat())
+
+          override fun onDestroy() {
+              super.onDestroy()
+              cancelTimer()
+              cancelAllCredProofTimer()
+              chatsRepository.currentOpenChatLiveData.value = null
+
+          }
+
+          fun getDownloadedPath(url: String): String {
+              return messageUseCase.getDownloadedFilePathFromUrl(url)
+          }
+
+          fun getFilename(url: String, text: String?): String {
+              return messageUseCase.getFilename(url, text)
+          }
+
+          fun updateUncompleteMessage(message: String?) {
+              chatsRepository.updateUncompleteMessage(getCurrentChat(), message)
+          }
+
+          override fun onViewCreated() {
+              super.onViewCreated()
+              currentChat?.let { chat ->
+                  chatLiveData.value = chat
+                  chatsRepository.currentOpenChatLiveData.value = chat
+                  if (!chat.isRoom) {
+                      userRepository.checkLastActivityStatus(chat.id ?: "")
+                  }
+
+                  val uncompleteMessage = chat.uncompleteMessage
+
+                  messageTextLiveData.value = uncompleteMessage
+
+
+                  showHideMenu()
+
+                  messagesRepository.messagesInDBLiveData.observeUntilDestroy(this) {
+                      if (isMessageCurrentChat(it.data)) {
+
+                          val items = mapMessages(listOfNotNull(it.data))
+                          when (it.action) {
+                              CHANGE -> updateMessages(items)
+                              UPDATE -> updateMessages(items)
+                              ADD -> {
+                                  addMessage(items)
+                                  downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
+                              }
+                              ADD_RANGE -> {
+                                  addMessages(items)
+                                  downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
+                              }
+                              DELETE -> deleteMessages(items)
+                              SET -> {
+                                  setMessages(items)
+                                  downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
+                              }
+                          }
+                          showHideQuestionMenu(it.data)
+                          startTimerForCredentialProofMessage1(items)
+                      }
+                  }
+
+                  initialLoadMessages()
+
+                  *//*  goToNewSecretFromChatLiveData.observeUntilDestroy(this) {
                   it.let {
                       if (it?.id != chat.id && it is SecretChats) {
                           goToNewSecretChatLiveData.postValue(it)
@@ -281,19 +353,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun setChat(chats: Chats) {
-        currentChat = chats
-        chatLiveData.value = chats
-    }
 
-    fun sendMessageText(message: String) {
-        val mesForDb = messageUseCase.createTextMessage(message, getCurrentChat())
-        if (getCurrentChat() is SecretChats) {
-            messagesRepository.handleSendIndyMessages(mesForDb)
-            return
-        }
-        messagesRepository.sendMessage(mesForDb)
-    }
+
 
     fun sendAnswerMessageText(message: String) {
         val mesForDb = messageUseCase.createJsonMessage(message, getCurrentChat(), OutComing, ContentType.answer)

@@ -5,12 +5,13 @@ import com.j256.ormlite.table.DatabaseTable
 import com.sirius.library.agent.pairwise.Pairwise
 import com.sirius.library.messaging.Message
 import com.sirius.library.mobile.helpers.PairwiseHelper
+import java.io.Serializable
 
 
 import java.util.*
 
 @DatabaseTable(tableName = "messages")
-class LocalMessage : DatabaseIdModel {
+class LocalMessage : DatabaseIdModel , Serializable{
     override fun getId(): Any? {
         return id
     }

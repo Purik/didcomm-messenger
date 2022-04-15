@@ -43,10 +43,10 @@ class EventTransform() {
                 return TextItemMessage(event = null)
             }
             val message = event.message()
-            if (message is Invitation) {
+         /*   if (message is Invitation) {
                 val message = ConnectItemMessage(event = event)
                 return message
-            }
+            }*/
              if(message is ConnRequest){
                  return OfferItemMessage(event = event)
              }

@@ -4,11 +4,13 @@ package  com.socialsirius.messenger.ui.chats.chat.item
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-interface IChatItem {
+open class IChatItem() {
 
-    fun getMessageId(): String
+    open fun getMessageId(): String{
+        return ""
+    }
 
-    val timeInMillis: Double
+   open var timeInMillis: Double =0.0
 
     companion object {
 /*

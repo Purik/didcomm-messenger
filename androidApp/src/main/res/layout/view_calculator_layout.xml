@@ -10,6 +10,8 @@
         android:id="@+id/buttonOne"
         style="@style/CalculatorButton"
         android:text="1"
+
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -34,6 +36,7 @@
         android:id="@+id/buttonFour"
         style="@style/CalculatorButton"
         android:text="4"
+        android:gravity="center"
         android:layout_marginTop="@dimen/common_gap_24"
         app:layout_constraintStart_toStartOf="@+id/buttonOne"
         app:layout_constraintTop_toBottomOf="@+id/buttonOne"/>

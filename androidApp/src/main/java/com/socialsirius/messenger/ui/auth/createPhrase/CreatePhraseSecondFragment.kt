@@ -18,6 +18,8 @@ class CreatePhraseSecondFragment :
         return R.layout.fragment_create_phrase_second
     }
 
+
+
     override fun subscribe() {
         model.passPhraseListLiveData.observe(this, Observer {
             updateAdapter(it)
@@ -26,14 +28,13 @@ class CreatePhraseSecondFragment :
         model.startClickLiveData.observe(this, Observer {
             if(it){
                 model.startClickLiveData.value = false
-                baseActivity.finishAffinity()
-                MainActivity.newInstance(requireContext())
+               model.onShowToastLiveData.postValue("QR-code saved in folder")
             }
         })
     }
 
     fun updateAdapter(list : List<PassPhraseItem>){
-        adapter?.dataList = list
+        adapter?.dataList = list.toMutableList()
         adapter?.notifyDataSetChanged()
     }
     var adapter: PassPhraseAdapter? = null
@@ -59,8 +60,6 @@ class CreatePhraseSecondFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = PassPhraseAdapter()
-
-
     }
 
     override fun setModel() {
