@@ -8,6 +8,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.socialsirius.messenger.service.WebSocketService
 import com.socialsirius.messenger.utils.DateUtils.PATTERN_ROSTER_STATUS_RESPONSE2
 import com.sirius.library.agent.BaseSender
+import com.sirius.library.agent.aries_rfc.concept_0017_attachments.Attach
 import com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message
 
 import com.sirius.library.agent.aries_rfc.feature_0113_question_answer.messages.QuestionMessage
@@ -30,6 +31,7 @@ import com.socialsirius.messenger.utils.FileUtils
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.OfferCredentialMessage
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
 import com.sirius.library.mobile.models.CredentialsRecord
+import com.socialsirius.messenger.models.FileAttach
 import com.sodium.LibSodium
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -212,6 +214,25 @@ class SDKUseCase @Inject constructor(
 
     }
 
+
+    fun sendMessageWithAttachForPairwise(pairwiseDid: String, attach : FileAttach): LocalMessage {
+        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val message = Message.builder().setContent(attach.messageText).build()
+        val att: Attach = Attach().setId(attach.id).setMimeType("image/png").setFileName(attach.fileName)
+            .setData(attach.fileBase64Bytes ?: ByteArray(0))
+        message.addAttach(att)
+        val localMessage = LocalMessage(pairwiseDid = pairwiseDid)
+
+        localMessage.isMine = true
+        localMessage.type = "doc"
+
+        localMessage.message = message.serialize()
+        localMessage.sentTime = Date()
+        pairwise?.let {
+            SiriusSDK.getInstance().context.sendTo(message, pairwise)
+        }
+        return localMessage
+    }
 
     fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)

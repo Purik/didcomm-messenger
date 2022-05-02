@@ -67,12 +67,25 @@ dependencies {
 
 android {
     compileSdkVersion 31
+
+
+    signingConfigs {
+        config {
+            keyAlias System.getenv('KEY_ALIAS')
+            keyPassword System.getenv('KEY_PASS')
+            storeFile System.getenv('KEYSTORE_FILE') ? file(System.getenv('KEYSTORE_FILE')) : null
+            storePassword System.getenv('KEYSTORE_PASS')
+        }
+    }
+
     defaultConfig {
         applicationId 'com.socialsirius.messenger'
         minSdkVersion 24
         targetSdkVersion 31
         versionCode 1
         versionName '1.0'
+        versionCode System.getenv("VERSION_CODE") ? System.getenv("VERSION_CODE").toInteger() : 1
+        versionName System.getenv("VERSION") ?: '1.3.246'
 
         multiDexEnabled true
         archivesBaseName = "SocialSiriusMessenger_$versionName"
@@ -88,8 +101,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
-        'release' {
+        release {
             minifyEnabled false
+            signingConfig signingConfigs.config
         }
     }
     buildFeatures {

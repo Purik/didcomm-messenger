@@ -1,8 +1,15 @@
 package  com.socialsirius.messenger.ui.chats.chat
 
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.graphics.Matrix
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -12,14 +19,17 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.models.FileAttach
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
+import com.socialsirius.messenger.utils.FileUtils
 import com.socialsirius.messenger.utils.extensions.observeOnce
 
 
@@ -28,6 +38,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.math.BigInteger
 import java.util.*
 import javax.inject.Inject
@@ -37,181 +49,306 @@ import kotlin.collections.HashMap
 const val MESSAGES_LIMIT = 20
 
 class ChatViewModel @Inject constructor(
-        val resourcesProvider: ResourcesProvider,
-        private val messageRepository: MessageRepository,
-        val sdkUseCase: SDKUseCase
-     //   private val userRepository: UserRepository,
-     //   private val messageListenerUseCase: MessageListenerUseCase,
-      //  private val favoritesRepository: FavoritesRepository,
-       // private val chatsRepository: ChatsRepository,
-      //  private val uploadRepository: UploadRepository,
-      //  val messageUseCase: MessagesUseCase,
-     //   val downloadRepository: DownloadRepository
+    val resourcesProvider: ResourcesProvider,
+    private val messageRepository: MessageRepository,
+    val sdkUseCase: SDKUseCase
+    //   private val userRepository: UserRepository,
+    //   private val messageListenerUseCase: MessageListenerUseCase,
+    //  private val favoritesRepository: FavoritesRepository,
+    // private val chatsRepository: ChatsRepository,
+    //  private val uploadRepository: UploadRepository,
+    //  val messageUseCase: MessagesUseCase,
+    //   val downloadRepository: DownloadRepository
 ) : BaseViewModel() {
-        private var currentChat: Chats? = null
-        val chatLiveData = MutableLiveData<Chats>()
-        val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
-        val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
-        val eventStoreLiveData = messageRepository.eventStoreLiveData
-        fun setChat(chats: Chats?) {
-                currentChat = chats
-                currentChat?.let {
-                        chatLiveData.value = it
+    private var currentChat: Chats? = null
+    val chatLiveData = MutableLiveData<Chats>()
+    val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
+    val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val eventStoreLiveData = messageRepository.eventStoreLiveData
+    fun setChat(chats: Chats?) {
+        currentChat = chats
+        currentChat?.let {
+            chatLiveData.value = it
+        }
+        createList()
+    }
+
+
+    fun readUnread(id: String) {
+        messageRepository.updateErrorAccepted(id, true, false, null, null)
+    }
+
+    private fun createList() {
+        messageRepository.getMessagesForPairwiseDid(currentChat?.id ?: "").observeOnce(this) {
+            var list = it.map {
+                LocalMessageTransform.toBaseItemMessage(it)
+            }.toMutableList()
+
+            /*  if (list.isEmpty()) {
+                      visibilityChatLiveData.postValue(View.GONE)
+              } else {
+                      visibilityChatLiveData.postValue(View.VISIBLE)
+              }*/
+
+            if (list.isEmpty()) {
+                LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
+                    .observeOnce(this) {
+                        val message = LocalMessageTransform.toBaseItemMessage(it)
+                        list.add(message)
+                        Collections.sort(
+                            list,
+                            kotlin.Comparator { o1, o2 ->
+                                o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
+                            })
+                        adapterListLiveData.postValue(list)
+                    }
+            } else {
+                Collections.sort(
+                    list,
+                    kotlin.Comparator { o1, o2 ->
+                        o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
+                    })
+                adapterListLiveData.postValue(list)
+            }
+        }
+    }
+
+
+    fun generateFileAttach(filePath: Uri): FileAttach {
+        val fileAttach = FileAttach()
+       // val file = File(filePath)
+        fileAttach.fileName = "12.png"
+        fileAttach.id = "12"
+        fileAttach.fileType = FileAttach.FileType.Doc
+        val path = loadFromUri(filePath)
+        val file = File(path)
+        fileAttach.fileBase64Bytes = file.readBytes()
+        return fileAttach
+    }
+
+    fun sendMessageWithAttach(attach: FileAttach) {
+        val message = sdkUseCase.sendMessageWithAttachForPairwise(currentChat?.id ?: "", attach)
+        message?.let {
+            messageRepository.createOrUpdateItem(it)
+            // eventRepository.storeEvent(message.message()?.id ?: "", message, "text")
+            clearTextLiveData.postValue(true)
+        }
+    }
+
+    fun sendMessageText(messageText: String) {
+        val message = sdkUseCase.sendTextMessageForPairwise(currentChat?.id ?: "", messageText)
+        message?.let {
+            messageRepository.createOrUpdateItem(it)
+            // eventRepository.storeEvent(message.message()?.id ?: "", message, "text")
+            clearTextLiveData.postValue(true)
+        }
+    }
+
+    fun createFileFromBitmap(bitmap: Bitmap): String? {
+        val file = FileUtils.getOutputMediaFile("temp", FileUtils.generateFileName())
+        try {
+            /* val maxHeight = 2000
+             val maxWidth = 2000
+             val scale: Float = Math.min(
+                     maxHeight.toFloat() / bitmap.getWidth(),
+                     maxWidth.toFloat() / bitmap.getHeight()
+             )
+
+             val matrix = Matrix()
+             matrix.postScale(scale, scale)
+
+             val bitmape = Bitmap.createBitmap(
+                     bitmap,
+                     0,
+                     0,
+                     bitmap.getWidth(),
+                     bitmap.getHeight(),
+                     matrix,
+                     true
+             )*/
+            FileOutputStream(file).use { out ->
+                bitmap.compress(
+                    Bitmap.CompressFormat.JPEG,
+                    90,
+                    out
+                ) // bmp is your Bitmap instance
+            }
+            return file.absolutePath
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    fun loadFromUri(photoUri: Uri): String? {
+        //   model.category = "social"
+        try {
+            if (photoUri.scheme == "content") {
+                // model.category = "private"
+                /* if (isWhatsappUri(photoUri)) {
+                File whatsappMediaDirectoryName = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/WhatsApp/Media");
+                //Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images/Sent
+                //Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Images/
+                File whatsappMediaDirectoryName = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/WhatsApp/Media");
+                     val path = getDataColumn(requireContext(), photoUri, null, null, "_display_name")
+                     if (path != null) {
+                         val file = File(path)
+                         Log.d("mylog2090","path="+path +" file="+file)
+                         if (!file.canRead()) {
+                             // return null
+                         }
+                     }
+                     Log.d("mylog2090","path="+path)
+                     //     return path
+                 }*/
+                // check version of Android on device
+                var image = if (Build.VERSION.SDK_INT > 27) {
+                    // on newer versions of Android, use the new decodeBitmap method
+                    val source: ImageDecoder.Source =
+                        ImageDecoder.createSource(
+                            App.getContext().contentResolver,
+                            photoUri
+                        )
+                    ImageDecoder.decodeBitmap(source)
+                } else {
+                    // support older versions of Android by using getBitmap
+                    MediaStore.Images.Media.getBitmap(
+                        App.getContext().contentResolver,
+                        photoUri
+                    )
                 }
-                createList()
-        }
 
+                //  var  image = BitmapFactory.decodeStream(ViewEvoApplication.getAppContext().contentResolver.
+                //    openInputStream(photoUri))
+                return createFileFromBitmap(image)
 
-        fun readUnread(id : String){
-                messageRepository.updateErrorAccepted(id,true,false,null,null)
-        }
-        private fun createList() {
-                messageRepository.getMessagesForPairwiseDid(currentChat?.id ?: "").observeOnce(this) {
-                        var list = it.map {
-                                LocalMessageTransform.toBaseItemMessage(it)
-                        }.toMutableList()
-
-                      /*  if (list.isEmpty()) {
-                                visibilityChatLiveData.postValue(View.GONE)
-                        } else {
-                                visibilityChatLiveData.postValue(View.VISIBLE)
+                /*     dataBinding?.imageView?.setImageBitmap(image)
+                     if(model.recognizeAutomatically){
+                             model.onRecognizeClick(null)
+                     }*/
+            } /*else if(photoUri.path?.contains("storage") == true){
+                                model.category = "private"
+                                val file = File(photoUri.path)
+                                model. pathToFile =  file.absolutePath
+                                Glide.with(this)
+                                        .load(file)
+                                        .into(dataBinding.imageView)
+                                if(model.recognizeAutomatically){
+                                        model.onRecognizeClick(null)
+                                }
                         }*/
 
-                        if (list.isEmpty()) {
-                                LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
-                                        .observeOnce(this) {
-                                                val message = LocalMessageTransform.toBaseItemMessage(it)
-                                                list.add(message)
-                                                Collections.sort(
-                                                        list,
-                                                        kotlin.Comparator { o1, o2 ->
-                                                                o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
-                                                        })
-                                                adapterListLiveData.postValue(list)
-                                        }
-                        }else{
-                                Collections.sort(
-                                        list,
-                                        kotlin.Comparator { o1, o2 ->
-                                                o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
-                                        })
-                                adapterListLiveData.postValue(list)
-                        }
-                }
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            // Log.d()
         }
+        return null
+    }
 
-        fun sendMessageText(messageText: String) {
-                val message = sdkUseCase.sendTextMessageForPairwise(currentChat?.id ?: "", messageText)
-                message?.let {
-                        messageRepository.createOrUpdateItem(it)
-                        // eventRepository.storeEvent(message.message()?.id ?: "", message, "text")
-                        clearTextLiveData.postValue(true)
-                }
-        }
+    fun updateList() {
+        createList()
+    }
 
-        fun updateList() {
-                createList()
-        }
+    /*
+      private var isRangeLoading = false
 
-        /*
-          private var isRangeLoading = false
+      val emptyStateLiveData = MutableLiveData<Boolean>()
 
-          val emptyStateLiveData = MutableLiveData<Boolean>()
-
-          val moreActionLiveData = MutableLiveData<List<String>>()
-          val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
-          val lastActivityLiveData = MutableLiveData<String>()
-          val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
-          val lastActivityAllLiveData = userRepository.statusListLiveData
-          val updateOneChatLiveData = chatsRepository.oneChatUpdateLiveData
+      val moreActionLiveData = MutableLiveData<List<String>>()
+      val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
+      val lastActivityLiveData = MutableLiveData<String>()
+      val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
+      val lastActivityAllLiveData = userRepository.statusListLiveData
+      val updateOneChatLiveData = chatsRepository.oneChatUpdateLiveData
 
 
-          val messagesSetLiveData = MutableLiveData<Int>()
-          val messagesAddLiveData = MutableLiveData<Triple<Int, Int, Boolean>>()
-          val messagesAddRangeLiveData = MutableLiveData<Pair<Int, Int>>()
-          val messagesUpdateLiveData = MutableLiveData<List<Int>>()
-          val showAcceptInviteButtonLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
-          val goToNewSecretChatLiveData = MutableLiveData<SecretChats>()
-          val goToNewSecretFromChatLiveData = chatsRepository.oneChatCreatedUpdateLiveData
-          val goToConnectionLiveData = MutableLiveData<ConnectionsWrapper>()
-          val messageTextLiveData = MutableLiveData<String>()
-          val bottomBotButtonList = MutableLiveData<List<BotButton>>()
-          val scrollToPositionLiveData = MutableLiveData<Int>()
-          private val originalMessages = mutableListOf<IChatItem>()
+      val messagesSetLiveData = MutableLiveData<Int>()
+      val messagesAddLiveData = MutableLiveData<Triple<Int, Int, Boolean>>()
+      val messagesAddRangeLiveData = MutableLiveData<Pair<Int, Int>>()
+      val messagesUpdateLiveData = MutableLiveData<List<Int>>()
+      val showAcceptInviteButtonLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
+      val goToNewSecretChatLiveData = MutableLiveData<SecretChats>()
+      val goToNewSecretFromChatLiveData = chatsRepository.oneChatCreatedUpdateLiveData
+      val goToConnectionLiveData = MutableLiveData<ConnectionsWrapper>()
+      val messageTextLiveData = MutableLiveData<String>()
+      val bottomBotButtonList = MutableLiveData<List<BotButton>>()
+      val scrollToPositionLiveData = MutableLiveData<Int>()
+      private val originalMessages = mutableListOf<IChatItem>()
 
 
-          val addToContactListLayoutVisibilityLiveData = MutableLiveData<Int>(View.GONE)
-          val addToContactListTextLiveData = MutableLiveData<String>()
+      val addToContactListLayoutVisibilityLiveData = MutableLiveData<Int>(View.GONE)
+      val addToContactListTextLiveData = MutableLiveData<String>()
 
-          fun getOriginalMessages() = originalMessages
-          fun getCurrentChat() = chatLiveData.value
-          fun getRoomsResponseFromChats() = RoomsResponse(getCurrentChat())
+      fun getOriginalMessages() = originalMessages
+      fun getCurrentChat() = chatLiveData.value
+      fun getRoomsResponseFromChats() = RoomsResponse(getCurrentChat())
 
-          override fun onDestroy() {
-              super.onDestroy()
-              cancelTimer()
-              cancelAllCredProofTimer()
-              chatsRepository.currentOpenChatLiveData.value = null
+      override fun onDestroy() {
+          super.onDestroy()
+          cancelTimer()
+          cancelAllCredProofTimer()
+          chatsRepository.currentOpenChatLiveData.value = null
 
-          }
+      }
 
-          fun getDownloadedPath(url: String): String {
-              return messageUseCase.getDownloadedFilePathFromUrl(url)
-          }
+      fun getDownloadedPath(url: String): String {
+          return messageUseCase.getDownloadedFilePathFromUrl(url)
+      }
 
-          fun getFilename(url: String, text: String?): String {
-              return messageUseCase.getFilename(url, text)
-          }
+      fun getFilename(url: String, text: String?): String {
+          return messageUseCase.getFilename(url, text)
+      }
 
-          fun updateUncompleteMessage(message: String?) {
-              chatsRepository.updateUncompleteMessage(getCurrentChat(), message)
-          }
+      fun updateUncompleteMessage(message: String?) {
+          chatsRepository.updateUncompleteMessage(getCurrentChat(), message)
+      }
 
-          override fun onViewCreated() {
-              super.onViewCreated()
-              currentChat?.let { chat ->
-                  chatLiveData.value = chat
-                  chatsRepository.currentOpenChatLiveData.value = chat
-                  if (!chat.isRoom) {
-                      userRepository.checkLastActivityStatus(chat.id ?: "")
-                  }
+      override fun onViewCreated() {
+          super.onViewCreated()
+          currentChat?.let { chat ->
+              chatLiveData.value = chat
+              chatsRepository.currentOpenChatLiveData.value = chat
+              if (!chat.isRoom) {
+                  userRepository.checkLastActivityStatus(chat.id ?: "")
+              }
 
-                  val uncompleteMessage = chat.uncompleteMessage
+              val uncompleteMessage = chat.uncompleteMessage
 
-                  messageTextLiveData.value = uncompleteMessage
+              messageTextLiveData.value = uncompleteMessage
 
 
-                  showHideMenu()
+              showHideMenu()
 
-                  messagesRepository.messagesInDBLiveData.observeUntilDestroy(this) {
-                      if (isMessageCurrentChat(it.data)) {
+              messagesRepository.messagesInDBLiveData.observeUntilDestroy(this) {
+                  if (isMessageCurrentChat(it.data)) {
 
-                          val items = mapMessages(listOfNotNull(it.data))
-                          when (it.action) {
-                              CHANGE -> updateMessages(items)
-                              UPDATE -> updateMessages(items)
-                              ADD -> {
-                                  addMessage(items)
-                                  downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
-                              }
-                              ADD_RANGE -> {
-                                  addMessages(items)
-                                  downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
-                              }
-                              DELETE -> deleteMessages(items)
-                              SET -> {
-                                  setMessages(items)
-                                  downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
-                              }
+                      val items = mapMessages(listOfNotNull(it.data))
+                      when (it.action) {
+                          CHANGE -> updateMessages(items)
+                          UPDATE -> updateMessages(items)
+                          ADD -> {
+                              addMessage(items)
+                              downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
                           }
-                          showHideQuestionMenu(it.data)
-                          startTimerForCredentialProofMessage1(items)
+                          ADD_RANGE -> {
+                              addMessages(items)
+                              downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
+                          }
+                          DELETE -> deleteMessages(items)
+                          SET -> {
+                              setMessages(items)
+                              downloadRepository.startDownloadAfterRefresh(listOfNotNull(it.data), false)
+                          }
                       }
+                      showHideQuestionMenu(it.data)
+                      startTimerForCredentialProofMessage1(items)
                   }
+              }
 
-                  initialLoadMessages()
+              initialLoadMessages()
 
-                  *//*  goToNewSecretFromChatLiveData.observeUntilDestroy(this) {
+              *//*  goToNewSecretFromChatLiveData.observeUntilDestroy(this) {
                   it.let {
                       if (it?.id != chat.id && it is SecretChats) {
                           goToNewSecretChatLiveData.postValue(it)
@@ -1069,5 +1206,5 @@ class ChatViewModel @Inject constructor(
             messagesRepository.handleSendIndyMessages(mesForDb)
             return
         }*/
-   // }
+    // }
 }

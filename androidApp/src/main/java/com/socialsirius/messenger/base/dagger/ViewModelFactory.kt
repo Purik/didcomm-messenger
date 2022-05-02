@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivityModel
+import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivityModel
 import com.socialsirius.messenger.ui.activities.invite.InviteActivityModel
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivityModel
 import com.socialsirius.messenger.ui.activities.main.MainActivityModel
@@ -21,6 +22,8 @@ import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseSecondViewMod
 import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseThirdViewModel
 import com.socialsirius.messenger.ui.chats.allChats.AllChatsViewModel
 import com.socialsirius.messenger.ui.chats.chat.ChatViewModel
+import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateFragment
+import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewModel
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileViewModel
 import com.socialsirius.messenger.ui.inviteUser.InviteUserViewModel
 import com.socialsirius.messenger.ui.main.MainViewModel
@@ -142,6 +145,10 @@ abstract class ViewModelModule {
     @ViewModelKey(ScanActivityModel::class)
     internal abstract fun bindScanActivityModel(viewModel: ScanActivityModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(GroupCreateActivityModel::class)
+    internal abstract fun bindGroupCreateActivityModel(viewModel: GroupCreateActivityModel): ViewModel
 
 
     /**
@@ -239,6 +246,12 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(EnterPinViewModel::class)
     internal abstract fun bindEnterPinViewModel(viewModel: EnterPinViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GroupChatCreateViewModel::class)
+    internal abstract fun bindGroupChatCreateViewModel(viewModel: GroupChatCreateViewModel): ViewModel
 
 
     /*

@@ -119,9 +119,9 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
             binding?.typingImageView?.visibility = View.GONE
             binding?.mutedImageView?.visibility = if (chat.isInSilentMode) View.VISIBLE else View.GONE
             binding?.avatarImageView?.update(chat)
-            val local = LocalMessageTransform.toBaseItemMessage(chat.lastMessage)
-            binding?.senderMessageTextView?.text = local.getText()
-            binding?.timeTextView?.text = DateUtils.dateToHHmmss(chat.lastMessage?.sentTime);
+          ///  val local = LocalMessageTransform.toBaseItemMessage(chat.lastMessage)
+           // binding?.senderMessageTextView?.text = local.getText()
+          //  binding?.timeTextView?.text = DateUtils.dateToHHmmss(chat.lastMessage?.sentTime);
         /*
             val userName = chat.getUserFromMembers(chat.lastMessage?.msg_from)?.contactName.orEmpty()
             val showName = chat.lastMessage?.contentType != ContentType.service  //Todo Other type?

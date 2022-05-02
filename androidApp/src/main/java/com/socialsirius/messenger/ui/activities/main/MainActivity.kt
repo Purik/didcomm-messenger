@@ -19,6 +19,7 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityMainBinding
+import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.scan.ScanActivity
 import com.socialsirius.messenger.ui.activities.settings.SettingsActivity
@@ -94,7 +95,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_create_group -> {
-
+                    GroupCreateActivity.newInstance(this)
                 }
                 R.id.nav_contacts -> {
 

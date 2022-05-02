@@ -13,13 +13,13 @@ class Utils {
     companion object {
 
         fun makeScreenshotUnavailable(activity: Activity?) {
-            if (activity != null) {
+         /*   if (activity != null) {
                 val window = activity.window
                 window?.setFlags(
                     WindowManager.LayoutParams.FLAG_SECURE,
                     WindowManager.LayoutParams.FLAG_SECURE
                 )
-            }
+            }*/
         }
 
         fun copyRawFile(context: Context, rawRes: Int, filepath: String) {
