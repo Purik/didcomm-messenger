@@ -82,11 +82,8 @@ android {
         applicationId 'com.socialsirius.messenger'
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 1
-        versionName '1.0'
         versionCode System.getenv("VERSION_CODE") ? System.getenv("VERSION_CODE").toInteger() : 1
-        versionName System.getenv("VERSION") ?: '1.3.246'
-
+        versionName System.getenv("VERSION") ?: '1.0'
         multiDexEnabled true
         archivesBaseName = "SocialSiriusMessenger_$versionName"
     }
