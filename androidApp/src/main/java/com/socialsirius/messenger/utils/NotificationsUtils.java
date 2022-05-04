@@ -12,31 +12,17 @@ import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
-
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 import static android.media.AudioManager.STREAM_NOTIFICATION;
 
 import com.socialsirius.messenger.R;
 import com.socialsirius.messenger.base.App;
-import com.socialsirius.messenger.base.AppPref;
 import com.socialsirius.messenger.models.Chats;
 import com.socialsirius.messenger.ui.activities.main.MainActivity;
 import com.socialsirius.messenger.ui.activities.message.MessageActivity;
-import com.socialsirius.messenger.ui.chats.chat.ChatFragment;
 
 
 /**

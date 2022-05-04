@@ -5,6 +5,7 @@ import com.socialsirius.messenger.repository.UserRepository
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
+import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
@@ -25,6 +26,7 @@ import com.socialsirius.messenger.ui.chats.chat.ChatFragment
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateFragment
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewModel
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileFragment
+import com.socialsirius.messenger.ui.inviteUser.HandleWebInviteFragment
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.main.MainFragment
 import com.socialsirius.messenger.ui.more.MenuMoreFragment
@@ -81,6 +83,7 @@ interface AppComponent {
     fun inject(activity: SettingsActivity)
     fun inject(activity: ScanActivity)
     fun inject(activity: GroupCreateActivity)
+    fun inject(activity: HandleWebInviteActivity)
 
 
     //Fragments
@@ -99,11 +102,12 @@ interface AppComponent {
     fun inject(fragment: UserSettingsFragment)
     fun inject(fragment: MenuScanQrFragment)
     fun inject(fragment: InviteUserFragment)
- //   fun inject(fragment: HandleWebInviteFragment)
+    fun inject(fragment: HandleWebInviteFragment)
 
     fun inject(fragment: CreatePinFragment)
     fun inject(fragment: EnterPinFragment)
     fun inject(fragment: GroupChatCreateFragment)
+
 
 
 /*    fun inject(fragment: AuthZeroFragment)

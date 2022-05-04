@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.j256.ormlite:ormlite-core:5.1'
     implementation 'com.j256.ormlite:ormlite-android:5.1'
 
-    def work_version = "2.5.0"
+    def work_version = "2.7.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // optional - GCMNetworkManager support
     implementation "androidx.work:work-gcm:$work_version"

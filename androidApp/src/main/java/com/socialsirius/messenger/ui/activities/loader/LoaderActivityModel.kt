@@ -31,6 +31,7 @@ class LoaderActivityModel @Inject constructor(
                 }
 
                 override fun initEnd() {
+                    sdkUseCase.isInitiated = true
                     initEndLiveData.postValue(true)
                 }
 

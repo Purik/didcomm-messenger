@@ -23,7 +23,7 @@ class AuthSecurityFragment : BaseFragment<FragmentAuthSecurityBinding,AuthSecuri
             if(it){
                 model.startClickLiveData.value  = false
                 baseActivity.finishAffinity()
-                LoaderActivity.newInstance(requireContext())
+                LoaderActivity.newInstance(requireContext(),null)
             }
         })
 

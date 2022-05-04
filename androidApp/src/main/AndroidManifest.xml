@@ -39,12 +39,6 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Messenger.NoActionBar"></activity>
-        <activity
-            android:name=".ui.activities.message.MessageActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.Messenger.NoActionBar"></activity>
 
         <activity
             android:name=".ui.activities.invite.InviteActivity"
@@ -68,6 +62,15 @@
             android:theme="@style/Theme.Messenger.NoActionBar"></activity>
 
         <activity
+            android:name=".ui.activities.invite.HandleWebInviteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:autoRemoveFromRecents="true"
+            android:theme="@style/Theme.Messenger.NoActionBar"></activity>
+
+        <activity
             android:name=".ui.activities.splash.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
@@ -79,6 +82,58 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="messenger.socialsirius.com"
+                    android:pathPrefix="/invitation" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="*"
+                    android:pathPrefix="/invitation" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="messenger.socialsirius.com"
+                    android:pathPrefix="/invitation" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="*"
+                    android:pathPrefix="/invitation" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="socialsirius"
+                    />
+            </intent-filter>
+
         </activity>
 
         <service android:name=".service.WebSocketService" />

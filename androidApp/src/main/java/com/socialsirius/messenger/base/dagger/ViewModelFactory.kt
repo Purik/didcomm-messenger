@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivityModel
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivityModel
+import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
+import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivityModel
 import com.socialsirius.messenger.ui.activities.invite.InviteActivityModel
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivityModel
 import com.socialsirius.messenger.ui.activities.main.MainActivityModel
@@ -25,6 +27,7 @@ import com.socialsirius.messenger.ui.chats.chat.ChatViewModel
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateFragment
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewModel
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileViewModel
+import com.socialsirius.messenger.ui.inviteUser.HandleWebInviteViewModel
 import com.socialsirius.messenger.ui.inviteUser.InviteUserViewModel
 import com.socialsirius.messenger.ui.main.MainViewModel
 import com.socialsirius.messenger.ui.more.MenuMoreViewModel
@@ -137,6 +140,13 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
+    @ViewModelKey(HandleWebInviteActivityModel::class)
+    internal abstract fun bindHandleWebInviteActivityModel(viewModel: HandleWebInviteActivityModel): ViewModel
+
+
+
+    @Binds
+    @IntoMap
     @ViewModelKey(SettingsActivityModel::class)
     internal abstract fun bindSettingsActivityModel(viewModel: SettingsActivityModel): ViewModel
 
@@ -232,11 +242,12 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(InviteUserViewModel::class)
     internal abstract fun bindInviteUserViewModel(viewModel: InviteUserViewModel): ViewModel
- /*   @Binds
+
+    @Binds
     @IntoMap
     @ViewModelKey(HandleWebInviteViewModel::class)
     internal abstract fun bindHandleWebInviteViewModel(viewModel: HandleWebInviteViewModel): ViewModel
-*/
+
     @Binds
     @IntoMap
     @ViewModelKey(CreatePinViewModel::class)

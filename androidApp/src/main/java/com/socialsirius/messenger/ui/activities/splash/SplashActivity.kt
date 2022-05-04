@@ -9,6 +9,7 @@ import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivitySplashBinding
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
+import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
 import com.socialsirius.messenger.ui.activities.tutorial.TutorialActivity
@@ -33,11 +34,26 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashActivityModel>(
     }
 
 
+    fun handleIntent(): Boolean {
+        if (intent?.data?.queryParameterNames?.contains("c_i") == true) {
+            HandleWebInviteActivity.newInstance(this, intent?.data?.toString())
+            return true
+        }
+        return false
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (AppPref.getInstance().isLoggedIn()) {
             finishAffinity()
-            LoaderActivity.newInstance(this)
+            if (model.isMediatorConnected()) {
+                if (!handleIntent()) {
+                    MainActivity.newInstance(this)
+                }
+            } else {
+                LoaderActivity.newInstance(this,intent?.data)
+            }
         } else {
             showPage(SplashFragment())
             Handler().postDelayed({

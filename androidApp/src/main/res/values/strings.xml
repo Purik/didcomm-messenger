@@ -157,4 +157,5 @@
     <string name="settings_in_message">In messages</string>
     <string name="settings_in_comments">In comments</string>
     <string name="settings_view_dialogs">Show Conversations for </string>
+    <string name="invitation_in_progress">Please wait\nInvitation is processing...</string>
 </resources>

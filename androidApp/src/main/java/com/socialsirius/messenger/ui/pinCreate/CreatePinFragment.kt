@@ -44,7 +44,7 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
         model.nextButtonClick.observe(this, Observer {
             model.createWallet()
             baseActivity.finishAffinity()
-            LoaderActivity.newInstance(requireContext())
+            LoaderActivity.newInstance(requireContext(),null)
         })
         model.indicatorCodeFillLiveData.observe(this, Observer { dataBinding.nextButton.isEnabled = it })
         model.indicatorSuccessLiveData.observe(this, Observer {

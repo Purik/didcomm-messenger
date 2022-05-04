@@ -55,6 +55,8 @@ class SDKUseCase @Inject constructor(
 ) {
 
 
+    var isInitiated: Boolean = false
+
     public fun startSocketService(context: Context) {
         val intent = Intent(context, WebSocketService::class.java)
         context.startService(intent)
@@ -161,7 +163,7 @@ class SDKUseCase @Inject constructor(
                         alias = walletId, pass = passForWallet,
                         mainDirPath = mainDirPath,
                         mediatorAddress = mediatorAddress, recipientKeys = listOf(recipientKeys),
-                        label = label, "default_mobile", baseSender = sender
+                        label = label, "default_mobile",serverUri = "https://messenger.socialsirius.com/invitation", baseSender = sender
                     )
                     ChanelHelper.getInstance().initListener()
                     SiriusSDK.getInstance().connectToMediator()
@@ -177,11 +179,12 @@ class SDKUseCase @Inject constructor(
                     alias = walletId, pass = passForWallet,
                     mainDirPath = mainDirPath,
                     mediatorAddress = mediatorAddress, recipientKeys = listOf(recipientKeys),
-                    label = label, "default_mobile", baseSender = sender
+                    label = label, "default_mobile",serverUri = "https://messenger.socialsirius.com/invitation",  baseSender = sender
                 )
                 ChanelHelper.getInstance().initListener()
                 SiriusSDK.getInstance().connectToMediator(token)
                 initScenario()
+                isInitiated = true
                 onInitListener?.initEnd()
             }
         })

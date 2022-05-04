@@ -3,6 +3,7 @@ package com.socialsirius.messenger.ui.activities.loader
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityLoaderBinding
 import com.socialsirius.messenger.databinding.ActivitySplashBinding
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
+import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
 import com.socialsirius.messenger.ui.pinEnter.EnterPinFragment
 
@@ -22,8 +24,9 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
 
     companion object {
         @JvmStatic
-        fun newInstance(context: Context) {
+        fun newInstance(context: Context, invitation: Uri?) {
             val intent = Intent(context, LoaderActivity::class.java)
+            intent.data = invitation
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
@@ -46,11 +49,22 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
 
 
 
+    fun handleIntent(): Boolean {
+        if (intent?.data?.queryParameterNames?.contains("c_i") == true) {
+            HandleWebInviteActivity.newInstance(this, intent?.data?.toString())
+            return true
+        }
+        return false
+    }
+
+
     override fun subscribe() {
         super.subscribe()
         model.initEndLiveData.observe(this, Observer {
             finishAffinity()
-            MainActivity.newInstance(this)
+            if(!handleIntent()){
+                MainActivity.newInstance(this)
+            }
         })
     }
 
