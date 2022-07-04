@@ -25,7 +25,7 @@ class Chats : Serializable{
     var unreadMessageNotInDB: Int = 0
     var isInSilentMode: Boolean = false
     var isRoom: Boolean = false
-  //  var lastMessage: LocalMessage? = null
+    var lastMessage: LocalMessage? = null
 
 
 }

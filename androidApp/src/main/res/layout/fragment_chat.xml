@@ -13,7 +13,7 @@
         android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-      >
+        android:background="@color/secondaryBackgroundColor">
 
         <LinearLayout
             android:id="@+id/topView"
@@ -61,7 +61,7 @@
 
                 <TextView
                     android:id="@+id/detailsBarView"
-
+                    style="@style/Caption"
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 style="@style/BackButton"
                 android:layout_width="@dimen/common_button_size"
                 android:layout_height="@dimen/common_button_size"
-
+                android:onClick="@{viewModel::onMoreButtonClick}"
                 android:src="@drawable/ic_more"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -182,7 +182,7 @@
         <Button
             android:id="@+id/acceptInviteButton"
             style="@style/AccentButton"
-
+            android:onClick="@{viewModel::onAcceptInviteClick}"
             android:text="@string/alert_confirm"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

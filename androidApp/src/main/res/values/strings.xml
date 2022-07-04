@@ -158,4 +158,34 @@
     <string name="settings_in_comments">In comments</string>
     <string name="settings_view_dialogs">Show Conversations for </string>
     <string name="invitation_in_progress">Please wait\nInvitation is processing...</string>
+    <string name="record">Record</string>
+    <string name="messenger_choose_image">Select an image</string>
+    <string name="alert_dialog_create_photo">Make a Photo</string>
+    <string name="alert_dialog_create_video">Make a Video</string>
+    <string name="alert_dialog_from_gallery">From the gallery</string>
+    <string name="alert_dialog_from_file">Select a file</string>
+
+    <string name="menu_fragment_messages_chat_add_to_favorite">Add to favorites</string>
+    <string name="menu_fragment_messages_chat_del_from_favorite">Remove from favorites</string>
+    <string name="menu_fragment_messages_chat_profile">Profile</string>
+    <string name="menu_fragment_messages_chat_add_users">Add people</string>
+    <string name="menu_fragment_messages_chat_clear">Delete chat</string>
+    <string name="menu_fragment_messages_create_secret_chat">Invite to secret chat</string>
+
+    <string name="menu_fragment_messages_group_users">Group participant</string>
+    <string name="menu_fragment_messages_group_rename">Rename</string>
+    <string name="menu_fragment_messages_group_clear">Delete chat</string>
+
+    <string name="menu_fragment_select_members_delete_all">Delete all</string>
+    <string name="menu_fragment_select_members_in_company_structure">Select in the company structure</string>
+    <string name="menu_fragment_messages_item_delete_all">Delete everywhere</string>
+    <string name="menu_fragment_messages_item_delete">Delete locally</string>
+    <string name="days_tomorrow">Tomorrow</string>
+    <string name="days_today">Today</string>
+    <string name="days_yesterday">Yesterday</string>
+    <string name="last_activity_was" formatted="false">"Was %s at %s"</string>
+    <string name="writes_message">writes a message</string>
+    <string name="message_resend">Resend</string>
+    <string name="message_quote">Quote</string>
+    <string name="task_content_delete">Delete</string>
 </resources>

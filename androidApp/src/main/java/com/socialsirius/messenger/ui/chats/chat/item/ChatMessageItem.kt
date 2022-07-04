@@ -3,7 +3,7 @@ package  com.socialsirius.messenger.ui.chats.chat.item
 import android.R.id.message
 import android.util.Log
 import com.google.gson.Gson
-
+import com.socialsirius.messenger.models.ChatMessageStatus
 
 
 class ChatMessageItem private constructor(
@@ -46,9 +46,9 @@ class ChatMessageItem private constructor(
 
     val uploadPercent = baseMessageRef.uploadPercent
     val downloadPercent = baseMessageRef.downloadPercent
-    val status: ChatMessageStatus = baseMessageRef.status
-*/
 
+*/
+val status: ChatMessageStatus = ChatMessageStatus.acknowlege
     fun getTextByType(): String {
        // var text = baseMessageRef.text.orEmpty()
     /*    if (baseMessageRef.contentType == ContentType.services) {

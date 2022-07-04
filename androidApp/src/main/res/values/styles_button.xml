@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AccentButton" parent="Button">
+        <item name="android:layout_height">@dimen/common_button_size</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/selector_accent_button</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+    </style>
+
+    <style name="AccentButtonRoundedCorners" parent="AccentButton">
+        <item name="android:background">@drawable/selector_accent_rounded_button</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+        <item name="android:minWidth">190dp</item>
+        <item name="android:paddingStart">@dimen/common_gap_24</item>
+        <item name="android:paddingEnd">@dimen/common_gap_24</item>
+    </style>
+
+    <style name="AccentButtonRoundedBigCorners" parent="AccentButton">
+        <item name="android:background">@drawable/bg_accent_rounded_button_big_corners</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <style name="NotAccentButton" parent="AccentButton">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/selector_calc_button</item>
+    </style>
+
+    <style name="BackButton" parent="NotAccentButton">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/defaultColor</item>
+        <item name="android:src">@drawable/ic_arrow_back</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="ChatButton" parent="BackButton">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:padding">@dimen/common_gap_8</item>
+        <item name="android:layout_height">@dimen/common_gap_40</item>
+        <item name="android:layout_width">@dimen/common_gap_40</item>
+    </style>
+
+    <style name="CalculatorButton" parent="Headline4">
+        <item name="android:background">@drawable/selector_calc_button</item>
+        <item name="android:textColor">@color/selector_calc_button</item>
+        <item name="android:tint">@color/selector_calc_button</item>
+        <item name="android:layout_height">@dimen/calculator_button_size</item>
+        <item name="android:layout_width">@dimen/calculator_button_size</item>
+    </style>
+
+    <style name="FilterChips" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:colorAccent">@color/white</item>
+        <item name="android:colorPrimary">@color/white</item>
+        <item name="android:colorPrimaryDark">@color/white</item>
+        <item name="background">@drawable/selector_accent_rounded_button</item>
+    </style>
+
+
+</resources>

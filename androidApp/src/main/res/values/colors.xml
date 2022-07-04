@@ -5,10 +5,9 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="blue2">#A8B4D1</color>
-    <color name="colorPrimary">#000743</color>
+
     <color name="colorBlueLight">#5c71b3</color>
     <color name="colorBlue">#5c71b3</color>
     <color name="colorBlue2">#3b4663</color>
@@ -21,21 +20,10 @@
 
     <color name="green">#6FCF97</color>
 
-    <color name="defaultColor">#000743</color>
-    <color name="defaultColor_10">#AA000743</color>
-    <color name="backgroundColor">#FFFFFF</color>
-    <color name="backgroundColorWithAlpha">#BBFFFFFF</color>
-    <color name="hintColor">#8DA1BE</color>
-    <color name="disableColor">#DADADA</color>
-    <color name="transparent">#00FFFFFF</color>
     <color name="blue_light">#50acd2</color>
     <color name="grey2">#c9c9ca</color>
 
-    <color name="lightDividerColor">#10212121</color>
-    <color name="dividerColor">#9194AC</color>
-    <color name="cardConnectionCredentials">#53366C</color>
 
-    <color name="errorColor">#B00020</color>
     <color name="darkBlueColor">#181c2f</color>
     <color name="dark1BlueColor">#20263f</color>
     <color name="dark2BlueColor">#20255a</color>
@@ -50,7 +38,68 @@
     <color name="blueText">#20263f</color>
 
 
-    <color name="userViolet">#ba68c8</color>
-    <color name="userRed">#EB5757</color>
+    <color name="colorPrimary">#000743</color>
+    <color name="colorPrimaryDark">#20255a</color>
+    <color name="colorAccent">#20263f</color>
+    <color name="app_background">#fafafa</color>
+
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- design colors -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundColorWithAlpha">#BBFFFFFF</color>
+    <color name="defaultColor">#000743</color>
+    <color name="secondaryColor">#000C7C</color>
+    <color name="defaultColor_10">#10000743</color>
+    <color name="dividerColor">#9194AC</color>
+    <color name="lightDividerColor">#10212121</color>
+    <color name="disableColor">#DADADA</color>
+
+    <color name="errorColor">#B00020</color>
+    <color name="hintColor">#8DA1BE</color>
+    <color name="hintColorHalfTransparent">#A08DA1BE</color>
+    <color name="successColor">#27AE60</color>
+    <color name="secondaryBackgroundColor">#E6EDF5</color>
+
+    <color name="userGreen">#27AE60</color>
     <color name="userYellow">#F2C94C</color>
+    <color name="userRed">#EB5757</color>
+    <color name="userBlue">#56CCF2</color>
+    <color name="userViolet">#ba68c8</color>
+
+    <color name="cardBlue">#2F80ED</color>
+    <color name="cardOrange">#F2994A</color>
+    <color name="cardViolet">#BB86FC</color>
+    <color name="cardGreen">#6FCF97</color>
+    <color name="cardConnectionCredentials">#53366C</color>
+    <color name="cardConnectionGreen">#27AE60</color>
+    <color name="cardBlackTransparent">#59000000</color>
+
+    <color name="project1">#F53F3A</color>
+    <color name="project2">#EA0C63</color>
+    <color name="project3">#9E17AD</color>
+    <color name="project4">#6932B2</color>
+    <color name="project5">#414DB1</color>
+    <color name="project6">#2194EE</color>
+    <color name="project7">#00A8F0</color>
+    <color name="project8">#00BBD2</color>
+    <color name="project9">#009789</color>
+    <color name="project10">#47B058</color>
+    <color name="project11">#89C456</color>
+    <color name="project12">#CBDD4E</color>
+    <color name="project13">#FEEC53</color>
+    <color name="project14">#FEC132</color>
+    <color name="project15">#FE9827</color>
+    <color name="project16">#FE552C</color>
+    <color name="project17">#7A5549</color>
+    <color name="project18">#9E9E9E</color>
+    <color name="project19">#607D8A</color>
+    <color name="project20">#455A64</color>
+    <color name="project21">#212121</color>
+    <color name="divider">#CC333333</color>
+
+
 </resources>

@@ -19,16 +19,25 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.FileAttach
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
+import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
+import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
+import com.socialsirius.messenger.ui.chats.chat.item.MessageActionItem
+import com.socialsirius.messenger.ui.chats.chat.item.MessageActionItemType
 import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
+import com.socialsirius.messenger.ui.chats.chats.message.ConnectItemMessage
+import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
+import com.socialsirius.messenger.utils.DateUtils
 import com.socialsirius.messenger.utils.FileUtils
 import com.socialsirius.messenger.utils.extensions.observeOnce
 
@@ -49,7 +58,7 @@ import kotlin.collections.HashMap
 const val MESSAGES_LIMIT = 20
 
 class ChatViewModel @Inject constructor(
-    val resourcesProvider: ResourcesProvider,
+    val resourceProvider: ResourcesProvider,
     private val messageRepository: MessageRepository,
     val sdkUseCase: SDKUseCase
     //   private val userRepository: UserRepository,
@@ -65,6 +74,9 @@ class ChatViewModel @Inject constructor(
     val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
     val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val eventStoreLiveData = messageRepository.eventStoreLiveData
+
+    public var fileName: String? = null
+
     fun setChat(chats: Chats?) {
         currentChat = chats
         currentChat?.let {
@@ -73,9 +85,16 @@ class ChatViewModel @Inject constructor(
         createList()
     }
 
+    override fun setupViews() {
+        super.setupViews()
+        updateLastActivity()
+    }
 
-    fun readUnread(id: String) {
-        messageRepository.updateErrorAccepted(id, true, false, null, null)
+
+    fun readUnread(id: String?) {
+        if(id!=null){
+            messageRepository.updateErrorAccepted(id, true, false, null, null)
+        }
     }
 
     private fun createList() {
@@ -83,6 +102,15 @@ class ChatViewModel @Inject constructor(
             var list = it.map {
                 LocalMessageTransform.toBaseItemMessage(it)
             }.toMutableList()
+
+
+            if(list.size>1){
+                list = list.filter {
+                    val isConnect = it is ConnectItemMessage
+                    return@filter !isConnect
+                }.toMutableList()
+            }
+
 
             /*  if (list.isEmpty()) {
                       visibilityChatLiveData.postValue(View.GONE)
@@ -249,16 +277,147 @@ class ChatViewModel @Inject constructor(
     fun updateList() {
         createList()
     }
+    val moreActionLiveData = MutableLiveData<List<String>>()
+    val lastActivityLiveData = MutableLiveData<String>()
+  //  val lastActivityAllLiveData = userRepository.statusListLiveData
+  val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
+
+    val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
+
+    private fun onResendMessage(message: TextItemMessage) {
+    //    messagesRepository.resendMessage(message.id, getCurrentChat()?.id ?: "")
+    }
+
+    private fun onDeleteMessage(message: TextItemMessage) {
+        messageRepository.deleteMessage(message.id)
+    }
+
+    fun updateLastActivity() {
+    /*    val items = lastActivityAllLiveData.value
+        items?.forEach {
+            activityStatusLiveData.postValue(Pair(it.uid, it.isOnline))
+        }
+
+        var countOnline = 0
+        val string = if (getCurrentChat()?.isRoom == true) {
+            if (items != null && getCurrentChat()?.members != null) {
+                items.indices.forEach { i ->
+                    for (z in getCurrentChat()?.members!!.indices) {
+                        if (items[i].uid == currentChat?.members!![z].jid) {
+                            if (items[i].isOnline) {
+                                countOnline++
+                            }
+                        }
+                    }
+                }
+            }
+            resourceProvider.getPluralsString(R.plurals.group_members_plurals, getCurrentChat()?.members?.size
+                ?: 0, getCurrentChat()?.members?.size
+                ?: 0) + ", " + countOnline + " " + resourceProvider.getString(R.string.online)
+        } else {
+            var status: RosterStatusResponse? = null
+            if (items != null) {
+                for (i in items.indices) {
+                    if (items[i].uid == getCurrentChat()?.id) {
+                        activityStatusLiveData.postValue(Pair(items[i].uid, items[i].isOnline))
+                        status = items[i]
+                        break
+                    }
+                }
+            }
+            if (status != null) {
+                if (status.isOnline) {
+                    ""
+                } else {
+                    if (!status.last_online.isNullOrEmpty()) {
+                        val dateString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "dd.MM.yyyy", false)
+                        val timeString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "HH:mm", false)
+                        java.lang.String.format(App.getContext().getString(R.string.last_activity_was),
+                            dateString, timeString)
+                    } else {
+                        ""
+                    }
+                }
+            } else {
+                ""
+            }
+        }*/
+        val dateString: String = DateUtils.getStringFromDate(Date(), "dd.MM.yyyy", false)
+        val timeString: String = DateUtils.getStringFromDate(Date(), "HH:mm", false)
+        val string=  java.lang.String.format(App.getContext().getString(R.string.last_activity_was),
+            dateString, timeString)
+        lastActivityLiveData.postValue(string)
+    }
+
+    fun deleteChatRequest() {
+        messageRepository.deleteAllForPairwiseDid(currentChat?.id ?: "")
+        onBackClickLiveData.postValue(true)
+    }
+    fun onMessageShortClick(message: IChatItem?) {
+        if(message is TextItemMessage){
+            if (message.isMine) {
+                messageActionLiveData.value = listOf(MessageActionItem(MessageActionItemType.DELETE, message, this::onDeleteMessage))
+            }
+        }
+    }
+
+/*    fun onMessageLongClick(message: IChatItem?) {
+        if(message is ChatMessageItem){
+            if (message.status != ChatMessageStatus.error) {
+                messageActionLiveData.value = listOf(
+                    MessageActionItem(MessageActionItemType.DELETE_LOCALLY, message, this::onDeleteMessage)
+                )
+            }
+        }
+    }*/
+
+    fun onMoreButtonClick(v: View?) {
+        moreActionLiveData.value = listOf(
+            resourceProvider.getString(R.string.menu_fragment_messages_chat_clear)
+        )
+      /*  val favorites: Favorites? = DaoUtilsFavorites.readFavoritesWithKey(Favorites.Category.user, getCurrentChat()?.id
+            ?: "")
+        if (getCurrentChat()?.isRoom == false) {
+            if (getCurrentChat() is SecretChats) {
+                moreActionLiveData.value = listOf(
+                    resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
+                    resourceProvider.getString(R.string.menu_fragment_messages_send_propose),
+                )
+            } else {
+                val list = mutableListOf(
+                    if (favorites == null) resourceProvider.getString(R.string.menu_fragment_messages_chat_add_to_favorite) else resourceProvider.getString(R.string.menu_fragment_messages_chat_del_from_favorite),
+                    resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
+                )
+                val user: RosterUser? = DaoUtilsRoster.readRosterUser(getCurrentChat()?.id)
+                if (user?.isUserOnlyInIncoming(true) == true) {
+                    list.add(resourceProvider.getString(R.string.add_user))
+                }
+                moreActionLiveData.value = list
+            }
+
+        } else {
+            if (getCurrentChat()?.creator == AppPref.getUserJid()) {
+                moreActionLiveData.value = listOf(
+                    resourceProvider.getString(R.string.title_settings),
+                    resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users)
+                )
+            } else {
+                moreActionLiveData.value = listOf(
+                    resourceProvider.getString(R.string.title_settings),
+                    resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users),
+                    resourceProvider.getString(R.string.leave_chat)
+                )
+            }
+        }*/
+    }
 
     /*
       private var isRangeLoading = false
 
       val emptyStateLiveData = MutableLiveData<Boolean>()
 
-      val moreActionLiveData = MutableLiveData<List<String>>()
-      val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
-      val lastActivityLiveData = MutableLiveData<String>()
-      val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
+
+
       val lastActivityAllLiveData = userRepository.statusListLiveData
       val updateOneChatLiveData = chatsRepository.oneChatUpdateLiveData
 
@@ -453,42 +612,7 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun onMoreButtonClick(v: View?) {
-        val favorites: Favorites? = DaoUtilsFavorites.readFavoritesWithKey(Favorites.Category.user, getCurrentChat()?.id
-                ?: "")
-        if (getCurrentChat()?.isRoom == false) {
-            if (getCurrentChat() is SecretChats) {
-                moreActionLiveData.value = listOf(
-                        resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
-                        resourceProvider.getString(R.string.menu_fragment_messages_send_propose),
-                )
-            } else {
-                val list = mutableListOf(
-                        if (favorites == null) resourceProvider.getString(R.string.menu_fragment_messages_chat_add_to_favorite) else resourceProvider.getString(R.string.menu_fragment_messages_chat_del_from_favorite),
-                        resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
-                )
-                val user: RosterUser? = DaoUtilsRoster.readRosterUser(getCurrentChat()?.id)
-                if (user?.isUserOnlyInIncoming(true) == true) {
-                    list.add(resourceProvider.getString(R.string.add_user))
-                }
-                moreActionLiveData.value = list
-            }
 
-        } else {
-            if (getCurrentChat()?.creator == AppPref.getUserJid()) {
-                moreActionLiveData.value = listOf(
-                        resourceProvider.getString(R.string.title_settings),
-                        resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users)
-                )
-            } else {
-                moreActionLiveData.value = listOf(
-                        resourceProvider.getString(R.string.title_settings),
-                        resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users),
-                        resourceProvider.getString(R.string.leave_chat)
-                )
-            }
-        }
-    }
 
 
 
@@ -558,58 +682,7 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    fun updateLastActivity() {
-        val items = lastActivityAllLiveData.value
-        items?.forEach {
-            activityStatusLiveData.postValue(Pair(it.uid, it.isOnline))
-        }
 
-        var countOnline = 0
-        val string = if (getCurrentChat()?.isRoom == true) {
-            if (items != null && getCurrentChat()?.members != null) {
-                items.indices.forEach { i ->
-                    for (z in getCurrentChat()?.members!!.indices) {
-                        if (items[i].uid == currentChat?.members!![z].jid) {
-                            if (items[i].isOnline) {
-                                countOnline++
-                            }
-                        }
-                    }
-                }
-            }
-            resourceProvider.getPluralsString(R.plurals.group_members_plurals, getCurrentChat()?.members?.size
-                    ?: 0, getCurrentChat()?.members?.size
-                    ?: 0) + ", " + countOnline + " " + resourceProvider.getString(R.string.online)
-        } else {
-            var status: RosterStatusResponse? = null
-            if (items != null) {
-                for (i in items.indices) {
-                    if (items[i].uid == getCurrentChat()?.id) {
-                        activityStatusLiveData.postValue(Pair(items[i].uid, items[i].isOnline))
-                        status = items[i]
-                        break
-                    }
-                }
-            }
-            if (status != null) {
-                if (status.isOnline) {
-                    ""
-                } else {
-                    if (!status.last_online.isNullOrEmpty()) {
-                        val dateString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "dd.MM.yyyy", false)
-                        val timeString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "HH:mm", false)
-                        java.lang.String.format(App.getContext().getString(R.string.last_activity_was),
-                                dateString, timeString)
-                    } else {
-                        ""
-                    }
-                }
-            } else {
-                ""
-            }
-        }
-        lastActivityLiveData.postValue(string)
-    }
 
     fun addToFavorite() {
         favoritesRepository.addToFavorites(Favorites.Category.user, getCurrentChat()?.id
@@ -651,14 +724,7 @@ class ChatViewModel @Inject constructor(
                 ?: Chats(), contentType)
     }
 
-    fun deleteChatRequest() {
-        chatsRepository.deleteAllMessagesForChat(getCurrentChat() ?: Chats()).observeOnce(this) {
-            if (it == true) {
-                chatsRepository.getAllChats(false)
-                onBackClickLiveData.postValue(true)
-            }
-        }
-    }
+
 
 
     fun inviteToSecret() {
@@ -869,23 +935,7 @@ class ChatViewModel @Inject constructor(
                 nextSentDate.get(Calendar.YEAR) != prevSentDate.get(Calendar.YEAR))
     }
 
-    fun onMessageShortClick(message: ChatMessageItem) {
-        if (message.status == ChatMessageStatus.error && message.isMine) {
-            messageActionLiveData.value = listOf(
-                    MessageActionItem(RESEND, message, this::onResendMessage),
-                    MessageActionItem(MessageActionItemType.DELETE, message, this::onDeleteMessage)
-            )
-        }
-    }
 
-    fun onMessageLongClick(message: ChatMessageItem) {
-        if (message.status != ChatMessageStatus.error) {
-            messageActionLiveData.value = listOf(
-                    MessageActionItem(DELETE_LOCALLY, message, this::onDeleteMessage)
-                    //,MessageActionItem(QUOTE, message, this::onDeleteMessage)
-            )
-        }
-    }
 
     fun onMessageCancelDownloadUploadClick(message: ChatMessageItem) {
         if (!message.isCanceled) {
@@ -951,13 +1001,7 @@ class ChatViewModel @Inject constructor(
         mediaPlayer = null
     }
 
-    private fun onResendMessage(message: ChatMessageItem) {
-        messagesRepository.resendMessage(message.id, getCurrentChat()?.id ?: "")
-    }
 
-    private fun onDeleteMessage(message: ChatMessageItem) {
-        messagesRepository.deleteMessageWithId(message.id, getCurrentChat()?.id ?: "")
-    }
 
 
     fun botButtonOnclick(botButton: BotButton) {
@@ -1207,4 +1251,8 @@ class ChatViewModel @Inject constructor(
             return
         }*/
     // }
+
+    fun onAcceptInviteClick(v: View?) {
+
+    }
 }

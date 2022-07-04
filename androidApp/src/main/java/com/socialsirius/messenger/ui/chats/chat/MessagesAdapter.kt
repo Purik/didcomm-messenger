@@ -182,9 +182,10 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
         fun bind(message: TextItemMessage) {
             itemView.chatMessageView.isMine = message.isMine
             itemView.chatMessageView.setMessage(message.getText(), message)
-            val isShowCorner =  false
+            val isShowCorner =  true
             itemView.chatMessageView.showCorner = isShowCorner
-            itemView.chatMessageView.setDateTime(DateUtils.dateToHHmmss(message.date))
+           // itemView.chatMessageView.updateOwnerAndCorners()
+            itemView.chatMessageView.setDateTime(DateUtils.parseDateToHhmmString(message.date))
 
 
            // if (message.canBeRead()) {
@@ -253,11 +254,15 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
                 documentClickAction.invoke(message)
             }
 
-            itemView.chatMessageView.getMessageContainer().setOnClickListener { shortClickAction.invoke(message) }
+          */
+            itemView.chatMessageView.getMessageContainer().setOnClickListener {
+                onCustomBtnClick?.onBtnClick(it.id,message, absoluteAdapterPosition)
+               }
             itemView.chatMessageView.getMessageContainer().setOnLongClickListener {
-                longClickAction.invoke(message)
+                onCustomBtnClick?.onLongBtnClick(it.id,message, absoluteAdapterPosition)
+
                 true
-            }*/
+            }
         }
 
         fun updateCornerAndStatus(message: ChatMessageItem) {

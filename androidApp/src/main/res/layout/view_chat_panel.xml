@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:minHeight="56dp"
+    android:minHeight="@dimen/common_button_size"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,16 +19,14 @@
 
         <ImageButton
             android:id="@+id/addAttachmentButton"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            style="@style/ChatButton"
             android:src="@drawable/ic_attachment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageButton
             android:id="@+id/voiceMessageTrashImageView"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            style="@style/ChatButton"
             android:visibility="gone"
             android:scaleType="centerInside"
             android:src="@drawable/ic_delete"
@@ -38,8 +36,7 @@
         <ImageView
             android:id="@+id/recordImageView"
             android:src="@drawable/bg_circle_red"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            style="@style/ChatButton"
             android:visibility="gone"
             android:padding="13dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,22 +83,19 @@
 
             <ImageButton
                 android:id="@+id/emodjiButton"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                style="@style/ChatButton"
                 android:visibility="gone"
                 android:src="@drawable/ic_emodji"/>
 
             <ImageButton
                 android:id="@+id/textVoiceButton"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                style="@style/ChatButton"
                 android:visibility="visible"
                 android:src="@drawable/ic_text_to_voice"/>
 
             <ImageButton
                 android:id="@+id/sendButton"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                style="@style/ChatButton"
                 android:visibility="gone"
                 android:src="@drawable/ic_send"/>
 

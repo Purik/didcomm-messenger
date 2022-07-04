@@ -6,4 +6,5 @@ interface OnAdapterItemClick<T> {
 
 interface OnCustomBtnClick<T> {
     fun onBtnClick(btnId : Int, item: T?,  position : Int)
+    fun onLongBtnClick(btnId : Int, item: T?,  position : Int)
 }

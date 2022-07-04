@@ -240,7 +240,7 @@ class SDKUseCase @Inject constructor(
     fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
         val message = Message.builder().setContent(messageText).build()
-        val localMessage = LocalMessage(pairwiseDid = pairwiseDid)
+        val localMessage = LocalMessage(id = message.getId(),pairwiseDid = pairwiseDid)
         localMessage.isMine = true
         localMessage.type = "text"
         localMessage.message = message.serialize()

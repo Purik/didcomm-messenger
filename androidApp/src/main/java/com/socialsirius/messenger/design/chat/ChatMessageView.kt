@@ -15,6 +15,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.design.AvatarView
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
 import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
 
@@ -242,7 +243,7 @@ class ChatMessageView @JvmOverloads constructor(
         htmlView.loadData(html ?:"", "text/html; charset=utf-8", "UTF-8")
     }
 
-  /*  fun setStatus(status: ChatMessageStatus) {
+    fun setStatus(status: ChatMessageStatus) {
         if (isMine) {
             messageStatus2TextView.setTextColor(ContextCompat.getColor(this.context, when (status) {
                 ChatMessageStatus.error -> R.color.errorColor
@@ -258,7 +259,7 @@ class ChatMessageView @JvmOverloads constructor(
         } else {
             messageStatus2TextView.setTextColor(ContextCompat.getColor(this.context, R.color.hintColor))
         }
-    }*/
+    }
 
     fun setDateTime(dateTime: String) {
         messageStatus2TextView.text = dateTime

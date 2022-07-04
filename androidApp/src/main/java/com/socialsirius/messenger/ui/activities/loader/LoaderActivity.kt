@@ -16,6 +16,7 @@ import com.socialsirius.messenger.databinding.ActivitySplashBinding
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
+import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.ui.pinEnter.EnterPinFragment
 
 
@@ -78,6 +79,7 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+       // MessageActivity.newInstance(this,Chat())
         if(AppPref.getInstance().getPin().isNullOrEmpty()){
             initSdk()
         }else{

@@ -13,10 +13,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
+
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.utils.Utils
-
 import kotlinx.android.synthetic.main.view_chat_panel.view.addAttachmentButton
 import kotlinx.android.synthetic.main.view_chat_panel.view.bigVoiceButton
 import kotlinx.android.synthetic.main.view_chat_panel.view.emodjiButton
@@ -101,14 +101,14 @@ class ChatPanelView @JvmOverloads constructor(
                 scaleUpMessageCircle()
 
                 //Start Record sound
-          /*      val soundCLickMainMenu = MediaPlayer.create(getContext(), R.raw.beepbeep)
+                val soundCLickMainMenu = MediaPlayer.create(getContext(), R.raw.beepbeep)
                 soundCLickMainMenu.setOnCompletionListener { mp -> mp.release() }
                 soundCLickMainMenu.setOnCompletionListener {
                     onSoundListener?.onSoundStartRecord()
                     setViewsByType()
                     startRecordTimer()
                 }
-                soundCLickMainMenu.start()*/
+                soundCLickMainMenu.start()
 
             }
             return@setOnLongClickListener true
@@ -147,7 +147,7 @@ class ChatPanelView @JvmOverloads constructor(
 
                     if (X <= 100) {
                         //Error sound
-                      /*  val soundCLickMainMenu = MediaPlayer.create(getContext(), R.raw.error)
+                        val soundCLickMainMenu = MediaPlayer.create(getContext(), R.raw.error)
                         soundCLickMainMenu.setOnCompletionListener { mp -> mp.release() }
                         soundCLickMainMenu.start()
                         stopRecordTimer()
@@ -156,7 +156,7 @@ class ChatPanelView @JvmOverloads constructor(
                         type = SendType.RECORD_CANCEL
 
                         setViewsByType()
-                        event.action = MotionEvent.ACTION_UP*/
+                        event.action = MotionEvent.ACTION_UP
                     }
                 }
             }
@@ -169,15 +169,15 @@ class ChatPanelView @JvmOverloads constructor(
     }
 
     fun hideKeyboard(activity: FragmentActivity?){
-      //  Utils.hideKeyboard(activity,messageEditText)
+        Utils.hideKeyboard(activity,messageEditText)
     }
 
     private fun setSoundTimeFromLong() {
         val time = recordTimerText.tag as Long
         val minutes = TimeUnit.MILLISECONDS.toMinutes(time)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(minutes)
-       // val formatTime = "${context.resources.getString(R.string.record)} ${String.format("%02d:%02d", minutes, seconds)}"
-       // recordTimerText.text = formatTime
+        val formatTime = "${context.resources.getString(R.string.record)} ${String.format("%02d:%02d", minutes, seconds)}"
+        recordTimerText.text = formatTime
     }
 
     private fun startRecordTimer() {
@@ -211,8 +211,8 @@ class ChatPanelView @JvmOverloads constructor(
             val currentNextX: Float = (x + width) -  bigVoiceButton.width / 2 -  App.getContext().resources.getDimensionPixelSize(R.dimen.common_gap_32)
             Log.d("mylog2080","currentNextX="+currentNextX +" x+"+x+ "widt="+width +"  bigVoiceButton.width / 2="+ (bigVoiceButton.width / 2))
             bigVoiceButton.animate().x(currentNextX)
-                    .setDuration(0)
-                    .start()
+                .setDuration(0)
+                .start()
         }
     }
     fun setViewsByType() {

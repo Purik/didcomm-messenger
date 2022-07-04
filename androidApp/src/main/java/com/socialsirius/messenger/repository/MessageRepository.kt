@@ -34,6 +34,12 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     }
 
 
+    fun deleteAllForPairwiseDid(did: String){
+        deleteAllFor("pairwiseDid", did)
+        eventStoreLiveData.postValue(did)
+    }
+
+
     fun getLastMessagesForPairwiseDid(did: String): LiveData<LocalMessage?> {
         val livedata = MutableLiveData<LocalMessage?>()
         livedata.postValue(getDatabase().getLastMessagesForDid(did))
@@ -76,6 +82,12 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
         getDatabase().updateLoading(id, true)
         eventStoreLiveData.postValue(id)
     }
+
+    fun deleteMessage(id: String?){
+        getDatabase().removeBy(id = id)
+        eventStoreLiveData.postValue(id)
+    }
+
 
     fun updateErrorAccepted(
         id: String,

@@ -7,8 +7,6 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.databinding.FragmentAuthSecurityBinding
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
-import com.socialsirius.messenger.ui.activities.main.MainActivity
-import com.socialsirius.messenger.ui.auth.createPhrase.CreatePhraseSecondFragment
 import com.socialsirius.messenger.ui.pinCreate.CreatePinFragment
 import com.socialsirius.messenger.utils.Utils
 
