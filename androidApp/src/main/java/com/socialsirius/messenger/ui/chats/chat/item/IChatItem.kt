@@ -10,7 +10,7 @@ open class IChatItem() {
         return ""
     }
 
-   open var timeInMillis: Double =0.0
+   open var timeInMillis: Long = 0
 
     companion object {
 /*

@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.item_chat_message.view.*
 import kotlinx.android.synthetic.main.item_chat_message_date.view.*
 import kotlinx.android.synthetic.main.item_chat_message_tech.view.*
 import kotlinx.android.synthetic.main.item_chat_secret_invite.view.*
+import java.util.*
 
 private const val CHAT_MESSAGE_ITEM = 1
 private const val TECH_MESSAGE_ITEM = 2
@@ -32,6 +33,11 @@ private const val MAX_AUDIO_CACHE_SIZE = 200
 class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.BaseMessagesViewHolder>() {
 
     val audioMessages = mutableMapOf<String, AudioMessageView>()
+
+
+
+
+
 
     fun setItems() {
         releaseAllMediaPlayers()
@@ -321,7 +327,7 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
             get() = itemView
 
         fun bind(message: ChatDateItem) {
-            itemView.dateTextView.text = message.date
+            itemView.dateTextView.text = message.getText()
         }
     }
 

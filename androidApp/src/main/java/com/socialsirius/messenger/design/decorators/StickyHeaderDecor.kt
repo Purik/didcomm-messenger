@@ -19,7 +19,7 @@ class StickyHeaderDecor() : Decorator.RecyclerViewDecor {
         //find all StiсkyHolders
         val stickyHolders = recyclerView.children
             .map { recyclerView.findContainingViewHolder(it) }
-            .filter { it is StiсkyHolder }
+            .filter { it is StickyHolder }
 
         //ensure that we see all attached holders
         stickyHolders.forEach { it?.itemView?.alpha = 1f }

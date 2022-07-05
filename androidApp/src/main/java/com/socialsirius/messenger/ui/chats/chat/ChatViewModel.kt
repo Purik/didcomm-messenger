@@ -30,10 +30,7 @@ import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
-import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
-import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
-import com.socialsirius.messenger.ui.chats.chat.item.MessageActionItem
-import com.socialsirius.messenger.ui.chats.chat.item.MessageActionItemType
+import com.socialsirius.messenger.ui.chats.chat.item.*
 import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
 import com.socialsirius.messenger.ui.chats.chats.message.ConnectItemMessage
 import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
@@ -92,7 +89,7 @@ class ChatViewModel @Inject constructor(
 
 
     fun readUnread(id: String?) {
-        if(id!=null){
+        if (id != null) {
             messageRepository.updateErrorAccepted(id, true, false, null, null)
         }
     }
@@ -104,7 +101,7 @@ class ChatViewModel @Inject constructor(
             }.toMutableList()
 
 
-            if(list.size>1){
+            if (list.size > 1) {
                 list = list.filter {
                     val isConnect = it is ConnectItemMessage
                     return@filter !isConnect
@@ -136,15 +133,39 @@ class ChatViewModel @Inject constructor(
                     kotlin.Comparator { o1, o2 ->
                         o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
                     })
-                adapterListLiveData.postValue(list)
+                val itemsToAdd : MutableList<BaseItemMessage> = mutableListOf()
+                list.forEachIndexed{ index, messMaps ->
+                    itemsToAdd.lastOrNull()?.let { prevMessageItem ->
+                        if (needToAddDateDelimiter(prevMessageItem, messMaps) ) {
+                            itemsToAdd.add(ChatDateItem(messMaps.date?.time ?: 0))
+                        }
+                    }
+                    if(  index ==0){
+                        itemsToAdd.add(ChatDateItem(messMaps.date?.time ?: 0))
+                    }
+
+                    itemsToAdd.add(messMaps)
+                }
+                adapterListLiveData.postValue(itemsToAdd)
             }
         }
+    }
+
+    private fun needToAddDateDelimiter(prevMessageItem: BaseItemMessage?, currentMessageItem: BaseItemMessage): Boolean {
+        val prevSentDate = Calendar.getInstance().apply {
+            time = prevMessageItem?.date?: Date()
+        }
+        val nextSentDate = Calendar.getInstance().apply { time = currentMessageItem.date ?: Date() }
+
+        return (nextSentDate.get(Calendar.DAY_OF_MONTH) != prevSentDate.get(Calendar.DAY_OF_MONTH) ||
+                nextSentDate.get(Calendar.MONTH) != prevSentDate.get(Calendar.MONTH) ||
+                nextSentDate.get(Calendar.YEAR) != prevSentDate.get(Calendar.YEAR))
     }
 
 
     fun generateFileAttach(filePath: Uri): FileAttach {
         val fileAttach = FileAttach()
-       // val file = File(filePath)
+        // val file = File(filePath)
         fileAttach.fileName = "12.png"
         fileAttach.id = "12"
         fileAttach.fileType = FileAttach.FileType.Doc
@@ -171,6 +192,7 @@ class ChatViewModel @Inject constructor(
             clearTextLiveData.postValue(true)
         }
     }
+
 
     fun createFileFromBitmap(bitmap: Bitmap): String? {
         val file = FileUtils.getOutputMediaFile("temp", FileUtils.generateFileName())
@@ -277,15 +299,17 @@ class ChatViewModel @Inject constructor(
     fun updateList() {
         createList()
     }
+
     val moreActionLiveData = MutableLiveData<List<String>>()
     val lastActivityLiveData = MutableLiveData<String>()
-  //  val lastActivityAllLiveData = userRepository.statusListLiveData
-  val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
+
+    //  val lastActivityAllLiveData = userRepository.statusListLiveData
+    val activityStatusLiveData = MutableLiveData<Pair<String, Boolean>>()
 
     val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
 
     private fun onResendMessage(message: TextItemMessage) {
-    //    messagesRepository.resendMessage(message.id, getCurrentChat()?.id ?: "")
+        //    messagesRepository.resendMessage(message.id, getCurrentChat()?.id ?: "")
     }
 
     private fun onDeleteMessage(message: TextItemMessage) {
@@ -293,59 +317,61 @@ class ChatViewModel @Inject constructor(
     }
 
     fun updateLastActivity() {
-    /*    val items = lastActivityAllLiveData.value
-        items?.forEach {
-            activityStatusLiveData.postValue(Pair(it.uid, it.isOnline))
-        }
+        /*    val items = lastActivityAllLiveData.value
+            items?.forEach {
+                activityStatusLiveData.postValue(Pair(it.uid, it.isOnline))
+            }
 
-        var countOnline = 0
-        val string = if (getCurrentChat()?.isRoom == true) {
-            if (items != null && getCurrentChat()?.members != null) {
-                items.indices.forEach { i ->
-                    for (z in getCurrentChat()?.members!!.indices) {
-                        if (items[i].uid == currentChat?.members!![z].jid) {
-                            if (items[i].isOnline) {
-                                countOnline++
+            var countOnline = 0
+            val string = if (getCurrentChat()?.isRoom == true) {
+                if (items != null && getCurrentChat()?.members != null) {
+                    items.indices.forEach { i ->
+                        for (z in getCurrentChat()?.members!!.indices) {
+                            if (items[i].uid == currentChat?.members!![z].jid) {
+                                if (items[i].isOnline) {
+                                    countOnline++
+                                }
                             }
                         }
                     }
                 }
-            }
-            resourceProvider.getPluralsString(R.plurals.group_members_plurals, getCurrentChat()?.members?.size
-                ?: 0, getCurrentChat()?.members?.size
-                ?: 0) + ", " + countOnline + " " + resourceProvider.getString(R.string.online)
-        } else {
-            var status: RosterStatusResponse? = null
-            if (items != null) {
-                for (i in items.indices) {
-                    if (items[i].uid == getCurrentChat()?.id) {
-                        activityStatusLiveData.postValue(Pair(items[i].uid, items[i].isOnline))
-                        status = items[i]
-                        break
-                    }
-                }
-            }
-            if (status != null) {
-                if (status.isOnline) {
-                    ""
-                } else {
-                    if (!status.last_online.isNullOrEmpty()) {
-                        val dateString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "dd.MM.yyyy", false)
-                        val timeString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "HH:mm", false)
-                        java.lang.String.format(App.getContext().getString(R.string.last_activity_was),
-                            dateString, timeString)
-                    } else {
-                        ""
-                    }
-                }
+                resourceProvider.getPluralsString(R.plurals.group_members_plurals, getCurrentChat()?.members?.size
+                    ?: 0, getCurrentChat()?.members?.size
+                    ?: 0) + ", " + countOnline + " " + resourceProvider.getString(R.string.online)
             } else {
-                ""
-            }
-        }*/
+                var status: RosterStatusResponse? = null
+                if (items != null) {
+                    for (i in items.indices) {
+                        if (items[i].uid == getCurrentChat()?.id) {
+                            activityStatusLiveData.postValue(Pair(items[i].uid, items[i].isOnline))
+                            status = items[i]
+                            break
+                        }
+                    }
+                }
+                if (status != null) {
+                    if (status.isOnline) {
+                        ""
+                    } else {
+                        if (!status.last_online.isNullOrEmpty()) {
+                            val dateString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "dd.MM.yyyy", false)
+                            val timeString: String = DateUtils.getStringFromDate(status.dateFromLastOnline, "HH:mm", false)
+                            java.lang.String.format(App.getContext().getString(R.string.last_activity_was),
+                                dateString, timeString)
+                        } else {
+                            ""
+                        }
+                    }
+                } else {
+                    ""
+                }
+            }*/
         val dateString: String = DateUtils.getStringFromDate(Date(), "dd.MM.yyyy", false)
         val timeString: String = DateUtils.getStringFromDate(Date(), "HH:mm", false)
-        val string=  java.lang.String.format(App.getContext().getString(R.string.last_activity_was),
-            dateString, timeString)
+        val string = java.lang.String.format(
+            App.getContext().getString(R.string.last_activity_was),
+            dateString, timeString
+        )
         lastActivityLiveData.postValue(string)
     }
 
@@ -353,10 +379,17 @@ class ChatViewModel @Inject constructor(
         messageRepository.deleteAllForPairwiseDid(currentChat?.id ?: "")
         onBackClickLiveData.postValue(true)
     }
+
     fun onMessageShortClick(message: IChatItem?) {
-        if(message is TextItemMessage){
+        if (message is TextItemMessage) {
             if (message.isMine) {
-                messageActionLiveData.value = listOf(MessageActionItem(MessageActionItemType.DELETE, message, this::onDeleteMessage))
+                messageActionLiveData.value = listOf(
+                    MessageActionItem(
+                        MessageActionItemType.DELETE,
+                        message,
+                        this::onDeleteMessage
+                    )
+                )
             }
         }
     }
@@ -375,40 +408,40 @@ class ChatViewModel @Inject constructor(
         moreActionLiveData.value = listOf(
             resourceProvider.getString(R.string.menu_fragment_messages_chat_clear)
         )
-      /*  val favorites: Favorites? = DaoUtilsFavorites.readFavoritesWithKey(Favorites.Category.user, getCurrentChat()?.id
-            ?: "")
-        if (getCurrentChat()?.isRoom == false) {
-            if (getCurrentChat() is SecretChats) {
-                moreActionLiveData.value = listOf(
-                    resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
-                    resourceProvider.getString(R.string.menu_fragment_messages_send_propose),
-                )
-            } else {
-                val list = mutableListOf(
-                    if (favorites == null) resourceProvider.getString(R.string.menu_fragment_messages_chat_add_to_favorite) else resourceProvider.getString(R.string.menu_fragment_messages_chat_del_from_favorite),
-                    resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
-                )
-                val user: RosterUser? = DaoUtilsRoster.readRosterUser(getCurrentChat()?.id)
-                if (user?.isUserOnlyInIncoming(true) == true) {
-                    list.add(resourceProvider.getString(R.string.add_user))
-                }
-                moreActionLiveData.value = list
-            }
+        /*  val favorites: Favorites? = DaoUtilsFavorites.readFavoritesWithKey(Favorites.Category.user, getCurrentChat()?.id
+              ?: "")
+          if (getCurrentChat()?.isRoom == false) {
+              if (getCurrentChat() is SecretChats) {
+                  moreActionLiveData.value = listOf(
+                      resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
+                      resourceProvider.getString(R.string.menu_fragment_messages_send_propose),
+                  )
+              } else {
+                  val list = mutableListOf(
+                      if (favorites == null) resourceProvider.getString(R.string.menu_fragment_messages_chat_add_to_favorite) else resourceProvider.getString(R.string.menu_fragment_messages_chat_del_from_favorite),
+                      resourceProvider.getString(R.string.menu_fragment_messages_chat_clear),
+                  )
+                  val user: RosterUser? = DaoUtilsRoster.readRosterUser(getCurrentChat()?.id)
+                  if (user?.isUserOnlyInIncoming(true) == true) {
+                      list.add(resourceProvider.getString(R.string.add_user))
+                  }
+                  moreActionLiveData.value = list
+              }
 
-        } else {
-            if (getCurrentChat()?.creator == AppPref.getUserJid()) {
-                moreActionLiveData.value = listOf(
-                    resourceProvider.getString(R.string.title_settings),
-                    resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users)
-                )
-            } else {
-                moreActionLiveData.value = listOf(
-                    resourceProvider.getString(R.string.title_settings),
-                    resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users),
-                    resourceProvider.getString(R.string.leave_chat)
-                )
-            }
-        }*/
+          } else {
+              if (getCurrentChat()?.creator == AppPref.getUserJid()) {
+                  moreActionLiveData.value = listOf(
+                      resourceProvider.getString(R.string.title_settings),
+                      resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users)
+                  )
+              } else {
+                  moreActionLiveData.value = listOf(
+                      resourceProvider.getString(R.string.title_settings),
+                      resourceProvider.getString(R.string.menu_fragment_messages_chat_add_users),
+                      resourceProvider.getString(R.string.leave_chat)
+                  )
+              }
+          }*/
     }
 
     /*

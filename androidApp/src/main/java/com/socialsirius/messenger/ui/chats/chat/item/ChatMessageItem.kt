@@ -23,7 +23,7 @@ class ChatMessageItem private constructor(
             )
         }*/
     }
-    override var timeInMillis = 0.0
+    override var timeInMillis: Long = 0
 /*
     val id = baseMessageRef.id.orEmpty()
     val isMine = baseMessageRef.messageUserType == BaseMessageNew.MessageUserType.OutComing
