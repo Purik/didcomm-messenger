@@ -69,6 +69,7 @@
                 android:inputType="textPersonName"
                 android:singleLine="true"
                 android:hint="Nickname"
+                android:paddingBottom="2dp"
                 android:backgroundTint="@color/white"
                 android:id="@+id/nameEditText"
                  />

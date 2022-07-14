@@ -51,6 +51,7 @@
         <item name="android:layout_width">@dimen/calculator_button_size</item>
     </style>
 
+
     <style name="FilterChips" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:colorAccent">@color/white</item>
         <item name="android:colorPrimary">@color/white</item>

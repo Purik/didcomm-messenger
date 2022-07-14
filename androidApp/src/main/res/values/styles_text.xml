@@ -151,6 +151,7 @@
         <item name="android:textSize">@dimen/button_text_size</item>
         <item name="android:background">@color/transparent</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:gravity">center</item>
         <item name="android:lineSpacingExtra">@dimen/button_text_line_spacing</item>
     </style>
 

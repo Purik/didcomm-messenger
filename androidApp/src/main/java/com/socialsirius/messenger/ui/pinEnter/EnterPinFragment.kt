@@ -1,15 +1,24 @@
 package  com.socialsirius.messenger.ui.pinEnter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
+import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.databinding.FragmentEnterPinBinding
+import com.socialsirius.messenger.service.BiometricPromptUtils.createBiometricPrompt
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
 
@@ -26,15 +35,98 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
         dataBinding!!.viewModel = model
     }
 
+    fun openFingerprintDialog() {
+
+
+        val biometricManager = BiometricManager.from(requireContext())
+        when (biometricManager.canAuthenticate(BIOMETRIC_WEAK)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                val promptInfo = createPromptInfo()
+                biometricPrompt.authenticate(promptInfo)
+                Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
+            }
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                Log.e("MY_APP_TAG", "No biometric features available on this device.")
+            }
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
+                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.")
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                // Prompts the user to create credentials that your app accepts.
+                val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                    putExtra(
+                        Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                        BIOMETRIC_WEAK
+                    )
+                }
+                startActivityForResult(enrollIntent, 1200)
+            }
+        }
+
+    }
+
+    private fun createPromptInfo(): BiometricPrompt.PromptInfo {
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.prompt_info_title))
+            .setSubtitle(getString(R.string.prompt_info_subtitle))
+            .setDescription(getString(R.string.prompt_info_description))
+            // Authenticate without requiring the user to press a "confirm"
+            // button after satisfying the biometric check
+            .setConfirmationRequired(false)
+            .setAllowedAuthenticators(BIOMETRIC_WEAK)
+            .setNegativeButtonText(getString(R.string.prompt_info_use_app_password))
+            .build()
+        return promptInfo
+    }
+
+    private fun createBiometricPrompt(): BiometricPrompt {
+        val executor = ContextCompat.getMainExecutor(requireContext())
+
+        val callback = object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                Log.d("TAG", "$errorCode :: $errString")
+                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+                    // loginWithPassword() // Because in this app, the negative button allows the user to enter an account password. This is completely optional and your app doesn’t have to do it.
+                }
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                Log.d("TAG", "Authentication failed for an unknown reason")
+            }
+
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                Log.d("TAG", "Authentication was successful")
+                // Proceed with viewing the private encrypted message.
+                //  showEncryptedMessage(result.cryptoObject)
+            }
+        }
+
+        val biometricPrompt = BiometricPrompt(this, executor, callback)
+        return biometricPrompt
+    }
+
+    private lateinit var biometricPrompt: BiometricPrompt
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        biometricPrompt = createBiometricPrompt()
         dataBinding.calculatorView.setOnDigitClickListener { model.onDigitClick(it) }
         dataBinding.calculatorView.setDeleteClickListener { model.onDeleteDigitClick() }
         dataBinding.calculatorView.setDeleteLongClickListener { model.onDeleteLongDigitClick() }
         dataBinding.calculatorView.setIdentifyClickListener { model.onIdentityClick() }
         model.countForDigit = dataBinding.indicatorView.countIndicatorAll
-        dataBinding.calculatorView.enableIdentityButton(false)
+        dataBinding.calculatorView.enableIdentityButton(true)
+
+        dataBinding.calculatorView.setIdentifyClickListener {
+            openFingerprintDialog()
+            // Allows user to authenticate using either a Class 3 biometric or
+// their lock screen credential (PIN, pattern, or password).
+
+        }
         dataBinding.mainLayout.setOnClickListener(View.OnClickListener { })
+
         //  Utils.hideKeyboardWitoutAnimWithView(activity, rootView)
     }
 
@@ -58,7 +150,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
                 builder.setPositiveButton(
                     App.getContext().getString(R.string.yes)
                 ) { dialog, which ->
-                 //   deletePinFragment()
+                    //   deletePinFragment()
                     model.logout(false)
                     baseActivity.finishAffinity()
                     AuthActivity.newInstance(requireContext())

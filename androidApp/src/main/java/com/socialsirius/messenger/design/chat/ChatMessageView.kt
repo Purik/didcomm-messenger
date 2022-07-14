@@ -59,7 +59,7 @@ class ChatMessageView @JvmOverloads constructor(
     var userNameTextView: TextView
     var avatarImageView: AvatarView
     var avatarSpace: Space
-    var linkPreviewView: LinkPreviewView
+   // var linkPreviewView: LinkPreviewView
     var messageExpireLayout: LinearLayout
     var htmlView: WebView
     var messageExpireTimeTextView: TextView
@@ -84,7 +84,7 @@ class ChatMessageView @JvmOverloads constructor(
         userNameTextView = view.findViewById(R.id.userNameTextView)
         avatarImageView = view.findViewById(R.id.avatarImageView)
         avatarSpace = view.findViewById(R.id.avatarSpace)
-        linkPreviewView = view.findViewById(R.id.linkPreviewView)
+   //     linkPreviewView = view.findViewById(R.id.linkPreviewView)
         messageExpireLayout = view.findViewById(R.id.messageExpireLayout)
         htmlView = view.findViewById(R.id.htmlView)
         messageExpireTimeTextView = view.findViewById(R.id.messageExpireTimeTextView)

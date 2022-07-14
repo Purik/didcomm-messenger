@@ -8,6 +8,7 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.repository.local.BaseDatabase
 import com.socialsirius.messenger.repository.local.MessageDatabase
 import com.socialsirius.messenger.repository.models.LocalMessage
+import java.sql.SQLException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,9 +35,25 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     }
 
 
-    fun deleteAllForPairwiseDid(did: String){
-        deleteAllFor("pairwiseDid", did)
+    fun deleteAllForPairwiseDid(did: String, deleteInvite: Boolean) {
+        if (deleteInvite) {
+            deleteAllFor("pairwiseDid", did)
+        } else {
+            deleteForPairwiseDidExceptInvite(did)
+        }
+
         eventStoreLiveData.postValue(did)
+    }
+
+
+    fun deleteForPairwiseDidExceptInvite(did : String) {
+        try {
+            val builder = getDatabase().getDeleteBuilder()
+            builder.where().eq("pairwiseDid", did).and().not().like("message","%/invitation%")
+            builder.delete()
+        } catch (throwables: SQLException) {
+            throwables.printStackTrace()
+        }
     }
 
 
@@ -47,7 +64,7 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     }
 
     fun getLastMessagesForPairwiseDid2(did: String): LocalMessage? {
-        return  getDatabase().getLastMessagesForDid(did)
+        return getDatabase().getLastMessagesForDid(did)
     }
 
 
@@ -55,18 +72,17 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
         val livedata = MutableLiveData<List<LocalMessage>>()
         livedata.postValue(getDatabase().getMainActionsMessages())
         return livedata
-     /*   val map = HashMap<String, Boolean>()
-        map["isAccepted"] = false
-        map["isCanceled"] = false
-        map["type"] = false
-        return getItemsBy(map)*/
+        /*   val map = HashMap<String, Boolean>()
+           map["isAccepted"] = false
+           map["isCanceled"] = false
+           map["type"] = false
+           return getItemsBy(map)*/
     }
 
-    fun getUnreadcountForDid(did : String): Int {
+    fun getUnreadcountForDid(did: String): Int {
         return getDatabase().getUnreadMessages(did).toInt()
 
     }
-
 
 
     override fun getDatabase(): MessageDatabase {
@@ -83,7 +99,7 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
         eventStoreLiveData.postValue(id)
     }
 
-    fun deleteMessage(id: String?){
+    fun deleteMessage(id: String?) {
         getDatabase().removeBy(id = id)
         eventStoreLiveData.postValue(id)
     }

@@ -19,8 +19,10 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityMainBinding
+import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
+import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.ui.activities.scan.ScanActivity
 import com.socialsirius.messenger.ui.activities.settings.SettingsActivity
 import com.socialsirius.messenger.ui.chats.allChats.AllChatsFragment
@@ -34,10 +36,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
 
     companion object {
         @JvmStatic
-        fun newInstance(context: Context) {
+        fun newInstance(context: Context, toChat: Chats? = null) {
             val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("toChat", toChat)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    fun handleIntent(intent: Intent?) {
+        if (intent?.hasExtra("toChat") == true) {
+            val chats = intent?.getSerializableExtra("toChat") as? Chats
+            MessageActivity.newInstance(this, chats)
         }
     }
 
@@ -56,11 +71,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotificationsUtils.createChannelsForNotifications()
-     //   val drawerLayout: DrawerLayout = dataBinding.drawerLayout
+        //   val drawerLayout: DrawerLayout = dataBinding.drawerLayout
         val navView: NavigationView = dataBinding.navView
-      //  val toolbar: Toolbar = findViewById(R.id.toolbar)
+        //  val toolbar: Toolbar = findViewById(R.id.toolbar)
         showPage(AllChatsFragment())
-       // setSupportActionBar(toolbar)
+        // setSupportActionBar(toolbar)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         val drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val mDrawerToggle: ActionBarDrawerToggle
@@ -82,7 +97,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
                     //drawerOpened = false;
                 }
 
-              override  fun onDrawerOpened(drawerView: View) {
+                override fun onDrawerOpened(drawerView: View) {
                     supportInvalidateOptionsMenu()
                     //drawerOpened = true;
                 }
@@ -122,6 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
 
         val nickName = dataBinding.navView.getHeaderView(0).findViewById<TextView>(R.id.nickname)
         nickName.text = AppPref.getInstance().getUser()?.name
+        handleIntent(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,12 +147,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.action_scan_qr){
-          //  showPage(MenuScanQrFragment())
+        if (item.itemId == R.id.action_scan_qr) {
+            //  showPage(MenuScanQrFragment())
             ScanActivity.newInstance(this)
         }
         return super.onOptionsItemSelected(item)
     }
+
     var dialog: AlertDialog? = null
     override fun subscribe() {
         super.subscribe()

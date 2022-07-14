@@ -33,7 +33,7 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
         dataBinding. calculatorView.setDeleteLongClickListener { model.onDeleteLongDigitClick() }
         dataBinding.  calculatorView.setIdentifyClickListener { model.onIdentityClick() }
         model.countForDigit = dataBinding.indicatorView.countIndicatorAll
-        dataBinding.  calculatorView.enableIdentityButton(false)
+        dataBinding.  calculatorView.enableIdentityButton(true)
         dataBinding.   mainLayout.setOnClickListener(View.OnClickListener {  })
        // Utils.hideKeyboardWitoutAnimWithView(activity, rootView)
     }

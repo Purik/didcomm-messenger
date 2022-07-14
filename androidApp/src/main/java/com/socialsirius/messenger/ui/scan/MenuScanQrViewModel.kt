@@ -1,11 +1,17 @@
 package com.socialsirius.messenger.ui.scan
 
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.net.Uri
 import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
+import com.sirius.library.messaging.Message
 import com.sirius.library.mobile.helpers.ChanelHelper
 import com.sirius.library.mobile.helpers.InvitationHelper
 import com.socialsirius.messenger.R
@@ -37,18 +43,34 @@ open class MenuScanQrViewModel @Inject constructor(
 
     val goToNewSecretChatLiveData = MutableLiveData<Chats?>()
 
+    val showInvitationBottomSheetLiveData = MutableLiveData<Invitation?>()
+    val showErrorBottomSheetLiveData = MutableLiveData<String>()
+
     override fun onViewCreated() {
         super.onViewCreated()
     }
 
-    open fun onCodeScanned(result: String) : Boolean {
+    var isConnecting = false
+    fun connectToInvitation(message : Invitation){
+        isConnecting = true
+        ChanelHelper.getInstance().parseMessage(message.serialize())
+    }
+
+
+    open fun onCodeScanned(result: String, type: Int) : Boolean {
         val message = InvitationHelper.getInstance().parseInvitationLink(result)
         if (message != null) {
-            ChanelHelper.getInstance().parseMessage(message)
+            showInvitationBottomSheetLiveData.postValue(message)
             return true
         } else {
-            val textError: String ="The scanned QR code is not an invitation, please scan another QR code."
-            onShowToastLiveData.postValue(textError)
+            var textError ="The scanned QR code is not an invitation, please scan another QR code."
+            if (type ==1){
+                textError = "The pasted text from clipboard is not an invitation, please copy to clipboard another text."
+            }
+            if (type ==2){
+                textError = "The URL that you want to parse is not an invitation, please try another URL."
+            }
+            showErrorBottomSheetLiveData.postValue(textError)
             return false
         }
 
@@ -59,4 +81,19 @@ open class MenuScanQrViewModel @Inject constructor(
         return LocalMessageTransform.toItemContacts(localMessage)
     }
 
+
+    fun OnReadClick(v : View){
+        val text = v.context.getFromClipBoard() ?:""
+        if (text.isNullOrEmpty()) {
+            val textError ="Text from clipboard is empty. Please copy invitation text first."
+            showErrorBottomSheetLiveData.postValue(textError)
+            return
+        }
+        onCodeScanned(text, 1)
+    }
+}
+
+fun Context.getFromClipBoard() : String? {
+    val clipBoardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+    return clipBoardManager.primaryClip?.getItemAt(0)?.text?.toString()
 }

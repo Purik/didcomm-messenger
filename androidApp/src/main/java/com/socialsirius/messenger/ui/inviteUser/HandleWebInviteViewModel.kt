@@ -26,14 +26,13 @@ class HandleWebInviteViewModel @Inject constructor(
         super.onViewCreated()
     }
 
-    fun setError(error : String?){
+    fun setError(error : String){
         errorTextLiveData.postValue(error)
         splashTextLiveData.postValue("")
         loadingVisibilityLiveData.postValue(View.GONE)
     }
-    override fun onCodeScanned(code: String): Boolean {
-        return super.onCodeScanned(code)
-    }
+
+
 
 
 }

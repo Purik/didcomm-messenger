@@ -1,18 +1,21 @@
 package com.socialsirius.messenger.ui.inviteUser
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
+import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.Chats
-import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
-
 import javax.inject.Inject
+
 
 class InviteUserViewModel @Inject constructor(
     val resourcesProvider: ResourcesProvider,
@@ -68,6 +71,15 @@ class InviteUserViewModel @Inject constructor(
     fun onShareButtonClick(v: View?) {
         shareButtonAction.value = qrCodeLiveData.value
     }
+
+
+    fun onCopyButtonClick(v: View) {
+        val clipboard: ClipboardManager? = v.context.getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager
+        val clip = ClipData.newPlainText("Invitation QR", qrCodeLiveData.value)
+        clipboard?.setPrimaryClip(clip)
+       onShowToastLiveData.postValue(resourcesProvider.getString(R.string.copy_to_clipboard_succes))
+    }
+
 
     fun getMessage(id : String) : Chats {
         val localMessage = messageRepository.getItemBy(id)

@@ -116,7 +116,9 @@ class ChatViewModel @Inject constructor(
               }*/
 
             if (list.isEmpty()) {
-                LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
+             //   list.add(ConnectItemMessage())
+                adapterListLiveData.postValue(list)
+            /*    LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
                     .observeOnce(this) {
                         val message = LocalMessageTransform.toBaseItemMessage(it)
                         list.add(message)
@@ -126,7 +128,7 @@ class ChatViewModel @Inject constructor(
                                 o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
                             })
                         adapterListLiveData.postValue(list)
-                    }
+                    }*/
             } else {
                 Collections.sort(
                     list,
@@ -376,7 +378,7 @@ class ChatViewModel @Inject constructor(
     }
 
     fun deleteChatRequest() {
-        messageRepository.deleteAllForPairwiseDid(currentChat?.id ?: "")
+        messageRepository.deleteAllForPairwiseDid(currentChat?.id ?: "",false)
         onBackClickLiveData.postValue(true)
     }
 

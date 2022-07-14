@@ -81,6 +81,17 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
+            android:id="@+id/copyButton"
+            style="@style/AccentButton"
+            android:text="@string/copy_to_clipboard"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/shareButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="24dp"
+            android:onClick="@{viewModel::onCopyButtonClick}"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
             android:id="@+id/shareButton"
             style="@style/AccentButton"
             android:text="@string/send_share"
@@ -90,6 +101,8 @@
             android:layout_margin="24dp"
             android:onClick="@{viewModel::onShareButtonClick}"
             app:layout_constraintStart_toStartOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

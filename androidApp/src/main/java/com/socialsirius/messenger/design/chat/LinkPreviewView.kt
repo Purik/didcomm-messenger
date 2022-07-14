@@ -5,8 +5,13 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.socialsirius.messenger.R
 
+import io.github.ponnamkarthik.richlinkpreview.MetaData
+import io.github.ponnamkarthik.richlinkpreview.ResponseListener
+import io.github.ponnamkarthik.richlinkpreview.RichPreview
 import kotlinx.android.synthetic.main.view_link_preview.view.headerTextView
 import kotlinx.android.synthetic.main.view_link_preview.view.descTextView
 import kotlinx.android.synthetic.main.view_link_preview.view.lineView
@@ -14,9 +19,9 @@ import kotlinx.android.synthetic.main.view_link_preview.view.logoView
 import kotlinx.android.synthetic.main.view_link_preview.view.linkTextView
 
 class LinkPreviewView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
@@ -39,7 +44,7 @@ class LinkPreviewView @JvmOverloads constructor(
         }
     }
 
-/*    fun updateLink(link: String, updateMetadataAction: (MetaData?) -> Unit) {
+    fun updateLink(link: String, updateMetadataAction: (MetaData?) -> Unit) {
         if (link.isEmpty()){
             updateMetadataAction(null)
             return
@@ -54,9 +59,9 @@ class LinkPreviewView @JvmOverloads constructor(
             }
         })
         richPreview.getPreview(link)
-    }*/
+    }
 
-    /* fun updateWithMetadata(metaData: MetaData?) {
+    fun updateWithMetadata(metaData: MetaData?) {
         if (metaData == null) {
             this@LinkPreviewView.visibility = View.GONE
             return
@@ -85,5 +90,5 @@ class LinkPreviewView @JvmOverloads constructor(
                 logoView.visibility = View.GONE
             }
         }
-    }*/
+    }
 }

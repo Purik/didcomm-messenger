@@ -124,10 +124,15 @@ class SDKUseCase @Inject constructor(
                             .url(endpoint ?: "")
                             .post(body)
                             .build()
-                        client.newCall(request).execute().use { response ->
-                            Log.d("mylog200", "response=" + response.body?.string())
-                            response.isSuccessful
+                        try {
+                            client.newCall(request).execute().use { response ->
+                                Log.d("mylog200", "response=" + response.body?.string())
+                                response.isSuccessful
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
+
                     }).start()
                 } else if (endpoint?.startsWith("ws") == true) {
                     sendMessToSocket(context, endpoint, data ?: ByteArray(0))
@@ -160,10 +165,15 @@ class SDKUseCase @Inject constructor(
                 GlobalScope.launch(Dispatchers.Default) {
 
                     SiriusSDK.getInstance().initializeCorouitine(
-                        alias = walletId, pass = passForWallet,
+                        alias = walletId,
+                        pass = passForWallet,
                         mainDirPath = mainDirPath,
-                        mediatorAddress = mediatorAddress, recipientKeys = listOf(recipientKeys),
-                        label = label, "default_mobile",serverUri = "https://messenger.socialsirius.com/invitation", baseSender = sender
+                        mediatorAddress = mediatorAddress,
+                        recipientKeys = listOf(recipientKeys),
+                        label = label,
+                        "default_mobile",
+                        serverUri = "https://messenger.socialsirius.com/invitation",
+                        baseSender = sender
                     )
                     ChanelHelper.getInstance().initListener()
                     SiriusSDK.getInstance().connectToMediator()
@@ -176,10 +186,15 @@ class SDKUseCase @Inject constructor(
             GlobalScope.launch(Dispatchers.Default) {
 
                 SiriusSDK.getInstance().initializeCorouitine(
-                    alias = walletId, pass = passForWallet,
+                    alias = walletId,
+                    pass = passForWallet,
                     mainDirPath = mainDirPath,
-                    mediatorAddress = mediatorAddress, recipientKeys = listOf(recipientKeys),
-                    label = label, "default_mobile",serverUri = "https://messenger.socialsirius.com/invitation",  baseSender = sender
+                    mediatorAddress = mediatorAddress,
+                    recipientKeys = listOf(recipientKeys),
+                    label = label,
+                    "default_mobile",
+                    serverUri = "https://messenger.socialsirius.com/invitation",
+                    baseSender = sender
                 )
                 ChanelHelper.getInstance().initListener()
                 SiriusSDK.getInstance().connectToMediator(token)
@@ -218,11 +233,12 @@ class SDKUseCase @Inject constructor(
     }
 
 
-    fun sendMessageWithAttachForPairwise(pairwiseDid: String, attach : FileAttach): LocalMessage {
+    fun sendMessageWithAttachForPairwise(pairwiseDid: String, attach: FileAttach): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
         val message = Message.builder().setContent(attach.messageText).build()
-        val att: Attach = Attach().setId(attach.id).setMimeType("image/png").setFileName(attach.fileName)
-            .setData(attach.fileBase64Bytes ?: ByteArray(0))
+        val att: Attach =
+            Attach().setId(attach.id).setMimeType("image/png").setFileName(attach.fileName)
+                .setData(attach.fileBase64Bytes ?: ByteArray(0))
         message.addAttach(att)
         val localMessage = LocalMessage(pairwiseDid = pairwiseDid)
 
@@ -240,7 +256,7 @@ class SDKUseCase @Inject constructor(
     fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
         val message = Message.builder().setContent(messageText).build()
-        val localMessage = LocalMessage(id = message.getId(),pairwiseDid = pairwiseDid)
+        val localMessage = LocalMessage(id = message.getId(), pairwiseDid = pairwiseDid)
         localMessage.isMine = true
         localMessage.type = "text"
         localMessage.message = message.serialize()

@@ -34,7 +34,7 @@
                 style="@style/Regular19"
                 android:layout_margin="16dp"
                 android:textColor="@color/black"
-
+                android:visibility="@{viewModel.loadingVisibilityLiveData}"
                 android:text="@string/invitation_in_progress"
                 android:id="@+id/splashText"/>
 
@@ -61,6 +61,73 @@
                 android:visibility="@{viewModel.loadingVisibilityLiveData}"
                 android:progressBackgroundTint="@color/yellow"
                 android:layout_gravity="center"/>
+
+
+           <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:id="@+id/connectionLayout"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Subtitle1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invitation_from" />
+
+                <TextView
+                    style="@style/Headline6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:id="@+id/labelText"
+                    android:text="" />
+
+                <TextView
+                    style="@style/Subtitle1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/recipient_keys" />
+
+                <TextView
+                    style="@style/Headline6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:id="@+id/receipentKeyText"
+                    android:text="" />
+
+                <TextView
+                    style="@style/Subtitle1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/recipient_endpoint" />
+
+                <TextView
+                    style="@style/Headline6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:id="@+id/endpointText"
+                    android:text="" />
+
+                <Button
+                    android:id="@+id/connectButton"
+                    style="@style/AccentButton"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
+
+                    android:text="@string/connect" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <FrameLayout
