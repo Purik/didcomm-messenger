@@ -144,6 +144,23 @@ class HandleWebInviteFragment :
         binding?.receipentKeyText?.text = invitation.recipientKeys().getOrNull(0)
         binding?.endpointText?.text = invitation.endpoint()
 
+        binding?.labelText?.text = invitation.label()
+        binding?.receipentLabel?.text = String.format(App.getContext().getString(R.string.recipient_keys), invitation.label())
+
+        binding?.receipentKeyText?.text = invitation.recipientKeys().getOrNull(0)
+        // binding?.endpointText?.text = invitation.endpoint()
+        if(invitation.endpoint()==model.getMyEndpoint()){
+            binding?.connectButton?.visibility = View.GONE
+        }
+
+        binding?.moreBtn?.setOnClickListener{
+            binding?.receipentLabel?.visibility = View.VISIBLE
+            binding?.receipentKeyText?.visibility = View.VISIBLE
+            //    binding?.endpointLabel?.visibility = View.VISIBLE
+            //    binding?.endpointText?.visibility = View.VISIBLE
+            binding?.moreBtn?.visibility = View.GONE
+        }
+
         binding?.connectButton?.setOnClickListener {
             model.loadingVisibilityLiveData.postValue(View.VISIBLE)
             model.connectToInvitation(invitation)

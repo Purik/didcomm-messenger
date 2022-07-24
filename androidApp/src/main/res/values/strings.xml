@@ -214,7 +214,8 @@
     <string name="cancel">Cancel</string>
 
     <string name="invitation_from">Invitation to chat from:</string>
-    <string name="recipient_keys">Recipient public key</string>
+    <string name="recipient_keys">%s public key</string>
+    <string name="more_detail">Details</string>
     <string name="recipient_endpoint">Recipient public endpoint</string>
     <string name="connect">Connect</string>
 </resources>

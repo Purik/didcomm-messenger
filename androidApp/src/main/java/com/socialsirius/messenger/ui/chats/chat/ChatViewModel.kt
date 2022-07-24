@@ -28,15 +28,18 @@ import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.FileAttach
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.repository.models.MessageStatus
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chat.item.*
 import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
 import com.socialsirius.messenger.ui.chats.chats.message.ConnectItemMessage
 import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
+import com.socialsirius.messenger.use_cases.EventUseCase
 import com.socialsirius.messenger.utils.DateUtils
 import com.socialsirius.messenger.utils.FileUtils
 import com.socialsirius.messenger.utils.extensions.observeOnce
+import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
 
 
 import retrofit2.Call
@@ -57,7 +60,8 @@ const val MESSAGES_LIMIT = 20
 class ChatViewModel @Inject constructor(
     val resourceProvider: ResourcesProvider,
     private val messageRepository: MessageRepository,
-    val sdkUseCase: SDKUseCase
+    val sdkUseCase: SDKUseCase,
+    val eventUseCase: EventUseCase
     //   private val userRepository: UserRepository,
     //   private val messageListenerUseCase: MessageListenerUseCase,
     //  private val favoritesRepository: FavoritesRepository,
@@ -71,8 +75,10 @@ class ChatViewModel @Inject constructor(
     val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
     val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val eventStoreLiveData = messageRepository.eventStoreLiveData
-
+    val pongLiveData = eventUseCase.pongMutableLiveData
     public var fileName: String? = null
+    val isOnlineLiveData = MutableLiveData<Boolean>()
+
 
     fun setChat(chats: Chats?) {
         currentChat = chats
@@ -84,13 +90,25 @@ class ChatViewModel @Inject constructor(
 
     override fun setupViews() {
         super.setupViews()
+        subscribe()
         updateLastActivity()
+
     }
 
 
+    fun subscribe(){
+        pongLiveData.observeUntilDestroy(this) {
+            Log.d("mylog2090","pongLiveData= ${it?.second} ${currentChat?.id} ")
+            if (it?.second == currentChat?.id) {
+
+                isOnlineLiveData.postValue(it?.first ?: false)
+            }
+        }
+    }
+
     fun readUnread(id: String?) {
         if (id != null) {
-            messageRepository.updateErrorAccepted(id, true, false, null, null)
+            messageRepository.updateStatus(id, MessageStatus.Read)
         }
     }
 
@@ -116,33 +134,33 @@ class ChatViewModel @Inject constructor(
               }*/
 
             if (list.isEmpty()) {
-             //   list.add(ConnectItemMessage())
+                //   list.add(ConnectItemMessage())
                 adapterListLiveData.postValue(list)
-            /*    LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
-                    .observeOnce(this) {
-                        val message = LocalMessageTransform.toBaseItemMessage(it)
-                        list.add(message)
-                        Collections.sort(
-                            list,
-                            kotlin.Comparator { o1, o2 ->
-                                o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
-                            })
-                        adapterListLiveData.postValue(list)
-                    }*/
+                /*    LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
+                        .observeOnce(this) {
+                            val message = LocalMessageTransform.toBaseItemMessage(it)
+                            list.add(message)
+                            Collections.sort(
+                                list,
+                                kotlin.Comparator { o1, o2 ->
+                                    o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
+                                })
+                            adapterListLiveData.postValue(list)
+                        }*/
             } else {
                 Collections.sort(
                     list,
                     kotlin.Comparator { o1, o2 ->
                         o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
                     })
-                val itemsToAdd : MutableList<BaseItemMessage> = mutableListOf()
-                list.forEachIndexed{ index, messMaps ->
+                val itemsToAdd: MutableList<BaseItemMessage> = mutableListOf()
+                list.forEachIndexed { index, messMaps ->
                     itemsToAdd.lastOrNull()?.let { prevMessageItem ->
-                        if (needToAddDateDelimiter(prevMessageItem, messMaps) ) {
+                        if (needToAddDateDelimiter(prevMessageItem, messMaps)) {
                             itemsToAdd.add(ChatDateItem(messMaps.date?.time ?: 0))
                         }
                     }
-                    if(  index ==0){
+                    if (index == 0) {
                         itemsToAdd.add(ChatDateItem(messMaps.date?.time ?: 0))
                     }
 
@@ -153,9 +171,12 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    private fun needToAddDateDelimiter(prevMessageItem: BaseItemMessage?, currentMessageItem: BaseItemMessage): Boolean {
+    private fun needToAddDateDelimiter(
+        prevMessageItem: BaseItemMessage?,
+        currentMessageItem: BaseItemMessage
+    ): Boolean {
         val prevSentDate = Calendar.getInstance().apply {
-            time = prevMessageItem?.date?: Date()
+            time = prevMessageItem?.date ?: Date()
         }
         val nextSentDate = Calendar.getInstance().apply { time = currentMessageItem.date ?: Date() }
 
@@ -319,6 +340,7 @@ class ChatViewModel @Inject constructor(
     }
 
     fun updateLastActivity() {
+        sdkUseCase.sendTrustPingMessageForPairwise(currentChat?.id ?: "")
         /*    val items = lastActivityAllLiveData.value
             items?.forEach {
                 activityStatusLiveData.postValue(Pair(it.uid, it.isOnline))
@@ -368,17 +390,17 @@ class ChatViewModel @Inject constructor(
                     ""
                 }
             }*/
-        val dateString: String = DateUtils.getStringFromDate(Date(), "dd.MM.yyyy", false)
+       /* val dateString: String = DateUtils.getStringFromDate(Date(), "dd.MM.yyyy", false)
         val timeString: String = DateUtils.getStringFromDate(Date(), "HH:mm", false)
         val string = java.lang.String.format(
             App.getContext().getString(R.string.last_activity_was),
             dateString, timeString
         )
-        lastActivityLiveData.postValue(string)
+        lastActivityLiveData.postValue(string)*/
     }
 
     fun deleteChatRequest() {
-        messageRepository.deleteAllForPairwiseDid(currentChat?.id ?: "",false)
+        messageRepository.deleteAllForPairwiseDid(currentChat?.id ?: "", false)
         onBackClickLiveData.postValue(true)
     }
 

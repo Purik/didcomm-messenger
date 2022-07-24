@@ -4,6 +4,7 @@ import android.content.Context
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.stmt.UpdateBuilder
 import com.socialsirius.messenger.repository.models.LocalMessage
+import com.socialsirius.messenger.repository.models.MessageStatus
 
 import java.lang.Exception
 import java.sql.SQLException
@@ -90,6 +91,20 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
             builder.updateColumnValue("isCanceled", canceled)
             builder.updateColumnValue("acceptedComment", comment)
             builder.updateColumnValue("canceledComment", error)
+            builder.update()
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
+
+    }
+
+    fun updateStatus(
+        id: String,
+        status: MessageStatus
+    ) {
+        try{
+            val builder = getIdUpdateBuilder(id)
+            builder.updateColumnValue("status", status)
             builder.update()
         }catch (e : Exception){
             e.printStackTrace()

@@ -22,10 +22,23 @@
             android:text="" />
 
         <TextView
+            style="@style/Subtitle2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/moreBtn"
+            android:padding="16dp"
+
+            android:text="@string/more_detail" />
+
+
+        <TextView
             style="@style/Subtitle1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:id="@+id/receipentLabel"
             android:text="@string/recipient_keys" />
 
         <TextView
@@ -33,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
+            android:visibility="gone"
             android:id="@+id/receipentKeyText"
             android:text="" />
 
@@ -41,6 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:id="@+id/endpointLabel"
             android:text="@string/recipient_endpoint" />
 
         <TextView
@@ -48,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
+            android:visibility="gone"
             android:id="@+id/endpointText"
             android:text="" />
 

@@ -8,6 +8,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.socialsirius.messenger.service.WebSocketService
 import com.socialsirius.messenger.utils.DateUtils.PATTERN_ROSTER_STATUS_RESPONSE2
 import com.sirius.library.agent.BaseSender
+import com.sirius.library.agent.aries_rfc.AriesProtocolMessage
 import com.sirius.library.agent.aries_rfc.concept_0017_attachments.Attach
 import com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message
 
@@ -30,8 +31,11 @@ import com.socialsirius.messenger.sirius_sdk_impl.scenario.*
 import com.socialsirius.messenger.utils.FileUtils
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.OfferCredentialMessage
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
+import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Ping
+import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Pong
 import com.sirius.library.mobile.models.CredentialsRecord
 import com.socialsirius.messenger.models.FileAttach
+import com.socialsirius.messenger.use_cases.EventUseCase
 import com.sodium.LibSodium
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -51,7 +55,9 @@ import javax.inject.Singleton
 @Singleton
 class SDKUseCase @Inject constructor(
     private val eventRepository: EventRepository,
-    private val messageRepository: MessageRepository, val userRepository: UserRepository
+    private val messageRepository: MessageRepository,
+    val userRepository: UserRepository,
+    val eventUseCase: EventUseCase
 ) {
 
 
@@ -229,6 +235,11 @@ class SDKUseCase @Inject constructor(
             .addScenario("Question", QuestionAnswerScenarioImp(messageRepository, eventRepository))
         ScenarioHelper.getInstance()
             .addScenario("Notification", NotificationScenarioImpl(messageRepository))
+        ScenarioHelper.getInstance()
+            .addScenario("Ping", PingScenarioImpl(this))
+        ScenarioHelper.getInstance()
+            .addScenario("Pong", PongScenarioImpl(eventRepository, eventUseCase ))
+
 
     }
 
@@ -265,6 +276,18 @@ class SDKUseCase @Inject constructor(
             SiriusSDK.getInstance().context.sendTo(message, pairwise)
         }
         return localMessage
+    }
+
+
+    fun sendTrustPingMessageForPairwise(pairwiseDid: String, pingId : String?=null){
+        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        var message : AriesProtocolMessage = Ping.builder().setResponseRequested(true).build()
+        if(pingId!=null){
+             message = Pong.builder().setPingId(pingId).build()
+        }
+        pairwise?.let {
+            SiriusSDK.getInstance().context.sendTo(message, pairwise)
+        }
     }
 
     fun sendRequestToPairwise(pairwiseDid: String): LocalMessage {

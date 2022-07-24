@@ -8,6 +8,7 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.repository.local.BaseDatabase
 import com.socialsirius.messenger.repository.local.MessageDatabase
 import com.socialsirius.messenger.repository.models.LocalMessage
+import com.socialsirius.messenger.repository.models.MessageStatus
 import java.sql.SQLException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -113,6 +114,14 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
         comment: String?
     ) {
         getDatabase().updateErrorAccepted(id, isAccepted, canceled, error, comment)
+    }
+
+
+    fun updateStatus(
+        id: String,
+        status: MessageStatus
+    ) {
+        getDatabase().updateStatus(id, status)
     }
 
     override fun createItem(item: LocalMessage) {

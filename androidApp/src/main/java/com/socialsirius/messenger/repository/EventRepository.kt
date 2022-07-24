@@ -18,9 +18,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EventRepository @Inject constructor(val messageRepository: MessageRepository)
-     :
-     EventStorageAbstract {
+class EventRepository @Inject constructor(val messageRepository: MessageRepository) : EventStorageAbstract {
+
 
 
 

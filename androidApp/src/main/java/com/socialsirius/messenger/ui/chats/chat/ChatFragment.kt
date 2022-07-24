@@ -72,8 +72,13 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
             .build()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun setupViews() {
         model.setChat(arguments?.getSerializable(CHAT_ITEM) as? Chats)
+        super.setupViews()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         dataBinding.chatPanelView.onSendClick = (object : ChatPanelView.OnSendClick {
             override fun onMessageSend(message: String) {
@@ -88,7 +93,7 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         adapter = MessagesAdapter()
         adapter!!.onCustomBtnClick = object : OnCustomBtnClick<IChatItem> {
             override fun onBtnClick(btnId: Int, item: IChatItem?, position: Int) {
-                if (btnId == -10) {
+                if (btnId == MessagesAdapter.readActionId) {
                     model.readUnread(item?.getMessageId())
                 }
                 if (btnId == R.id.mainPanelView) {
@@ -266,10 +271,10 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
             model.updateLastActivity()
         })*/
 
-        model.activityStatusLiveData.observe(this, Observer {
+    /*    model.activityStatusLiveData.observe(this, Observer {
             view?.findViewWithTag<AvatarView>(it.first)?.updateStatus(it.second)
             adapter?.updateActivityStatus(it)
-        })
+        })*/
 
         model.messageActionLiveData.observe(this, Observer {
             MessageActionDialogFragment(it).show(parentFragmentManager, MessageActionDialogFragment::class.java.simpleName)
@@ -406,6 +411,10 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
               botButtonRecycler.adapter = botButtonAdapter
           })
   */
+
+        model.isOnlineLiveData.observe(this, Observer {
+            dataBinding.avatarView.updateStatus(it)
+        })
     }
 
     private fun openAttachmentDialog() {

@@ -18,6 +18,7 @@ import com.socialsirius.messenger.databinding.ViewErrorBootomSheetBinding
 import com.socialsirius.messenger.databinding.ViewInvitationBootomSheetBinding
 import com.socialsirius.messenger.design.InvitationBottomSheet
 import com.socialsirius.messenger.design.SiriusScannerView
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.ui.activities.main.MainActivity
 import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.utils.PermissionHelper
@@ -168,10 +169,22 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
         val view = layoutInflater.inflate(R.layout.view_invitation_bootom_sheet, null,false)
        val binding =  DataBindingUtil.bind<ViewInvitationBootomSheetBinding>(view)
         binding?.labelText?.text = invitation.label()
+        binding?.receipentLabel?.text = String.format(App.getContext().getString(R.string.recipient_keys), invitation.label())
+
         binding?.receipentKeyText?.text = invitation.recipientKeys().getOrNull(0)
-        binding?.endpointText?.text = invitation.endpoint()
+       // binding?.endpointText?.text = invitation.endpoint()
+        if(invitation.endpoint()==model.getMyEndpoint()){
+            binding?.connectButton?.visibility = View.GONE
+        }
         binding?.connectButton?.setOnClickListener {
             model.connectToInvitation(invitation)
+        }
+        binding?.moreBtn?.setOnClickListener{
+            binding?.receipentLabel?.visibility = View.VISIBLE
+            binding?.receipentKeyText?.visibility = View.VISIBLE
+        //    binding?.endpointLabel?.visibility = View.VISIBLE
+        //    binding?.endpointText?.visibility = View.VISIBLE
+            binding?.moreBtn?.visibility = View.GONE
         }
         invitationSheet.setContentView(view)
         invitationSheet.show()

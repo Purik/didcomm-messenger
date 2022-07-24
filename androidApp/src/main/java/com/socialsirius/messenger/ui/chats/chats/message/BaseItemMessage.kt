@@ -10,6 +10,7 @@ import com.sirius.library.messaging.Message
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
+import com.socialsirius.messenger.repository.models.MessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
 import com.socialsirius.messenger.utils.DateUtils
 
@@ -56,7 +57,13 @@ abstract class BaseItemMessage : IChatItem {
     var commentString: String? = null
     var isError: Boolean = false
     var date: Date? = null
+    var status: MessageStatus? = null
     var notifyDataListener : NotifyDataListener? = null
+
+
+    fun canBeRead() : Boolean{
+        return !(isMine || status == MessageStatus.Read)
+    }
 
     fun notifyItem(){
         notifyDataListener?.notifyItem(this)
@@ -99,6 +106,7 @@ abstract class BaseItemMessage : IChatItem {
             errorString = localMessage.canceledCause
             commentString = localMessage.acceptedComment
             id = message?.getId() ?:""
+            status = localMessage.status
         }
     }
 

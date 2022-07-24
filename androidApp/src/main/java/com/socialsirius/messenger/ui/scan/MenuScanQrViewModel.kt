@@ -12,14 +12,17 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
 import com.sirius.library.messaging.Message
+import com.sirius.library.mobile.SiriusSDK
 import com.sirius.library.mobile.helpers.ChanelHelper
 import com.sirius.library.mobile.helpers.InvitationHelper
+import com.sirius.library.utils.SDK
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
 
 import org.json.JSONArray
@@ -29,10 +32,11 @@ import javax.inject.Inject
 
 open class MenuScanQrViewModel @Inject constructor(
     open var resourcesProvider: ResourcesProvider,
-  //  open var messagesUseCase: MessagesUseCase,
+    //  open var messagesUseCase: MessagesUseCase,
 //    open var chatsRepository: ChatsRepository,
-    open  var messageRepository: MessageRepository
-   // open  var messageListenerUseCase: MessageListenerUseCase
+    open var messageRepository: MessageRepository
+
+    // open  var messageListenerUseCase: MessageListenerUseCase
 
 ) : BaseViewModel() {
 
@@ -50,25 +54,31 @@ open class MenuScanQrViewModel @Inject constructor(
         super.onViewCreated()
     }
 
+    fun getMyEndpoint(): String {
+        return SiriusSDK.getInstance().context.endpointAddressWithEmptyRoutingKeys
+    }
+
     var isConnecting = false
-    fun connectToInvitation(message : Invitation){
+    fun connectToInvitation(message: Invitation) {
         isConnecting = true
         ChanelHelper.getInstance().parseMessage(message.serialize())
     }
 
 
-    open fun onCodeScanned(result: String, type: Int) : Boolean {
+    open fun onCodeScanned(result: String, type: Int): Boolean {
         val message = InvitationHelper.getInstance().parseInvitationLink(result)
         if (message != null) {
             showInvitationBottomSheetLiveData.postValue(message)
             return true
         } else {
-            var textError ="The scanned QR code is not an invitation, please scan another QR code."
-            if (type ==1){
-                textError = "The pasted text from clipboard is not an invitation, please copy to clipboard another text."
+            var textError = "The scanned QR code is not an invitation, please scan another QR code."
+            if (type == 1) {
+                textError =
+                    "The pasted text from clipboard is not an invitation, please copy to clipboard another text."
             }
-            if (type ==2){
-                textError = "The URL that you want to parse is not an invitation, please try another URL."
+            if (type == 2) {
+                textError =
+                    "The URL that you want to parse is not an invitation, please try another URL."
             }
             showErrorBottomSheetLiveData.postValue(textError)
             return false
@@ -76,16 +86,16 @@ open class MenuScanQrViewModel @Inject constructor(
 
     }
 
-    fun getMessage(id : String) : Chats {
+    fun getMessage(id: String): Chats {
         val localMessage = messageRepository.getItemBy(id)
         return LocalMessageTransform.toItemContacts(localMessage)
     }
 
 
-    fun OnReadClick(v : View){
-        val text = v.context.getFromClipBoard() ?:""
+    fun OnReadClick(v: View) {
+        val text = v.context.getFromClipBoard() ?: ""
         if (text.isNullOrEmpty()) {
-            val textError ="Text from clipboard is empty. Please copy invitation text first."
+            val textError = "Text from clipboard is empty. Please copy invitation text first."
             showErrorBottomSheetLiveData.postValue(textError)
             return
         }
@@ -93,7 +103,7 @@ open class MenuScanQrViewModel @Inject constructor(
     }
 }
 
-fun Context.getFromClipBoard() : String? {
+fun Context.getFromClipBoard(): String? {
     val clipBoardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
     return clipBoardManager.primaryClip?.getItemAt(0)?.text?.toString()
 }

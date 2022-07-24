@@ -34,7 +34,9 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
 
     val audioMessages = mutableMapOf<String, AudioMessageView>()
 
-
+    companion object {
+        val readActionId = -10
+    }
 
 
 
@@ -141,7 +143,7 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
             is MessagesViewHolder -> {
                 val item = item as TextItemMessage
             //    Log.d("mylog20031","onBindViewHolder item"+item.text +" item.status="+item.status)
-                holder.bind(item)
+                holder.bind(item,position)
             }
             is TechMessagesViewHolder -> holder.bind(item as TechMessageItem)
             is DateMessagesViewHolder -> holder.bind(item as ChatDateItem)
@@ -185,7 +187,7 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
         override val containerView: View?
             get() = itemView
 
-        fun bind(message: TextItemMessage) {
+        fun bind(message: TextItemMessage, position: Int) {
             itemView.chatMessageView.isMine = message.isMine
             itemView.chatMessageView.setMessage(message.getText(), message)
             val isShowCorner =  true
@@ -194,10 +196,11 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
             itemView.chatMessageView.setDateTime(DateUtils.parseDateToHhmmString(message.date))
 
 
-           // if (message.canBeRead()) {
+            if (message.canBeRead()) {
                 //отправляем статус что прочитано
-         //       messageReadAction.invoke(message.id, ConnectionsWrapper.ConnectionType.defaultType)
-            //}
+                onCustomBtnClick?.onBtnClick(readActionId,message,position)
+              //  messageReadAction.invoke(message.id, ConnectionsWrapper.ConnectionType.defaultType)
+            }
 
 
             // itemView.chatMessageView.setMessageType(message.messageType)

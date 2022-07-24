@@ -62,6 +62,9 @@ class LocalMessage : DatabaseIdModel , Serializable{
     @DatabaseField(columnName = "canceledComment")
     var canceledCause: String? = null
 
+    @DatabaseField(columnName = "status")
+    var status : MessageStatus? = null
+
     fun message(): Message? {
         var restored: Message? = null
         try {
