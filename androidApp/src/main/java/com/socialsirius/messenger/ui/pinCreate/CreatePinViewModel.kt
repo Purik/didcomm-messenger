@@ -41,7 +41,12 @@ class CreatePinViewModel @Inject constructor(
         indicatorCodeFillLiveData.value = countForDigit == indicatorCodeLiveData.value?.length ?: 0
     }
 
-    fun createWallet() {
+
+    fun protectUseBiometric(){
+        AppPref.getInstance().setUseBiometric(true)
+    }
+
+    fun protectUsePinCode() {
         val mCode = indicatorCodeLiveData.value
         AppPref.getInstance().setPin(mCode)
 

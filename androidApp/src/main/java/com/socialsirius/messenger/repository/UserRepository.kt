@@ -33,7 +33,9 @@ class UserRepository @Inject constructor(private val appExecutors: AppExecutors)
     fun logout(){
         AppPref.getInstance().setUser(null)
         AppPref.getInstance().setPin(null)
+        AppPref.getInstance().setUseBiometric(false)
         myUser = User()
+            //TODO remove all data from db
     }
 
 }

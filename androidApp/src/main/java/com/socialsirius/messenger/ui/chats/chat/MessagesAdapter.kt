@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.ui.BaseRecyclerViewAdapter
 import com.socialsirius.messenger.design.chat.AudioMessageView
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.*
 import com.socialsirius.messenger.ui.chats.chats.message.ConnectItemMessage
 import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
@@ -192,6 +193,7 @@ class MessagesAdapter () : BaseRecyclerViewAdapter<IChatItem,MessagesAdapter.Bas
             itemView.chatMessageView.setMessage(message.getText(), message)
             val isShowCorner =  true
             itemView.chatMessageView.showCorner = isShowCorner
+            itemView.chatMessageView.setStatus(message.status ?: ChatMessageStatus.default)
            // itemView.chatMessageView.updateOwnerAndCorners()
             itemView.chatMessageView.setDateTime(DateUtils.parseDateToHhmmString(message.date))
 

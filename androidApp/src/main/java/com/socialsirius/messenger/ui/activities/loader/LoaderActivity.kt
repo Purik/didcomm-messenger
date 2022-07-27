@@ -44,10 +44,10 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
     override fun isBottomNavigationEnabled(): Boolean {
         return false
     }
+
     override fun initDagger() {
         App.getInstance().appComponent.inject(this)
     }
-
 
 
     fun handleIntent(): Boolean {
@@ -63,7 +63,7 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
         super.subscribe()
         model.initEndLiveData.observe(this, Observer {
             finishAffinity()
-            if(!handleIntent()){
+            if (!handleIntent()) {
                 MainActivity.newInstance(this)
             }
         })
@@ -74,15 +74,18 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
 
     }
 
-    fun initSdk(){
+    fun initSdk() {
         model.initSdk(this)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // MessageActivity.newInstance(this,Chat())
-        if(AppPref.getInstance().getPin().isNullOrEmpty()){
+        // MessageActivity.newInstance(this,Chat())
+        if (AppPref.getInstance().getPin().isNullOrEmpty() && !AppPref.getInstance()
+                .getUseBiometric()
+        ) {
             initSdk()
-        }else{
+        } else {
             showPage(EnterPinFragment())
         }
     }

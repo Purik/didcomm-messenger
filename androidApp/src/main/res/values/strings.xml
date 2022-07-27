@@ -200,10 +200,10 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="password">Password</string>
 
-    <string name="prompt_info_title">Sample App Authentication</string>
+    <string name="prompt_info_title">Sirius Messenger Authentication</string>
     <string name="prompt_info_subtitle">Please login to get access</string>
-    <string name="prompt_info_description">Sample App is using Android biometric authentication</string>
-    <string name="prompt_info_use_app_password">Use app password</string>
+    <string name="prompt_info_description">Sirius Messenger is using Android biometric authentication for additional protect of your data</string>
+    <string name="prompt_info_use_app_password">Create PIN code</string>
     <string name="secret_key_name">biometric_sample_encryption_key</string>
     <string name="btn_login">Login</string>
     <string name="btn_biometric_authorization">Use biometrics</string>
@@ -218,4 +218,7 @@
     <string name="more_detail">Details</string>
     <string name="recipient_endpoint">Recipient public endpoint</string>
     <string name="connect">Connect</string>
+
+
+    <string name="create_pin_additional">Do you want to create a PIN code for an alternative login?</string>
 </resources>

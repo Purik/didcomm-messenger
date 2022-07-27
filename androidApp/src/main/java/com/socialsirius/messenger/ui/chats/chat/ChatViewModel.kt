@@ -28,7 +28,7 @@ import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.FileAttach
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
-import com.socialsirius.messenger.repository.models.MessageStatus
+
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chat.item.*
@@ -71,11 +71,12 @@ class ChatViewModel @Inject constructor(
     //   val downloadRepository: DownloadRepository
 ) : BaseViewModel() {
     private var currentChat: Chats? = null
-    val chatLiveData = MutableLiveData<Chats>()
+    val chatLiveData = MutableLiveData<Chats?>()
     val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
     val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val eventStoreLiveData = messageRepository.eventStoreLiveData
-    val pongLiveData = eventUseCase.pongMutableLiveData
+    val pongLiveData = messageRepository.pongMutableLiveData
+    val updateMessageLiveData = messageRepository.updateMessageLiveData
     public var fileName: String? = null
     val isOnlineLiveData = MutableLiveData<Boolean>()
 
@@ -100,16 +101,36 @@ class ChatViewModel @Inject constructor(
         pongLiveData.observeUntilDestroy(this) {
             Log.d("mylog2090","pongLiveData= ${it?.second} ${currentChat?.id} ")
             if (it?.second == currentChat?.id) {
-
                 isOnlineLiveData.postValue(it?.first ?: false)
             }
         }
+
+   /*     updateMessageLiveData.observeUntilDestroy(this){idMess->
+            if(idMess != null){
+                updateMessageLiveData.value = null
+                val list =  adapterListLiveData.value.orEmpty().toMutableList()
+                var message  =list.firstOrNull {
+                    it.id == idMess
+                }
+
+                message?.let {
+                    val mess = messageRepository.getItemBy(idMess?:"")
+                    val baseItem =  LocalMessageTransform.toBaseItemMessage(mess)
+                    message = baseItem
+                    list.replaceAll { replace->
+                        if(replace.id == idMess ){
+                            baseItem
+                        }
+                        replace
+                    }ЯЯЯЯЯЯЯТ к
+                    adapterListLiveData.postValue(list)
+                }
+            }
+        }*/
     }
 
     fun readUnread(id: String?) {
-        if (id != null) {
-            messageRepository.updateStatus(id, MessageStatus.Read)
-        }
+        id?.let {  eventUseCase.readMessage(id, currentChat?.id ?: "") }
     }
 
     private fun createList() {
@@ -125,28 +146,8 @@ class ChatViewModel @Inject constructor(
                     return@filter !isConnect
                 }.toMutableList()
             }
-
-
-            /*  if (list.isEmpty()) {
-                      visibilityChatLiveData.postValue(View.GONE)
-              } else {
-                      visibilityChatLiveData.postValue(View.VISIBLE)
-              }*/
-
             if (list.isEmpty()) {
-                //   list.add(ConnectItemMessage())
                 adapterListLiveData.postValue(list)
-                /*    LocalMessageTransform.toLocalMessage(currentChat, messageRepository)
-                        .observeOnce(this) {
-                            val message = LocalMessageTransform.toBaseItemMessage(it)
-                            list.add(message)
-                            Collections.sort(
-                                list,
-                                kotlin.Comparator { o1, o2 ->
-                                    o1.date?.compareTo(o2.date ?: Date(0)) ?: -1
-                                })
-                            adapterListLiveData.postValue(list)
-                        }*/
             } else {
                 Collections.sort(
                     list,
@@ -163,7 +164,6 @@ class ChatViewModel @Inject constructor(
                     if (index == 0) {
                         itemsToAdd.add(ChatDateItem(messMaps.date?.time ?: 0))
                     }
-
                     itemsToAdd.add(messMaps)
                 }
                 adapterListLiveData.postValue(itemsToAdd)

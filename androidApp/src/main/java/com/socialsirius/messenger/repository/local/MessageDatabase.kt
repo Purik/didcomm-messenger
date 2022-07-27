@@ -3,8 +3,9 @@ package com.socialsirius.messenger.repository.local
 import android.content.Context
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.stmt.UpdateBuilder
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.repository.models.LocalMessage
-import com.socialsirius.messenger.repository.models.MessageStatus
+
 
 import java.lang.Exception
 import java.sql.SQLException
@@ -59,7 +60,8 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
 
     fun getUnreadMessages(did : String): Long {
         try {
-            return getQueryeBuilder().where().eq("isAccepted", false).and().eq("pairwiseDid", did)
+            return getQueryeBuilder().where().eq("pairwiseDid", did).
+            and().eq("isMine",false).and().not().eq("status", ChatMessageStatus.acknowlege)
                .countOf()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -100,7 +102,7 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
 
     fun updateStatus(
         id: String,
-        status: MessageStatus
+        status: ChatMessageStatus
     ) {
         try{
             val builder = getIdUpdateBuilder(id)

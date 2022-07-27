@@ -16,7 +16,7 @@ class EnterPinViewModel @Inject constructor(
 /*    val pinCodeUseCase: PinCodeUseCase,
     val indyUseCase: IndyUseCase,
     val loginUseCase: LoginUseCase*/
-) : BaseViewModel( ) {
+) : BaseViewModel() {
 
     val indicatorCodeLiveData = MutableLiveData<String>()
     val indicatorCodeFillLiveData = MutableLiveData<Boolean>()
@@ -29,10 +29,10 @@ class EnterPinViewModel @Inject constructor(
 
     override fun onViewCreated() {
         super.onViewCreated()
-     /*   IndyWallet.closeMyWallet();
-        AppPref.getInstance().lastWalletConnectionTimestamp = System.currentTimeMillis()
-        val count = AppPref.getInstance().userCodeTryCount
-        attemptsCountLiveData.value = resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + count*/
+        /*   IndyWallet.closeMyWallet();
+           AppPref.getInstance().lastWalletConnectionTimestamp = System.currentTimeMillis()
+           val count = AppPref.getInstance().userCodeTryCount
+           attemptsCountLiveData.value = resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + count*/
     }
 
     fun onDigitClick(digit: Int) {
@@ -46,40 +46,40 @@ class EnterPinViewModel @Inject constructor(
 
     fun onSuccess() {
         indicatorSuccesLiveData.postValue(true)
-   /*     indyUseCase.setUserResoursesFromWallet()
-        indicatorSuccesLiveData.postValue(true)*/
+        /*     indyUseCase.setUserResoursesFromWallet()
+             indicatorSuccesLiveData.postValue(true)*/
     }
 
     fun onFail() {
         indicatorErrorLiveData.value = true
-       /*hintTextLiveData.value = (resourceProvider.getString(R.string.pin_code_entered_error))
-        val countMinus = AppPref.getInstance().userCodeTryCount - 1
-        if (countMinus < 0) {
-            AppPref.getInstance().userCodeTryCount = 0
-        } else {
-            AppPref.getInstance().userCodeTryCount = countMinus
-        }
-        attemptsCountLiveData.value = (resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + AppPref.getInstance().userCodeTryCount)
-        indicatorErrorLiveData.value = true
-        if (AppPref.getInstance().userCodeTryCount <= 0) {
-            deleteWallet()
-            AppPref.getInstance().userCodeTryCount = 3
-        }*/
+        /*hintTextLiveData.value = (resourceProvider.getString(R.string.pin_code_entered_error))
+         val countMinus = AppPref.getInstance().userCodeTryCount - 1
+         if (countMinus < 0) {
+             AppPref.getInstance().userCodeTryCount = 0
+         } else {
+             AppPref.getInstance().userCodeTryCount = countMinus
+         }
+         attemptsCountLiveData.value = (resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + AppPref.getInstance().userCodeTryCount)
+         indicatorErrorLiveData.value = true
+         if (AppPref.getInstance().userCodeTryCount <= 0) {
+             deleteWallet()
+             AppPref.getInstance().userCodeTryCount = 3
+         }*/
     }
 
 
     private fun deleteWallet() {
         //  finishAffinity()
-     /*   IndyWallet.deleteWallet()
-        logout(true)*/
+        /*   IndyWallet.deleteWallet()
+           logout(true)*/
     }
 
 
-    fun logout(forceLogout : Boolean){
+    fun logout(forceLogout: Boolean) {
         userRepository.logout()
 
-   /*     showProgressDialog()
-        loginUseCase.logout(forceLogout)*/
+        /*     showProgressDialog()
+             loginUseCase.logout(forceLogout)*/
     }
 
     fun onExitButtonClick(v: View) {
@@ -99,46 +99,60 @@ class EnterPinViewModel @Inject constructor(
     fun onDeleteDigitClick() {
         if (indicatorCodeLiveData.value.isNullOrEmpty())
             return
-        indicatorCodeLiveData.value = indicatorCodeLiveData.value?.substring(0, indicatorCodeLiveData.value!!.length - 1)
+        indicatorCodeLiveData.value =
+            indicatorCodeLiveData.value?.substring(0, indicatorCodeLiveData.value!!.length - 1)
     }
 
-    fun openWallet() {
-        val mCode = indicatorCodeLiveData.value
-        if(AppPref.getInstance().getPin() == mCode){
-            onSuccess()
-        }else{
-            onFail()
-        }
-      /*  val mCode = indicatorCodeLiveData.value
-        showProgressDialog()
-        val handler = Handler()
-        Thread(Runnable {
-            var isCorrect = false
-            var wallet: Wallet? = null
-            try {
-                IndyWallet.closeMyWallet()
-                wallet = IndyWallet.openWallet(mCode)
-                if (wallet != null) {
-                    App.code = mCode
-                    IndyWallet.myWallet = wallet
-                    isCorrect = true
-                    AppPref.getInstance().userCodeTryCount = 3
-                }
-            } catch (e1: WalletAlreadyOpenedException) {
-                isCorrect = true
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+    fun openWallet(fromPin: Boolean, isSuccessFromBiometric: Boolean) {
+        if (fromPin) {
+            val mCode = indicatorCodeLiveData.value
+            if (AppPref.getInstance().getPin() == mCode) {
+                onSuccess()
+            } else {
+                onFail()
             }
+        } else {
+            if (isSuccessFromBiometric) {
+                onSuccess()
+            } else {
+                onFail()
+            }
+        }
 
-            handler.post(Runnable {
-                hideProgressDialog()
-                if (isCorrect) {
-                    onSuccess()
-                } else {
-                    onFail()
-                }
-                indicatorCodeFillLiveData.postValue(false)
-            })
-        }).start()*/
+        /*  val mCode = indicatorCodeLiveData.value
+          showProgressDialog()
+          val handler = Handler()
+          Thread(Runnable {
+              var isCorrect = false
+              var wallet: Wallet? = null
+              try {
+                  IndyWallet.closeMyWallet()
+                  wallet = IndyWallet.openWallet(mCode)
+                  if (wallet != null) {
+                      App.code = mCode
+                      IndyWallet.myWallet = wallet
+                      isCorrect = true
+                      AppPref.getInstance().userCodeTryCount = 3
+                  }
+              } catch (e1: WalletAlreadyOpenedException) {
+                  isCorrect = true
+              } catch (e: java.lang.Exception) {
+                  e.printStackTrace()
+              }
+
+              handler.post(Runnable {
+                  hideProgressDialog()
+                  if (isCorrect) {
+                      onSuccess()
+                  } else {
+                      onFail()
+                  }
+                  indicatorCodeFillLiveData.postValue(false)
+              })
+          }).start()*/
+    }
+
+    fun protectUseBiometric() {
+        AppPref.getInstance().setUseBiometric(true)
     }
 }

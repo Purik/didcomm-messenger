@@ -226,7 +226,11 @@ class SiriusWebSocketListener() : WebSocketListener {
                         null,
                         meta
                     )
-                } else {
+                }  else if(jobj.has("@type")){
+                    val topic = "indy.transport"
+                    val meta = ChannelMessageWrapper.MessageWrapperMeta()
+                    return ChannelMessageWrapper(topic, messagePayload, "", null, meta)
+                } else  {
                     val topic = jobj["topic"].asString ?: ""
                     val messageStrig = jobj["event"].toString()
                     val did: String? = if (jobj.has("did")) jobj["did"].asString else null

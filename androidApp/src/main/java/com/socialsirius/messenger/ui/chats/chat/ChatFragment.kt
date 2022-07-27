@@ -195,8 +195,10 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         })
         model.chatLiveData.observe(this, Observer {
             //NotificationsUtils.removeMessageNotify(activity, model.chatLiveData.value?.id ?: "")
-            dataBinding.topBarView.text = it.title
-            dataBinding.avatarView.update(it)
+            it?.let {
+                dataBinding.topBarView.text = it.title
+                dataBinding.avatarView.update(it)
+            }
             //   model.updateLastActivity()
             // model.showHideAcceptedBtn()
             //  model.loadMessagesIfEMpty()

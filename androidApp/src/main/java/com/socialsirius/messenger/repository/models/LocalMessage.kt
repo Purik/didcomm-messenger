@@ -5,6 +5,7 @@ import com.j256.ormlite.table.DatabaseTable
 import com.sirius.library.agent.pairwise.Pairwise
 import com.sirius.library.messaging.Message
 import com.sirius.library.mobile.helpers.PairwiseHelper
+import com.socialsirius.messenger.models.ChatMessageStatus
 import java.io.Serializable
 
 
@@ -63,7 +64,7 @@ class LocalMessage : DatabaseIdModel , Serializable{
     var canceledCause: String? = null
 
     @DatabaseField(columnName = "status")
-    var status : MessageStatus? = null
+    var status : ChatMessageStatus = ChatMessageStatus.default
 
     fun message(): Message? {
         var restored: Message? = null

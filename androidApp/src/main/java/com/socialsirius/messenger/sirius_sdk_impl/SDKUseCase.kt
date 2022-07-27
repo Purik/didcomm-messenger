@@ -10,6 +10,7 @@ import com.socialsirius.messenger.utils.DateUtils.PATTERN_ROSTER_STATUS_RESPONSE
 import com.sirius.library.agent.BaseSender
 import com.sirius.library.agent.aries_rfc.AriesProtocolMessage
 import com.sirius.library.agent.aries_rfc.concept_0017_attachments.Attach
+import com.sirius.library.agent.aries_rfc.feature_0015_ack.Ack
 import com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message
 
 import com.sirius.library.agent.aries_rfc.feature_0113_question_answer.messages.QuestionMessage
@@ -34,6 +35,8 @@ import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages
 import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Ping
 import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Pong
 import com.sirius.library.mobile.models.CredentialsRecord
+import com.socialsirius.messenger.base.data.api.HttpLoggingInterceptorMy
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.FileAttach
 import com.socialsirius.messenger.use_cases.EventUseCase
 import com.sodium.LibSodium
@@ -48,16 +51,25 @@ import okhttp3.RequestBody
 import org.json.JSONObject
 
 import java.io.File
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 @Singleton
 class SDKUseCase @Inject constructor(
     private val eventRepository: EventRepository,
     private val messageRepository: MessageRepository,
-    val userRepository: UserRepository,
-    val eventUseCase: EventUseCase
+    val userRepository: UserRepository
 ) {
 
 
@@ -98,6 +110,61 @@ class SDKUseCase @Inject constructor(
         fun initEnd()
     }
 
+    //  private static OkHttpClient ApiOkHttpClient;
+    private fun provideOkHttpClient(
+        timeOut: Int = 15,
+    ): OkHttpClient {
+        /*if (ApiOkHttpClient != null) {
+            return ApiOkHttpClient;
+        }*/
+        val okHttpClient = OkHttpClient.Builder()
+        okHttpClient.connectTimeout(timeOut.toLong(), TimeUnit.SECONDS)
+        okHttpClient.readTimeout(timeOut.toLong(), TimeUnit.SECONDS)
+        //okHttpClient.addInterceptor(RequestInterceptor(useAuthorize, addHostHeader))
+        //  okHttpClient.addInterceptor(new ResponseInterceptor());
+        val logInterceptor = HttpLoggingInterceptorMy()
+        logInterceptor.setLevel(HttpLoggingInterceptorMy.Level.BODY)
+      //  okHttpClient.addInterceptor(LogoutInterceptor(useAuthorize))
+        okHttpClient.addInterceptor(logInterceptor)
+        okHttpClient.followRedirects(true)
+        okHttpClient.followSslRedirects(true)
+
+        // Create a trust manager that does not validate certificate chains
+        val trustAllCerts = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                @Throws(CertificateException::class)
+                override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf()
+                }
+            }
+        )
+
+        // Install the all-trusting trust manager
+        val sslContext: SSLContext
+        try {
+            sslContext = SSLContext.getInstance("SSL")
+            sslContext.init(null, trustAllCerts, SecureRandom())
+            // Create an ssl socket factory with our all-trusting manager
+            val sslSocketFactory = sslContext.socketFactory
+            okHttpClient.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+            okHttpClient.hostnameVerifier(HostnameVerifier { hostname, session -> true })
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: KeyManagementException) {
+            e.printStackTrace()
+        }
+        //ApiOkHttpClient = okHttpClient.build();
+        return okHttpClient.build()
+    }
+
+
     fun initSdk(
         context: Context,
         userJid: String,
@@ -122,7 +189,7 @@ class SDKUseCase @Inject constructor(
                     Thread(Runnable {
                         //content-type
                         val ssiAgentWire: MediaType = "application/ssi-agent-wire".toMediaType()
-                        var client: OkHttpClient = OkHttpClient()
+                        var client: OkHttpClient = provideOkHttpClient()
                         Log.d("mylog200", "requset=" + String(data ?: ByteArray(0)))
                         val body: RequestBody =
                             RequestBody.create(ssiAgentWire, data ?: ByteArray(0))
@@ -234,11 +301,13 @@ class SDKUseCase @Inject constructor(
         ScenarioHelper.getInstance()
             .addScenario("Question", QuestionAnswerScenarioImp(messageRepository, eventRepository))
         ScenarioHelper.getInstance()
-            .addScenario("Notification", NotificationScenarioImpl(messageRepository))
+            .addScenario("Notification", NotificationScenarioImpl(messageRepository, this))
         ScenarioHelper.getInstance()
             .addScenario("Ping", PingScenarioImpl(this))
         ScenarioHelper.getInstance()
-            .addScenario("Pong", PongScenarioImpl(eventRepository, eventUseCase ))
+            .addScenario("Pong", PongScenarioImpl(eventRepository, messageRepository ))
+        ScenarioHelper.getInstance()
+            .addScenario("Ack", AckScenarioImpl(eventRepository, messageRepository ))
 
 
     }
@@ -255,7 +324,7 @@ class SDKUseCase @Inject constructor(
 
         localMessage.isMine = true
         localMessage.type = "doc"
-
+        localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
         pairwise?.let {
@@ -270,6 +339,7 @@ class SDKUseCase @Inject constructor(
         val localMessage = LocalMessage(id = message.getId(), pairwiseDid = pairwiseDid)
         localMessage.isMine = true
         localMessage.type = "text"
+        localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
         pairwise?.let {
@@ -332,6 +402,15 @@ class SDKUseCase @Inject constructor(
         return inviter?.generateInvitation()
     }
 
+
+    fun sendStatusFoMessage(id : String, pairwiseDid: String, status : Ack.Status) {
+        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val ack: Ack = Ack.builder().setStatus(status).build()
+        ack.setThreadId(id)
+        SiriusSDK.getInstance().context.currentHub.getAgenti()?.sendMessage(ack,pairwise?.their?.endpointAddress)
+    }
+
+
     fun sendTestQuestion(pairwiseDid: String): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
         val message = QuestionMessage.builder()
@@ -343,6 +422,7 @@ class SDKUseCase @Inject constructor(
         localMessage.isMine = true
         localMessage.sentTime = Date()
         localMessage.type = "question"
+        localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
         Thread(Runnable {
             pairwise?.let {

@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 
 
 import com.socialsirius.messenger.base.App
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.repository.local.BaseDatabase
 import com.socialsirius.messenger.repository.local.MessageDatabase
 import com.socialsirius.messenger.repository.models.LocalMessage
-import com.socialsirius.messenger.repository.models.MessageStatus
+
 import java.sql.SQLException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,6 +25,9 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     val invitationErrorLiveData: MutableLiveData<Pair<Boolean, String?>?> = MutableLiveData()
     val invitationSuccessLiveData: MutableLiveData<String?> = MutableLiveData()
     val invitationPolicemanSuccessLiveData: MutableLiveData<String?> = MutableLiveData()
+    val updateMessageLiveData : MutableLiveData<String?> = MutableLiveData(null)
+
+    val pongMutableLiveData = MutableLiveData<Pair<Boolean, String>?>()
 
 
     override fun createDatabase(): BaseDatabase<LocalMessage, String> {
@@ -119,9 +123,10 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
 
     fun updateStatus(
         id: String,
-        status: MessageStatus
+        status: ChatMessageStatus
     ) {
         getDatabase().updateStatus(id, status)
+        updateMessageLiveData.postValue(id)
     }
 
     override fun createItem(item: LocalMessage) {

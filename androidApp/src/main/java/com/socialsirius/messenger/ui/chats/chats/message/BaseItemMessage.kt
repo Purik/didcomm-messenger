@@ -8,9 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import com.sirius.library.agent.listener.Event
 import com.sirius.library.messaging.Message
 import com.socialsirius.messenger.base.App
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
-import com.socialsirius.messenger.repository.models.MessageStatus
+
 import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
 import com.socialsirius.messenger.utils.DateUtils
 
@@ -21,6 +22,10 @@ abstract class BaseItemMessage : IChatItem {
     interface NotifyDataListener{
         fun notifyData()
         fun notifyItem(item : BaseItemMessage)
+    }
+
+    override fun getMessageId(): String {
+        return id ?:""
     }
 /*
     val messageRepository: MessageRepository? =
@@ -57,12 +62,12 @@ abstract class BaseItemMessage : IChatItem {
     var commentString: String? = null
     var isError: Boolean = false
     var date: Date? = null
-    var status: MessageStatus? = null
+    var status: ChatMessageStatus? = null
     var notifyDataListener : NotifyDataListener? = null
 
 
     fun canBeRead() : Boolean{
-        return !(isMine || status == MessageStatus.Read)
+        return !isMine && status != ChatMessageStatus.acknowlege
     }
 
     fun notifyItem(){

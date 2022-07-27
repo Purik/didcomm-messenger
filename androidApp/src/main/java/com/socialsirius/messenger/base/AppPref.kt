@@ -98,6 +98,23 @@ class AppPref {
         }
     }
 
+    fun setUseBiometric(useBiometric: Boolean) {
+        //  editor.putString("token", encryption.encryptOrNull(userModel.getToken()))
+        with(prefs.edit()) {
+            putBoolean(
+                getEncryptionDefault().encryptOrNull("use_biometric") ?: "",
+                useBiometric
+            )
+            apply()
+        }
+    }
+
+    fun getUseBiometric(): Boolean {
+        val tokenKey = getEncryptionDefault().encryptOrNull("use_biometric") ?: ""
+        return prefs.getBoolean(tokenKey, false)
+    }
+
+
     fun getPin(): String {
         val tokenKey = getEncryptionDefault().encryptOrNull("pin") ?: ""
         val string = prefs.getString(tokenKey, "") ?: ""
@@ -126,7 +143,7 @@ class AppPref {
         prefs.edit().clear().apply()
     }
 
-  fun setUser(user: User?) {
+    fun setUser(user: User?) {
         val userKey = getEncryptionDefault().encryptOrNull("user") ?: ""
         val userJson = Gson().toJson(user)
         with(prefs.edit()) {
@@ -135,7 +152,7 @@ class AppPref {
         }
     }
 
-   fun getUser(): User? {
+    fun getUser(): User? {
         try {
             val userKey = getEncryptionDefault().encryptOrNull("user") ?: ""
             val userJsonCrypt = prefs.getString(userKey, "")
@@ -153,9 +170,9 @@ class AppPref {
 
     fun isLoggedIn(): Boolean {
         val isLoggedIn = getUser()?.uid != null
-        Log.d("mylog2090","getUser()?.uid="+getUser()?.uid)
-        Log.d("mylog2090","getUser()?.name="+getUser()?.name)
-        Log.d("mylog2090","getUser()?.pass="+getUser()?.pass)
+        Log.d("mylog2090", "getUser()?.uid=" + getUser()?.uid)
+        Log.d("mylog2090", "getUser()?.name=" + getUser()?.name)
+        Log.d("mylog2090", "getUser()?.pass=" + getUser()?.pass)
         return isLoggedIn
     }
 
