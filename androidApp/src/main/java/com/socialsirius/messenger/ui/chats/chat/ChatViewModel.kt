@@ -105,7 +105,7 @@ class ChatViewModel @Inject constructor(
             }
         }
 
-   /*     updateMessageLiveData.observeUntilDestroy(this){idMess->
+        updateMessageLiveData.observeUntilDestroy(this){idMess->
             if(idMess != null){
                 updateMessageLiveData.value = null
                 val list =  adapterListLiveData.value.orEmpty().toMutableList()
@@ -117,16 +117,12 @@ class ChatViewModel @Inject constructor(
                     val mess = messageRepository.getItemBy(idMess?:"")
                     val baseItem =  LocalMessageTransform.toBaseItemMessage(mess)
                     message = baseItem
-                    list.replaceAll { replace->
-                        if(replace.id == idMess ){
-                            baseItem
-                        }
-                        replace
-                    }ЯЯЯЯЯЯЯТ к
+                  val index = list.indexOfFirst { it.id == idMess }
+                    list[index] = baseItem
                     adapterListLiveData.postValue(list)
                 }
             }
-        }*/
+        }
     }
 
     fun readUnread(id: String?) {

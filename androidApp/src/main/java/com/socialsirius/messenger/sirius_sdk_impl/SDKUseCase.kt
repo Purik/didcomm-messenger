@@ -289,7 +289,7 @@ class SDKUseCase @Inject constructor(
     }
 
     private fun initScenario() {
-        ScenarioHelper.getInstance().addScenario("Inviter", InviterScenarioImpl(messageRepository))
+        ScenarioHelper.getInstance().addScenario("Inviter", InviterScenarioImpl(messageRepository, eventRepository))
         ScenarioHelper.getInstance()
             .addScenario("Invitee", InviteeScenarioImp(messageRepository, eventRepository))
         ScenarioHelper.getInstance()

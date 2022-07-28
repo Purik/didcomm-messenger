@@ -117,8 +117,9 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun logout(forceLogout : Boolean){
-       /* showProgressDialog()
-        loginUseCase.logout(forceLogout)*/
+        userRepository.logout()
+    //    showProgressDialog()
+        //loginUseCase.logout(forceLogout)
     }
     fun onLogoutButtonClick(v: View?) {
         logoutLiveData.value = true
@@ -140,6 +141,15 @@ class UserSettingsViewModel @Inject constructor(
                 DaoUtilsRoster.writeRosterUser(AppPref.getMyselfUser())
             }
         }*/
+    }
+
+    fun onChangePinClick(v :View) {
+        /* userRepository.updateUser(jid = user?.jid ?: "", nickname = nickname).observeOnce(this) {
+             if (it == true) {
+                 AppPref.getMyselfUser().username = nickname
+                 DaoUtilsRoster.writeRosterUser(AppPref.getMyselfUser())
+             }
+         }*/
     }
 
     fun onNickNameChanged(nickname: String) {

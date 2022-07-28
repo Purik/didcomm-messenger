@@ -12,6 +12,7 @@ import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.databinding.FragmentUserSettingsBinding
+import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.utils.PermissionHelper
 
 
@@ -95,8 +96,9 @@ class UserSettingsFragment : BaseFragment<FragmentUserSettingsBinding, UserSetti
     }
 
     override fun subscribe() {
-        /*model.onBackClickLiveData.observe(this, Observer { onBackPressed() })
+        model.onBackClickLiveData.observe(this, Observer { onBackPressed() })
         model.logoutLiveData.observe(this, Observer { testLogout() })
+        /*
         model.nameLiveData.observe(this, Observer {
             nameEditText.removeTextChangedListener(nameEditTextWatcher)
             nameEditText.text = it ?: ""
@@ -260,7 +262,11 @@ class UserSettingsFragment : BaseFragment<FragmentUserSettingsBinding, UserSetti
             val builder = Builder(requireContext())
             builder.setTitle(App.getContext().getString(R.string.user_logout_title))
             builder.setMessage(App.getContext().getString(R.string.user_logout_are_you_sure))
-            builder.setPositiveButton(App.getContext().getString(R.string.yes)) { dialog, which -> model.logout(false) }
+            builder.setPositiveButton(App.getContext().getString(R.string.yes)) { dialog, which ->
+                model.logout(false)
+                baseActivity.finishAffinity()
+                AuthActivity.newInstance(requireContext())
+            }
             builder.setNegativeButton(App.getContext().getString(R.string.no), null)
             builder.show()
         } catch (e: Exception) {

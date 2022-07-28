@@ -3,11 +3,13 @@ package  com.socialsirius.messenger.ui.chats.allChats
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.ui.SimpleBaseRecyclerViewAdapter
 import com.socialsirius.messenger.databinding.ItemChatBinding
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.repository.models.LocalMessage
 import com.socialsirius.messenger.transform.LocalMessageTransform
@@ -121,7 +123,33 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
             binding?.avatarImageView?.update(chat)
             val local = LocalMessageTransform.toBaseItemMessage(chat.lastMessage)
             binding?.senderMessageTextView?.text = local.getText()
-            binding?.timeTextView?.text = DateUtils.parseDateToHhmmString(local.date);
+            binding?.timeTextView?.text = DateUtils.parseDateToHhmmString(local.date)
+            val isMine = local.isMine
+            if(isMine){
+                binding?.sentStatusImageView?.visibility = View.VISIBLE
+            }else{
+                binding?.sentStatusImageView?.visibility = View.GONE
+            }
+            when (chat.lastMessage?.status) {
+                ChatMessageStatus.sent -> {
+                    binding?.sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.color.transparent))
+                }
+                ChatMessageStatus.error -> {
+                    binding?. sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_send_error))
+                }
+                ChatMessageStatus.acknowlege -> {
+                    binding?. sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_sent_and_read))
+                }
+                ChatMessageStatus.received -> {
+                    binding?. sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_sent_not_read))
+                }
+                ChatMessageStatus.default -> {
+                    binding?. sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_watch_later))
+                }
+                else -> {
+                    binding?. sentStatusImageView?.visibility = View.GONE
+                }
+            }
         /*
             val userName = chat.getUserFromMembers(chat.lastMessage?.msg_from)?.contactName.orEmpty()
             val showName = chat.lastMessage?.contentType != ContentType.service  //Todo Other type?
@@ -139,32 +167,7 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
             avatarImageView?.updateStatus(statusMap[chat.id] ?:false)
 
 
-            val isMine = BaseMessageNew.MessageUserType.OutComing == chat.lastMessage?.messageUserType
-            if(isMine){
-                sentStatusImageView?.visibility = View.VISIBLE
-            }else{
-                sentStatusImageView?.visibility = View.GONE
-            }
-            when (chat.lastMessage?.status) {
-                ChatMessageStatus.sent -> {
-                    sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.color.transparent))
-                }
-                ChatMessageStatus.error -> {
-                    sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_send_error))
-                }
-                ChatMessageStatus.acknowlege -> {
-                    sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_sent_and_read))
-                }
-                ChatMessageStatus.received -> {
-                    sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_sent_not_read))
-                }
-                ChatMessageStatus.default -> {
-                    sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_watch_later))
-                }
-                else -> {
-                    sentStatusImageView?.visibility = View.GONE
-                }
-            }
+
             mutedImageView?.visibility = if (chat.isInSilentMode) View.VISIBLE else View.GONE
             lockedImageView?.visibility = if (chat is SecretChats) View.VISIBLE else View.GONE
             //todo

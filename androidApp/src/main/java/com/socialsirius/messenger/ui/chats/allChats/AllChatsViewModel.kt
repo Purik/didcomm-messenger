@@ -10,7 +10,9 @@ import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.UserRepository
+import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.transform.PairwiseTransform
+import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
 
 import javax.inject.Inject
 
@@ -38,6 +40,7 @@ class AllChatsViewModel @Inject constructor(
 
     val inviteUserLiveData = MutableLiveData<Boolean>()
     val scanQrLiveData = MutableLiveData<Boolean>()
+    val updateMessageLiveData = messageRepository.updateMessageLiveData
 
     override fun onViewCreated() {
         super.onViewCreated()
@@ -57,6 +60,29 @@ class AllChatsViewModel @Inject constructor(
     //    getChatList()
     }
 
+    override fun setupViews() {
+        super.setupViews()
+        subscribe()
+    }
+
+    fun subscribe(){
+        updateMessageLiveData.observeUntilDestroy(this){idMess->
+            if(idMess != null){
+                updateMessageLiveData.value = null
+                val list =  chatsListLiveData.value.orEmpty().toMutableList()
+                var message  =list.firstOrNull {
+                    it.lastMessage?.id == idMess
+                }
+
+                message?.let {
+                    val mess = messageRepository.getItemBy(idMess?:"")
+                    message.lastMessage = mess
+                    chatsListLiveData.postValue(list)
+                }
+            }
+        }
+
+    }
     override fun onResume() {
         super.onResume()
         getChatList()

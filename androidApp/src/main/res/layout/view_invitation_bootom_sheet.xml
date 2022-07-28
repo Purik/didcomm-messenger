@@ -23,12 +23,15 @@
 
         <TextView
             style="@style/Subtitle2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:id="@+id/moreBtn"
-            android:padding="16dp"
-
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/bg_accent_rounded_button_big_corners_borders"
             android:text="@string/more_detail" />
 
 

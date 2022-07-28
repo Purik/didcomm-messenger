@@ -98,15 +98,16 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
 
         })
 
-        model.invitationSuccessLiveData.observe(this, Observer {
+     /*   model.invitationSuccessLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationSuccessLiveData.value = null
                 val item = model.getMessage(it)
                 dialog?.cancel()
-
+                baseActivity.finish()
+                MessageActivity.newInstance(requireContext(), item)
                 //   popPage(ChatsFragment.newInstance(item))
             }
-        })
+        })*/
 
         model.invitationPolicemanSuccessLiveData.observe(this, Observer {
             if (it != null) {

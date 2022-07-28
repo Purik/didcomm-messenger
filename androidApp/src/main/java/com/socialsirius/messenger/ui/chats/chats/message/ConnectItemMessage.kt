@@ -20,8 +20,8 @@ class ConnectItemMessage : BaseItemMessage {
            val invit =  message as? Invitation
             name = invit?.label()?:""
         }else if(message is ConnRequest){
-            val connRequest =  message as? Invitation
-            name = connRequest?.label()?:""
+            val connRequest =  message as? ConnRequest
+            name = connRequest?.label ?:""
         }
 
     }

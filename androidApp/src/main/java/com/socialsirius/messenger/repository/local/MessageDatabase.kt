@@ -61,7 +61,9 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
     fun getUnreadMessages(did : String): Long {
         try {
             return getQueryeBuilder().where().eq("pairwiseDid", did).
-            and().eq("isMine",false).and().not().eq("status", ChatMessageStatus.acknowlege)
+            and().eq("isMine",false).
+            and().not().eq("status", ChatMessageStatus.acknowlege).
+            and().not().eq("type","invitation")
                .countOf()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -71,7 +73,8 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
 
     fun getMainActionsMessages(): List<LocalMessage> {
         try {
-            return getQueryeBuilder().where().eq("isAccepted", false).and().eq("isCanceled", false)
+            return getQueryeBuilder().where().eq("isAccepted", false).
+            and().eq("isCanceled", false)
                 .and().not().eq("type", "text").query().orEmpty()
         } catch (e: Exception) {
             e.printStackTrace()
