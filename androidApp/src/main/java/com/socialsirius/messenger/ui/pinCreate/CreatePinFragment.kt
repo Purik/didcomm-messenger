@@ -38,13 +38,31 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
         dataBinding.calculatorView.setOnDigitClickListener { model.onDigitClick(it) }
         dataBinding.calculatorView.setDeleteClickListener { model.onDeleteDigitClick() }
         dataBinding.calculatorView.setDeleteLongClickListener { model.onDeleteLongDigitClick() }
-        dataBinding.calculatorView.setIdentifyClickListener {
+     /*   dataBinding.calculatorView.setIdentifyClickListener {
             openFingerprintDialog()
-        }
+        }*/
         model.countForDigit = dataBinding.indicatorView.countIndicatorAll
+        dataBinding.calculatorView.showHideIdentityButton(true)
         dataBinding.calculatorView.enableIdentityButton(true)
         dataBinding.mainLayout.setOnClickListener(View.OnClickListener { })
         // Utils.hideKeyboardWitoutAnimWithView(activity, rootView)
+    }
+
+    fun showFingerPrintPromt(){
+       val builder =  AlertDialog.Builder(requireContext())
+        builder.setMessage(R.string.create_biometric_additional)
+        builder.setTitle(R.string.create_biometric_additional_title)
+        builder.setPositiveButton(R.string.ok_button){dialog, pos ->
+            dialog.cancel()
+            openFingerprintDialog()
+        }
+        builder.setNegativeButton(R.string.cancel){dialog, pos ->
+            baseActivity.finishAffinity()
+            LoaderActivity.newInstance(requireContext(), null)
+        }
+        builder.setCancelable(false)
+        builder.show()
+
     }
 
     override fun subscribe() {
@@ -56,8 +74,8 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
             Observer { dataBinding.indicatorView.setupError() })
         model.nextButtonClick.observe(this, Observer {
             model.protectUsePinCode()
-            baseActivity.finishAffinity()
-            LoaderActivity.newInstance(requireContext(), null)
+            showFingerPrintPromt()
+
         })
         model.indicatorCodeFillLiveData.observe(
             this,
@@ -150,7 +168,9 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 model.protectUseBiometric()
-                showAdditionalPinCodeAlert()
+                baseActivity.finishAffinity()
+                LoaderActivity.newInstance(requireContext(), null)
+              //  showAdditionalPinCodeAlert()
                 Log.d("TAG", "Authentication was successful")
                 // Proceed with viewing the private encrypted message.
                 //  showEncryptedMessage(result.cryptoObject)

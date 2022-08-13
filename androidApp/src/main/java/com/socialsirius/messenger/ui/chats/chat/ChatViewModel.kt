@@ -105,22 +105,24 @@ class ChatViewModel @Inject constructor(
             }
         }
 
-        updateMessageLiveData.observeUntilDestroy(this){idMess->
-            if(idMess != null){
-                updateMessageLiveData.value = null
-                val list =  adapterListLiveData.value.orEmpty().toMutableList()
-                var message  =list.firstOrNull {
-                    it.id == idMess
-                }
 
-                message?.let {
-                    val mess = messageRepository.getItemBy(idMess?:"")
-                    val baseItem =  LocalMessageTransform.toBaseItemMessage(mess)
-                    message = baseItem
-                  val index = list.indexOfFirst { it.id == idMess }
-                    list[index] = baseItem
-                    adapterListLiveData.postValue(list)
-                }
+    }
+
+    fun updateMessageStatus(idMess: String?){
+        if(idMess != null){
+            updateMessageLiveData.value = null
+            val list =  adapterListLiveData.value.orEmpty().toMutableList()
+            var message  =list.firstOrNull {
+                it.id == idMess
+            }
+
+            message?.let {
+                val mess = messageRepository.getItemBy(idMess?:"")
+                val baseItem =  LocalMessageTransform.toBaseItemMessage(mess)
+                message = baseItem
+                val index = list.indexOfFirst { it.id == idMess }
+                list[index] = baseItem
+                adapterListLiveData.postValue(list)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.socialsirius.messenger.base
 
+
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
@@ -7,8 +8,9 @@ import android.util.Log
 import com.google.gson.Gson
 import com.socialsirius.messenger.base.providers.Encryption
 import com.socialsirius.messenger.models.User
-
-
+import com.socialsirius.messenger.utils.HashUtils
+import java.security.NoSuchAlgorithmException
+import java.security.spec.InvalidKeySpecException
 import java.util.*
 
 
@@ -174,6 +176,76 @@ class AppPref {
         Log.d("mylog2090", "getUser()?.name=" + getUser()?.name)
         Log.d("mylog2090", "getUser()?.pass=" + getUser()?.pass)
         return isLoggedIn
+    }
+
+    fun getBlockType(): Int {
+        return getPrefMain().getInt("block_type", 0)
+    }
+
+    fun getTimeByBlockType(): Long {
+        val type = getBlockType()
+        when (type) {
+            0 -> return 30 * 1000
+            1 -> return 90 * 1000
+            2 -> return 60 * 3 * 1000
+            3 -> return 60 * 5 * 1000
+            4 -> return 1000
+        }
+        return 1000
+    }
+
+    fun setBlockType(blockType: Int) {
+        getPrefMain().edit().putInt("block_type", blockType).apply()
+    }
+
+    fun setSyncContacts(isSync: Boolean) {
+        getPrefMain().edit().putBoolean("sync_contacts", isSync).apply()
+    }
+
+    fun isSyncContacts(): Boolean {
+        return getPrefMain().getBoolean("sync_contacts", true)
+    }
+
+    fun getUserCodeTryCount(): Int {
+        try {
+            val defValue: String = HashUtils.generateStorngPasswordHash(3.toString() + "")
+            val value = getPrefMain().getString("hash_code_try", defValue)
+            if (TextUtils.isEmpty(value)) {
+                return 3
+            }
+            val isZero: Boolean = HashUtils.validatePassword(0.toString() + "", value)
+            val isOne: Boolean = HashUtils.validatePassword(1.toString() + "", value)
+            val isTwo: Boolean = HashUtils.validatePassword(2.toString() + "", value)
+            val isThree: Boolean = HashUtils.validatePassword(3.toString() + "", value)
+            if (isZero) {
+                return 0
+            }
+            if (isOne) {
+                return 1
+            }
+            if (isTwo) {
+                return 2
+            }
+            if (isThree) {
+                return 3
+            }
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: InvalidKeySpecException) {
+            e.printStackTrace()
+        }
+        return 3
+    }
+
+    fun setUserCodeTryCount(count: Int) {
+        try {
+            val defValue: String = HashUtils.generateStorngPasswordHash(count.toString() + "")
+            getPrefMain().edit().putString("hash_code_try", defValue).apply()
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: InvalidKeySpecException) {
+            e.printStackTrace()
+        }
     }
 
 }

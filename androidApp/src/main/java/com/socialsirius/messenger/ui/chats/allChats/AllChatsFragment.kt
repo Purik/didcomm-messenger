@@ -16,6 +16,7 @@ import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.ui.activities.scan.ScanActivity
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.scan.MenuScanQrFragment
+import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
 
 
 class AllChatsFragment : BaseFragment<FragmentAllChatsBinding, AllChatsViewModel>() {
@@ -52,6 +53,10 @@ class AllChatsFragment : BaseFragment<FragmentAllChatsBinding, AllChatsViewModel
         model.emptyStateLiveData.observe(this, Observer {
            dataBinding.emptyStateView.visibility = if (it) View.VISIBLE else View.GONE
         })
+        model.updateMessageLiveData.observe(this, Observer { idMess->
+           model.updateStatusOfChat(idMess)
+        })
+
        // model.chatsLiveData.observe(this, Observer {
 
        /*     if (it.status != Status.LOADING) {

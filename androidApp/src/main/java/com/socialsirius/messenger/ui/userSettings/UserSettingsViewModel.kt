@@ -2,6 +2,8 @@ package  com.socialsirius.messenger.ui.userSettings
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.sirius.library.mobile.SiriusSDK
+import com.sirius.library.utils.SDK
 import com.socialsirius.messenger.BuildConfig
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.AppExecutors
@@ -9,19 +11,20 @@ import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.repository.UserRepository
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 
 import java.util.*
 import javax.inject.Inject
 
 class UserSettingsViewModel @Inject constructor(
-    val resourcesProvider: ResourcesProvider,
+    val resourceProvider: ResourcesProvider,
     val userRepository: UserRepository,
    // val indyUseCase: IndyUseCase,
   //  val walletUseCase: WalletUseCase,
     val appExecutors: AppExecutors,
   // val loginUseCase: LoginUseCase,
    // val contactUseCase: ContactUseCase,
-    val rosteRepository: UserRepository
+    val sdkUseCase: SDKUseCase
 ) : BaseViewModel() {
 
     val logoutLiveData = MutableLiveData<Boolean>()
@@ -54,28 +57,25 @@ class UserSettingsViewModel @Inject constructor(
 
     override fun onViewCreated() {
         super.onViewCreated()
-      //  val myUser = AppPref.getMyselfUser()
-       /* nameLiveData.value = myUser.name
+        val myUser = userRepository.myUser
+        nameLiveData.value = myUser.name
+        val versionText = "Ver. ${BuildConfig.VERSION_NAME}"
+        appVersionLiveData.value = versionText.toString()
+        backupPeriodicLiveData.value = getPeriodicString()
+        syncContactLiveData.value = AppPref.getInstance().isSyncContacts()
+       /*
         surnameLiveData.value = myUser.fullname
         phoneLiveData.value = myUser.telephony_mob
         enableEditViewsLiveData.value = user?.jid == AppPref.getMyselfUser().jid
         aboutLiveData.value = myUser.descr
         nicknameLiveData.value = myUser.username
         publicAccountLiveData.value = myUser.isIs_public
-        val versionText = StringBuilder()
-        versionText.append("Ver.")
-        versionText.append(" ")
-        versionText.append(BuildConfig.VERSION_NAME)
-        appVersionLiveData.value = versionText.toString()
-
-        askPinTimeLiveData.value = getPinString()
-        backupPeriodicLiveData.value = getPeriodicString()
         taskCompleteLiveData.value = AppPref.getInstance().isEndedTask && AppPref.getInstance().isEndedTaskVibro
         newConversationsLiveData.value =  AppPref.getInstance().isSoundNewMessage && AppPref.getInstance().isSoundNewMessageVibro
         taskRemainderLiveData.value =   AppPref.getInstance().isReminderTask && AppPref.getInstance().isReminderTaskVibro
-        syncContactLiveData.value = AppPref.getInstance().isSyncContacts
-        setLastBackup()*/
 
+        setLastBackup()*/
+        askPinTimeLiveData.value = getPinString()
 
     }
 
@@ -88,7 +88,7 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     private fun getPinString(): String {
-      /*  val type = AppPref.getInstance().blockType
+        val type = AppPref.getInstance().getBlockType()
         var string: String = resourceProvider.getString(R.string.settings_safety_safety_30)
         when (type) {
             0 -> string = resourceProvider.getString(R.string.settings_safety_safety_30)
@@ -98,7 +98,7 @@ class UserSettingsViewModel @Inject constructor(
             4 -> string = resourceProvider.getString(R.string.settings_safety_safety_always)
             else -> string = resourceProvider.getString(R.string.settings_safety_safety_30)
         }
-        return string*/
+        return string
         return ""
     }
 
@@ -118,6 +118,7 @@ class UserSettingsViewModel @Inject constructor(
 
     fun logout(forceLogout : Boolean){
         userRepository.logout()
+        sdkUseCase.logoutFromSDK()
     //    showProgressDialog()
         //loginUseCase.logout(forceLogout)
     }
@@ -126,12 +127,9 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun onNameChanged(name: String) {
-      /*  userRepository.updateUser(jid = user?.jid ?: "", firstName = name).observeOnce(this) {
-            if (it == true) {
-                AppPref.getMyselfUser().name = name
-                DaoUtilsRoster.writeRosterUser(AppPref.getMyselfUser())
-            }
-        }*/
+        userRepository.myUser.name = name
+        userRepository.saveUserToPref()
+
     }
 
     fun onLastNameChanged(lastName: String) {
@@ -144,6 +142,7 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun onChangePinClick(v :View) {
+        changePinClickLiveData.postValue(true)
         /* userRepository.updateUser(jid = user?.jid ?: "", nickname = nickname).observeOnce(this) {
              if (it == true) {
                  AppPref.getMyselfUser().username = nickname
@@ -193,13 +192,13 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun onPinCodeTimerClick() {
-      /*  pinCodeTimeClickLiveData.value = listOf(
+        pinCodeTimeClickLiveData.value = listOf(
                 resourceProvider.getString(R.string.settings_safety_safety_30),
                 resourceProvider.getString(R.string.settings_safety_safety_15),
                 resourceProvider.getString(R.string.settings_safety_safety_3),
                 resourceProvider.getString(R.string.settings_safety_safety_5),
                 resourceProvider.getString(R.string.settings_safety_safety_always)
-        )*/
+        )
     }
 
     fun onBackupPeriodicClick() {
@@ -250,8 +249,8 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun onSetPinCodeTimer(item: Pair<Int, String>) {
-    /*    AppPref.getInstance().blockType = item.first
-        askPinTimeLiveData.value = item.second*/
+        AppPref.getInstance().setBlockType(item.first)
+        askPinTimeLiveData.value = item.second
     }
 
     fun onSetBackupPeriod(item: Pair<Int, String>) {

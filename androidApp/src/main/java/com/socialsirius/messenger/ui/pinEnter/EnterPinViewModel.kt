@@ -3,16 +3,19 @@ package  com.socialsirius.messenger.ui.pinEnter
 import android.os.Handler
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.repository.UserRepository
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 
 import javax.inject.Inject
 
 class EnterPinViewModel @Inject constructor(
-    val resourcesProvider: ResourcesProvider,
-    val userRepository: UserRepository
+    val resourceProvider: ResourcesProvider,
+    val userRepository: UserRepository,
+     val sdkUseCase: SDKUseCase
 /*    val pinCodeUseCase: PinCodeUseCase,
     val indyUseCase: IndyUseCase,
     val loginUseCase: LoginUseCase*/
@@ -29,10 +32,10 @@ class EnterPinViewModel @Inject constructor(
 
     override fun onViewCreated() {
         super.onViewCreated()
-        /*   IndyWallet.closeMyWallet();
-           AppPref.getInstance().lastWalletConnectionTimestamp = System.currentTimeMillis()
-           val count = AppPref.getInstance().userCodeTryCount
-           attemptsCountLiveData.value = resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + count*/
+        //   IndyWallet.closeMyWallet();
+        //   AppPref.getInstance().lastWalletConnectionTimestamp = System.currentTimeMillis()
+           val count = AppPref.getInstance().getUserCodeTryCount()
+           attemptsCountLiveData.value = resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + count
     }
 
     fun onDigitClick(digit: Int) {
@@ -45,6 +48,7 @@ class EnterPinViewModel @Inject constructor(
     }
 
     fun onSuccess() {
+        AppPref.getInstance().setUserCodeTryCount(3)
         indicatorSuccesLiveData.postValue(true)
         /*     indyUseCase.setUserResoursesFromWallet()
              indicatorSuccesLiveData.postValue(true)*/
@@ -52,19 +56,19 @@ class EnterPinViewModel @Inject constructor(
 
     fun onFail() {
         indicatorErrorLiveData.value = true
-        /*hintTextLiveData.value = (resourceProvider.getString(R.string.pin_code_entered_error))
-         val countMinus = AppPref.getInstance().userCodeTryCount - 1
+        hintTextLiveData.value = (resourceProvider.getString(R.string.pin_code_entered_error))
+         val countMinus = AppPref.getInstance().getUserCodeTryCount() - 1
          if (countMinus < 0) {
-             AppPref.getInstance().userCodeTryCount = 0
+             AppPref.getInstance().setUserCodeTryCount( 0)
          } else {
-             AppPref.getInstance().userCodeTryCount = countMinus
+             AppPref.getInstance().setUserCodeTryCount(countMinus)
          }
-         attemptsCountLiveData.value = (resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + AppPref.getInstance().userCodeTryCount)
+         attemptsCountLiveData.value = (resourceProvider.getString(R.string.lock_screen_title_try_count_pf) + " " + AppPref.getInstance().getUserCodeTryCount())
          indicatorErrorLiveData.value = true
-         if (AppPref.getInstance().userCodeTryCount <= 0) {
-             deleteWallet()
-             AppPref.getInstance().userCodeTryCount = 3
-         }*/
+         if (AppPref.getInstance().getUserCodeTryCount() <= 0) {
+             logout(true)
+             AppPref.getInstance().setUserCodeTryCount(3)
+         }
     }
 
 
@@ -77,7 +81,7 @@ class EnterPinViewModel @Inject constructor(
 
     fun logout(forceLogout: Boolean) {
         userRepository.logout()
-
+        sdkUseCase.logoutFromSDK()
         /*     showProgressDialog()
              loginUseCase.logout(forceLogout)*/
     }

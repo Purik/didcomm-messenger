@@ -42,6 +42,22 @@ class AllChatsViewModel @Inject constructor(
     val scanQrLiveData = MutableLiveData<Boolean>()
     val updateMessageLiveData = messageRepository.updateMessageLiveData
 
+
+    fun updateStatusOfChat(idMess : String?){
+        if(idMess != null){
+            updateMessageLiveData.value = null
+            val list =  chatsListLiveData.value.orEmpty().toMutableList()
+            var message  =list.firstOrNull {
+                it.lastMessage?.id == idMess
+            }
+
+            message?.let {
+                val mess = messageRepository.getItemBy(idMess?:"")
+                message.lastMessage = mess
+                chatsListLiveData.postValue(list)
+            }
+        }
+    }
     override fun onViewCreated() {
         super.onViewCreated()
 
@@ -66,21 +82,7 @@ class AllChatsViewModel @Inject constructor(
     }
 
     fun subscribe(){
-        updateMessageLiveData.observeUntilDestroy(this){idMess->
-            if(idMess != null){
-                updateMessageLiveData.value = null
-                val list =  chatsListLiveData.value.orEmpty().toMutableList()
-                var message  =list.firstOrNull {
-                    it.lastMessage?.id == idMess
-                }
 
-                message?.let {
-                    val mess = messageRepository.getItemBy(idMess?:"")
-                    message.lastMessage = mess
-                    chatsListLiveData.postValue(list)
-                }
-            }
-        }
 
     }
     override fun onResume() {

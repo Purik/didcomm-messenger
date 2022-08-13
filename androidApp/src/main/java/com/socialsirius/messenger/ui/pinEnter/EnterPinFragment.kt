@@ -53,14 +53,15 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
                 model.onShowToastLiveData.postValue("Biometric features are currently unavailable.")
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                model.onShowToastLiveData.postValue("No biometric available. Please go to settings and add new biometric feature.")
                 // Prompts the user to create credentials that your app accepts.
-                val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+           /*     val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
                     putExtra(
                         Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
                         BiometricManager.Authenticators.BIOMETRIC_WEAK
                     )
                 }
-                startActivityForResult(enrollIntent, 1200)
+                startActivityForResult(enrollIntent, 1200)*/
             }
         }
 
@@ -143,7 +144,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
         dataBinding.calculatorView.setIdentifyClickListener { model.onIdentityClick() }
         model.countForDigit = dataBinding.indicatorView.countIndicatorAll
         dataBinding.calculatorView.enableAllButtons(!AppPref.getInstance().getPin().isNullOrEmpty())
-        dataBinding.calculatorView.enableIdentityButton(true)
+        dataBinding.calculatorView.enableIdentityButton(AppPref.getInstance().getUseBiometric())
         dataBinding.calculatorView.setIdentifyClickListener {
             openFingerprintDialog()
             // Allows user to authenticate using either a Class 3 biometric or

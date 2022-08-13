@@ -63,6 +63,14 @@ class CalculatorView @JvmOverloads constructor(
         buttonIdentify.isEnabled = isEnabled
     }
 
+    fun showHideIdentityButton(isHide : Boolean){
+        if (isHide){
+            buttonIdentify.visibility = View.INVISIBLE
+        }else{
+            buttonIdentify.visibility = View.VISIBLE
+        }
+    }
+
     fun enableBackButton(isEnabled : Boolean){
         buttonBack.isEnabled = isEnabled
     }

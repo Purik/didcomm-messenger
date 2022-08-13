@@ -26,7 +26,7 @@ class AckScenarioImpl(val eventRepository: EventRepository, val messageRepositor
 
 
     override fun onScenarioEnd(id: String,success: Boolean, error: String?) {
-        messageRepository.updateMessageLiveData.postValue(error)
+
 
     }
 

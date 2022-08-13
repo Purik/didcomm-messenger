@@ -92,7 +92,7 @@
     <string name="check_audio_permission_error">To send voice messages, you must grant the necessary permissions to the application</string>
     <string name="backup_wallet_and_messages_last_time">last backup:</string>
     <string name="first_middle_name">Name Patronymic name</string>
-    <string name="lock_screen_title_try_count_pf_hint">After 3 unsuccessful attempts to enter a password, for your safety, your secure with data will be deleted and application will exit.</string>
+    <string name="lock_screen_title_try_count_pf_hint">After 3 unsuccessful attempts to enter a password, for your safety, you are going to force logout. Be careful you can enter again with only with your passphrase.</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -221,4 +221,19 @@
 
 
     <string name="create_pin_additional">Do you want to create a PIN code for an alternative login?</string>
+    <string name="create_biometric_additional_title">Add biometric for alternative login?</string>
+    <string name="create_biometric_additional">If you want you can add biometric for an alternative login or  you can do it later in settings.</string>
+
+    <string name="settings_safety_safety_hint">Application lock</string>
+    <string name="settings_safety_safety_30">After 30 seconds</string>
+    <string name="settings_safety_safety_15">After 1.5 minutes</string>
+    <string name="settings_safety_safety_3">After 3 minutes</string>
+    <string name="settings_safety_safety_5">After 5 minutes</string>
+    <string name="settings_safety_safety_always">At each transition</string>
+    <string name="settings_safety_safety_always_hint">Including when switching between applications</string>
+
+    <string name="wait">Please wait...</string>
+    <string name="pin_code_entered_error">You have incorrectly entered PIN code</string>
+
+
 </resources>

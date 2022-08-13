@@ -27,6 +27,7 @@ import com.socialsirius.messenger.design.chat.ChatPanelView
 import com.socialsirius.messenger.design.decorators.Decorator
 import com.socialsirius.messenger.design.decorators.StickyHeaderDecor
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
 import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
 import com.socialsirius.messenger.utils.FileUtils
@@ -34,6 +35,7 @@ import com.socialsirius.messenger.utils.FileUtils.generateFileName
 import com.socialsirius.messenger.utils.FileUtils.generateFileVideoName
 import com.socialsirius.messenger.utils.PermissionHelper
 import com.socialsirius.messenger.utils.Utils
+import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
 import java.io.File
 
 private const val CHAT_ITEM = "CHAT_ITEM"
@@ -190,7 +192,7 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         model.adapterListLiveData.observe(this, Observer {
             updateAdapter(it)
             dataBinding.chatRecyclerView.postDelayed({
-                dataBinding.chatRecyclerView.scrollToPosition((adapter?.itemCount ?: 1 - 1) ?: 0)
+                dataBinding.chatRecyclerView.scrollToPosition((adapter?.itemCount ?: 1) - 1)
             }, 200)
         })
         model.chatLiveData.observe(this, Observer {
@@ -280,6 +282,9 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
         model.messageActionLiveData.observe(this, Observer {
             MessageActionDialogFragment(it).show(parentFragmentManager, MessageActionDialogFragment::class.java.simpleName)
+        })
+        model.updateMessageLiveData.observe(this, Observer {
+            model.updateMessageStatus(it)
         })
 
 /*

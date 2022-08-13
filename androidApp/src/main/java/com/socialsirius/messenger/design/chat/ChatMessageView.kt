@@ -14,6 +14,7 @@ import android.webkit.WebView
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.socialsirius.messenger.R
+import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
@@ -46,12 +47,12 @@ class ChatMessageView @JvmOverloads constructor(
             updateOwnerAndCorners()
         }
 
-    var mainPanelView: LinearLayout
+    var mainPanelView: RelativeLayout
     var messageStatusView: LinearLayout
     var rightSpace: Space
     var leftSpace: Space
-    var messageExpireTitleTextView: TextView
-    var messageCommentTextView: TextView
+  //  var messageExpireTitleTextView: TextView
+ //   var messageCommentTextView: TextView
     var messageTextView: TextView
     var messageStatusImageView: ImageView
     var mainView: LinearLayout
@@ -60,13 +61,13 @@ class ChatMessageView @JvmOverloads constructor(
     var avatarImageView: AvatarView
     var avatarSpace: Space
    // var linkPreviewView: LinkPreviewView
-    var messageExpireLayout: LinearLayout
+   // var messageExpireLayout: LinearLayout
     var htmlView: WebView
-    var messageExpireTimeTextView: TextView
+   // var messageExpireTimeTextView: TextView
     var messageStatus2TextView: TextView
-    var imageVideoView: VideoImageView
-    var audioView: FrameLayout
-    var fileView: DocumentMessageView
+   // var imageVideoView: VideoImageView
+  //  var audioView: FrameLayout
+ //   var fileView: DocumentMessageView
 
 
     init {
@@ -75,9 +76,9 @@ class ChatMessageView @JvmOverloads constructor(
         messageStatusView = view.findViewById(R.id.messageStatusView)
         leftSpace = view.findViewById(R.id.leftSpace)
         rightSpace = view.findViewById(R.id.rightSpace)
-        messageExpireTitleTextView = view.findViewById(R.id.messageExpireTitleTextView)
+     //   messageExpireTitleTextView = view.findViewById(R.id.messageExpireTitleTextView)
         messageTextView = view.findViewById(R.id.messageTextView)
-        messageCommentTextView = view.findViewById(R.id.messageCommentTextView)
+     //   messageCommentTextView = view.findViewById(R.id.messageCommentTextView)
         messageStatusImageView = view.findViewById(R.id.messageStatusImageView)
         mainView = view.findViewById(R.id.mainView)
         typingImageView = view.findViewById(R.id.typingImageView)
@@ -85,13 +86,13 @@ class ChatMessageView @JvmOverloads constructor(
         avatarImageView = view.findViewById(R.id.avatarImageView)
         avatarSpace = view.findViewById(R.id.avatarSpace)
    //     linkPreviewView = view.findViewById(R.id.linkPreviewView)
-        messageExpireLayout = view.findViewById(R.id.messageExpireLayout)
+    //    messageExpireLayout = view.findViewById(R.id.messageExpireLayout)
         htmlView = view.findViewById(R.id.htmlView)
-        messageExpireTimeTextView = view.findViewById(R.id.messageExpireTimeTextView)
+    //    messageExpireTimeTextView = view.findViewById(R.id.messageExpireTimeTextView)
         messageStatus2TextView = view.findViewById(R.id.messageStatus2TextView)
-        imageVideoView = view.findViewById(R.id.imageVideoView)
-        audioView = view.findViewById(R.id.audioView)
-        fileView = view.findViewById(R.id.fileView)
+      //  imageVideoView = view.findViewById(R.id.imageVideoView)
+     //   audioView = view.findViewById(R.id.audioView)
+    //    fileView = view.findViewById(R.id.fileView)
     }
 
     private fun updateCorners() {
@@ -120,10 +121,12 @@ class ChatMessageView @JvmOverloads constructor(
                 mainPanelView.background = ContextCompat.getDrawable(this.context, R.drawable.bg_message_rounded_right_corner)
                 messageStatusView.gravity = Gravity.END
                 messageStatusView.visibility = View.VISIBLE
+                messageStatus2TextView.setTextColor(App.getContext().resources.getColor(R.color.backgroundColorWithAlpha))
             }
             isMine && !showCorner -> {
                 mainPanelView.background = ContextCompat.getDrawable(this.context, R.drawable.bg_message_rounded_right)
                 messageStatusView.visibility = View.GONE
+                messageStatus2TextView.setTextColor(App.getContext().resources.getColor(R.color.backgroundColorWithAlpha))
             }
             !isMine && showCorner -> {
                 mainPanelView.background = ContextCompat.getDrawable(this.context, R.drawable.bg_message_rounded_left_corner)
@@ -143,13 +146,13 @@ class ChatMessageView @JvmOverloads constructor(
         leftSpace.visibility = View.GONE
         when {
             isMine -> {
-                if (isGray) {
+              /*  if (isGray) {
                     messageExpireTitleTextView.setTextColor(ContextCompat.getColor(this.context, R.color.backgroundColor))
                     messageCommentTextView.setTextColor(ContextCompat.getColor(this.context, R.color.backgroundColor))
                 } else {
                     messageExpireTitleTextView.setTextColor(ContextCompat.getColor(this.context, R.color.hintColor))
                     messageCommentTextView.setTextColor(ContextCompat.getColor(this.context, R.color.hintColor))
-                }
+                }*/
                 messageTextView.setTextColor(ContextCompat.getColor(this.context, R.color.backgroundColor))
                // messageStatusImageView.visibility = View.VISIBLE
                 rightSpace.visibility = View.GONE
@@ -157,13 +160,13 @@ class ChatMessageView @JvmOverloads constructor(
                 mainView.setHorizontalGravity(END)
             }
             else -> {
-                if (isGray) {
+               /* if (isGray) {
                     messageExpireTitleTextView.setTextColor(ContextCompat.getColor(this.context, R.color.backgroundColor))
                     messageCommentTextView.setTextColor(ContextCompat.getColor(this.context, R.color.backgroundColor))
                 } else {
                     messageExpireTitleTextView.setTextColor(ContextCompat.getColor(this.context, R.color.hintColor))
                     messageCommentTextView.setTextColor(ContextCompat.getColor(this.context, R.color.hintColor))
-                }
+                }*/
                 messageTextView.setTextColor(ContextCompat.getColor(this.context, R.color.defaultColor))
                 messageStatusImageView.visibility = View.GONE
                 rightSpace.visibility = View.VISIBLE
@@ -220,22 +223,22 @@ class ChatMessageView @JvmOverloads constructor(
 
 
     fun setComment(comment: String?) {
-        messageCommentTextView.text = comment
+       /* messageCommentTextView.text = comment
         if (comment == null) {
             messageCommentTextView.visibility = View.GONE
         } else {
             messageCommentTextView.visibility = View.VISIBLE
-        }
+        }*/
     }
 
     fun setMessageExpireTimeText(text: String?, time: String?) {
-        if (time == null && text == null) {
+     /*   if (time == null && text == null) {
             messageExpireLayout.visibility = View.GONE
         } else {
             messageExpireTitleTextView.text = text
             messageExpireTimeTextView.text = time
             messageExpireLayout.visibility = View.VISIBLE
-        }
+        }*/
     }
 
     fun setHtml(html: String?) {
@@ -280,8 +283,8 @@ class ChatMessageView @JvmOverloads constructor(
     }
 
     fun addAudioView(audioMessageView: AudioMessageView) {
-        (audioMessageView.parent as? FrameLayout)?.removeAllViews()
-        audioView.addView(audioMessageView)
+      /*  (audioMessageView.parent as? FrameLayout)?.removeAllViews()
+        audioView.addView(audioMessageView)*/
     }
 
     fun setUrlAndPreviewUrl(url: String?, previewUrl: String?, text: String? = null) {
@@ -301,8 +304,8 @@ class ChatMessageView @JvmOverloads constructor(
         }*/
     }
 
-    fun getImageContainer() = imageVideoView
-    fun getFileContainer() = fileView
+  //  fun getImageContainer() = imageVideoView
+   // fun getFileContainer() = fileView
     fun getMessageContainer() = mainPanelView
 
   /*  fun setMessageType(messageType: ContentType?) {

@@ -112,7 +112,7 @@ class SDKUseCase @Inject constructor(
 
     //  private static OkHttpClient ApiOkHttpClient;
     private fun provideOkHttpClient(
-        timeOut: Int = 15,
+        timeOut: Int = 30,
     ): OkHttpClient {
         /*if (ApiOkHttpClient != null) {
             return ApiOkHttpClient;
@@ -282,6 +282,7 @@ class SDKUseCase @Inject constructor(
 
     fun deleteWallet(context: Context) {
         userRepository.logout()
+        logoutFromSDK()
         val mainDirPath = context.filesDir.absolutePath
         val walletDirPath = mainDirPath + File.separator + "wallet"
         FileUtils.cleanDirectory(File(walletDirPath))
@@ -430,5 +431,15 @@ class SDKUseCase @Inject constructor(
             }
         }).start()
         return localMessage
+    }
+
+    fun logoutFromSDK() {
+        SiriusSDK.cleanInstance()
+        //TODO close websoket, delete firebase Token and some other
+      //  WebSocketService.
+    }
+
+    fun changeLabel(){
+        SiriusSDK.getInstance().label = userRepository.myUser.name
     }
 }
