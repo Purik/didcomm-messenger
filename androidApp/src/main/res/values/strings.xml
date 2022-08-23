@@ -234,6 +234,8 @@
 
     <string name="wait">Please wait...</string>
     <string name="pin_code_entered_error">You have incorrectly entered PIN code</string>
-
+    <string name="open_connection">Open connection</string>
+    <string name="list_of_connections">Connections</string>
+    <string name="proof_request_details">Details</string>
 
 </resources>

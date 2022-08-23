@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/defaultColor">
+
+        <LinearLayout
+            android:id="@+id/topView"
+            style="@style/TopBarStyle"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/cardConnectionCredentials"
+            android:background="@drawable/bg_rounded_top_corners"
+            android:clipToPadding="false"
+            android:paddingBottom="36dp"
+            android:elevation="0dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                style="@style/BackButton"
+                android:src="@drawable/ic_close"
+                android:layout_width="@dimen/common_button_size"
+                android:layout_height="@dimen/common_button_size"
+                android:onClick="@{viewModel::onBackButtonClick}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/backgroundColor" />
+
+            <TextView
+                android:id="@+id/topViewName"
+                style="@style/Body2"
+                android:textColor="@color/backgroundColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/list_of_connections" />
+
+        </LinearLayout>
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/connectionIconView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:elevation="2dp"
+            app:shapeAppearanceOverlay="@style/RoundImageCorners"
+            app:strokeWidth="5dp"
+            android:padding="3dp"
+            app:strokeColor="@color/white"
+            android:background="@color/cardConnectionCredentials"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/common_button_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="none"
+            android:background="@color/backgroundColor"
+            android:fillViewport="true"
+            android:id="@+id/scrollLayout"
+            app:layout_constraintBottom_toTopOf="@+id/bottomBlock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/common_gap_16"
+                android:layout_marginEnd="@dimen/common_gap_16"
+                android:paddingBottom="@dimen/common_gap_16"
+                android:paddingTop="@dimen/common_gap_48">
+
+                <TextView
+                    style="@style/Headline6"
+                    android:id="@+id/connectionUserTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    tools:text="Connection User"/>
+
+                <TextView
+                    style="@style/Subtitle1"
+                    android:textColor="@color/hintColor"
+                    android:id="@+id/connectionTypeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    tools:text="Connection name"/>
+
+                <TextView
+                    style="@style/Subtitle2"
+                    android:layout_marginTop="2dp"
+                    android:id="@+id/connectionSubheaderTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    tools:text="Check status"/>
+
+                <TextView
+                    style="@style/Body2"
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/connectionDescriptionTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Connecti khdhkjdghgdjfhkgh jkgl;;sdkjldksg jlk  gdhfgjdfhkg hdkfjgdfgkfjjfgkdjfhgdkjfghkdj fgkjfkjhdk jfgkdfjghfdjk ghjhdfkgjhdfkghk dfjgkdjfgkjdfgkhon type"/>
+
+                <LinearLayout
+                    android:id="@+id/detailsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/common_gap_16">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/lightDividerColor"/>
+
+                    <TextView
+                        android:id="@+id/detailsTitleTextView"
+                        style="@style/Body1"
+                        android:textColor="@color/hintColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/common_gap_16"
+                        android:text="DETAILS"/>
+
+                    <TextView
+                        android:id="@+id/warningTextView"
+                        style="@style/Body2"
+                        android:textColor="@color/errorColor"
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/common_gap_8"
+                        tools:text="khskdfhls dkfhdslfh ksdfhslkdfsdffhl skdhksfhlkdfh!"/>
+
+                    <TextView
+                        android:id="@+id/commentTextView"
+                        style="@style/Subtitle2"
+
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/common_gap_8"
+                        tools:text="khskdfhls dkfhdslfh ksdfhslkdfsdffhl skdhksfhlkdfh!"/>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/detailsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/common_gap_8"
+                        android:orientation="vertical"
+                        tools:itemCount="4"
+                        tools:listitem="@layout/item_details_data"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/bottomBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/backgroundColor"
+            android:paddingEnd="@dimen/common_gap_16"
+            android:paddingStart="@dimen/common_gap_8"
+            android:paddingBottom="@dimen/common_gap_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/actionButton3"
+                tools:text="action 3"
+                android:padding="16dp"
+                android:textColor="@color/defaultColor"
+                android:background="@drawable/bg_accent_rounded_button_big_corners_borders"
+                style="@style/AccentButtonRoundedBigCorners"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/common_gap_8"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_weight="1"
+                android:onClick="@{viewModel::onAction3ButtonClick}"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/actionButton2"
+                tools:text="action 2"
+                android:padding="16dp"
+                android:backgroundTint="@color/hintColor"
+                style="@style/AccentButtonRoundedBigCorners"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/common_gap_8"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_weight="1"
+                android:onClick="@{viewModel::onAction2ButtonClick}"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/actionButton1"
+                tools:text="action 1"
+                android:padding="16dp"
+                style="@style/AccentButtonRoundedBigCorners"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/common_gap_8"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_weight="1"
+                android:onClick="@{viewModel::onAction1ButtonClick}"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

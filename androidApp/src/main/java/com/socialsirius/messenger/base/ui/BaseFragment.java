@@ -1,6 +1,6 @@
 package com.socialsirius.messenger.base.ui;
 
-import android.app.ProgressDialog;
+
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -31,6 +31,8 @@ import com.google.android.material.appbar.AppBarLayout;
 
 
 import com.socialsirius.messenger.R;
+import com.socialsirius.messenger.base.App;
+import com.socialsirius.messenger.design.dialogs.ProgressDialog;
 import com.socialsirius.messenger.ui.activities.main.MainActivity;
 
 
@@ -224,6 +226,8 @@ public abstract class BaseFragment<VB extends ViewDataBinding, VM extends BaseVi
             setModel();
             model.onCreateview();
             setupViews();
+            baseSubscribe();
+            subscribe();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -249,10 +253,7 @@ public abstract class BaseFragment<VB extends ViewDataBinding, VM extends BaseVi
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        model.onViewCreated();
+    public void baseSubscribe(){
         model.getOnShowToastLiveData().observe(getViewLifecycleOwner(), message -> {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
         });
@@ -291,6 +292,13 @@ public abstract class BaseFragment<VB extends ViewDataBinding, VM extends BaseVi
             }
         });
 
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        model.onViewCreated();
+
         subscribe();
 
     }
@@ -305,8 +313,8 @@ public abstract class BaseFragment<VB extends ViewDataBinding, VM extends BaseVi
     public void showProgressDialog() {
         hideProgressDialog();
         try {
-            progressDialog = new ProgressDialog(requireContext());
-            progressDialog.setTitle(R.string.please_wait);
+            progressDialog = new ProgressDialog(requireContext(), App.getContext().getResources().getString(R.string.please_wait));
+          //  progressDialog.setTitle(R.string.please_wait);
             progressDialog.setCancelable(false);
             progressDialog.show();
         } catch (Exception e) {

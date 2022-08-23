@@ -53,4 +53,10 @@
     <style name="Theme.Messenger.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Messenger.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="RoundImageCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

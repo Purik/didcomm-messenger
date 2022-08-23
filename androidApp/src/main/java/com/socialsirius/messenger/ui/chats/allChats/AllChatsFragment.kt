@@ -73,10 +73,11 @@ class AllChatsFragment : BaseFragment<FragmentAllChatsBinding, AllChatsViewModel
             adapter?.notifyDataSetChanged()
         })
         model.chatsSelectLiveData.observe(this, Observer { chat ->
-            val messageIntent = Intent(context, MessageActivity::class.java).apply {
-                putExtra("chat", chat)
+            if (   chat!=null ){
+                model.chatsSelectLiveData.value = null
+                MessageActivity.newInstance(requireContext(),chat)
             }
-           startActivity(messageIntent)
+
         })
 
         model.eventStoreLiveData.observe(this, Observer {

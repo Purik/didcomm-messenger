@@ -1,4 +1,4 @@
-package com.socialsirius.messenger.ui.chats.chats.message
+package com.socialsirius.messenger.ui.chats.chat.message
 
 
 
@@ -24,7 +24,7 @@ class ProverItemMessage : BaseItemMessage {
 
     override fun getType(): MessageType {
         if (isError) {
-            return MessageType.ProverAccepted
+            return MessageType.ProverError
         }
         return if (isAccepted) {
             MessageType.ProverAccepted
@@ -32,6 +32,7 @@ class ProverItemMessage : BaseItemMessage {
             MessageType.Prover
         }
     }
+
 
     var hint: String? = null
     var expiresTime: Date? = null
@@ -206,7 +207,7 @@ class ProverItemMessage : BaseItemMessage {
     }
 
     override fun getText(): String {
-        return "offer sample"
+        return hint ?: ""
     }
 
     override fun getTitle(): String {

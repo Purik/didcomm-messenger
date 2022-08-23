@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/drawable-xxxhdpi/asd.xml" value="0.195" />
+        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/drawable/bg_accent_rounded_button_big_corners.xml" value="0.1945" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/drawable/bg_accent_rounded_button_big_corners_borders.xml" value="0.195" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/drawable/bg_accent_rounded_button_normal.xml" value="0.1615" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/drawable/bg_accent_rounded_button_pressed.xml" value="0.1615" />
@@ -63,6 +64,8 @@
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_auth_security.xml" value="0.2713541666666667" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_chat.xml" value="0.33" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_chat_image_fullscreen.xml" value="0.20697463768115942" />
+        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_connection_card.xml" value="0.25" />
+        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_connection_request_detail.xml" value="0.25729166666666664" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_create_phrase.xml" value="0.2552083333333333" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_create_phrase_first.xml" value="0.25" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_create_phrase_second.xml" value="0.254981884057971" />
@@ -79,11 +82,13 @@
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_user_profile.xml" value="0.25" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/fragment_user_settings.xml" value="0.33" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat.xml" value="0.33" />
-        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat_connection.xml" value="0.20697463768115942" />
+        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat_connection.xml" value="0.33" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat_message.xml" value="0.33" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat_message_date.xml" value="0.33" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat_message_tech.xml" value="0.20697463768115942" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_chat_secret_invite.xml" value="0.25" />
+        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_details_data.xml" value="0.25729166666666664" />
+        <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_details_photo.xml" value="0.23385416666666667" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_passphrase.xml" value="0.3061594202898551" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/item_selector.xml" value="0.35104166666666664" />
         <entry key="..\:/Repository/SocialSiriusMessenger/androidApp/src/main/res/layout/items_tutorial.xml" value="0.25" />

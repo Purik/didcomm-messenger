@@ -1,26 +1,20 @@
 package com.socialsirius.messenger.models.ui
 
+import com.socialsirius.messenger.ui.connections.connectionCard.items.DetailsBaseItem
 import java.io.Serializable
 import java.util.*
 
-class ItemCredentialsDetails  : Serializable{
+class ItemCredentialsDetails : DetailsBaseItem,  Serializable{
 
-    constructor() {
 
-    }
-
-    constructor(name: String, value: String, mimeType: String) {
-        this.name = name
-        this.value = value
+    constructor(title: String?, value: String?, mimeType: String? = null) : super(title,value) {
         this.mimeType = mimeType
     }
 
-    var name: String? = null
-    var value: String? = null
     var isExistInWallet = false
-    var mimeType : String = ""
+    var mimeType : String? = null
 
     override fun toString(): String {
-        return "name=$name "
+        return "title=$title "
     }
 }

@@ -1,4 +1,4 @@
-package com.socialsirius.messenger.ui.chats.chats.message
+package com.socialsirius.messenger.ui.chats.chat.message
 
 
 

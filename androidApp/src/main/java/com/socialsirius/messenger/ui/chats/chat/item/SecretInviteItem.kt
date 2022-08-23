@@ -1,7 +1,9 @@
 package  com.socialsirius.messenger.ui.chats.chat.item
 
+import com.socialsirius.messenger.ui.chats.chat.message.IChatItem
 
 
+@Deprecated("")
 class SecretInviteItem private constructor(
         val id: String,
         val text: String,

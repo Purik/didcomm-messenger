@@ -1,6 +1,5 @@
-package  com.socialsirius.messenger.ui.chats.chat.item
+package  com.socialsirius.messenger.ui.chats.chat.message
 
-import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
 
 enum class MessageActionItemType {
     DELETE,

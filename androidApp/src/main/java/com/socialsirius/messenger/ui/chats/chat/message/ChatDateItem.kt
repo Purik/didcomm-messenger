@@ -1,7 +1,7 @@
-package  com.socialsirius.messenger.ui.chats.chat.item
+package  com.socialsirius.messenger.ui.chats.chat.message
 
 
-import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
+
 import com.socialsirius.messenger.utils.DateUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar

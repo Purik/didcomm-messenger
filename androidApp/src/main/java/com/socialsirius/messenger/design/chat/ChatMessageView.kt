@@ -18,7 +18,7 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
-import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
+import com.socialsirius.messenger.ui.chats.chat.message.TextItemMessage
 
 
 import java.io.File

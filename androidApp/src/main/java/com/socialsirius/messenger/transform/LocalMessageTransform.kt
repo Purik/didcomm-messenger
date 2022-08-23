@@ -9,13 +9,13 @@ import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messa
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
 import com.sirius.library.agent.listener.Event
 import com.socialsirius.messenger.models.ui.ItemActions
-import com.socialsirius.messenger.models.ui.ItemContacts
-import com.socialsirius.messenger.repository.EventRepository
+
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
-import com.socialsirius.messenger.ui.chats.chats.message.*
+
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.ui.chats.chat.message.*
 
 
 import java.util.*

@@ -1,4 +1,4 @@
-package com.socialsirius.messenger.ui.chats.chats.message
+package com.socialsirius.messenger.ui.chats.chat.message
 
 import android.util.Log
 import android.view.View
@@ -12,10 +12,29 @@ import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
 
-import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
+
 import com.socialsirius.messenger.utils.DateUtils
 
 import java.util.*
+
+enum class MessageType{
+    Base,
+    Text,
+    Connect,
+    Connected,
+    ConnectError,
+    Offer,
+    OfferAccepted,
+    OfferError,
+    Prover,
+    ProverAccepted,
+    ProverError,
+    Question,
+    QuestionAccepted,
+    QuestionError,
+    ProposeCredential,
+    ProposeCredentialAccepted
+}
 
 abstract class BaseItemMessage : IChatItem {
 
@@ -35,14 +54,16 @@ abstract class BaseItemMessage : IChatItem {
     var detailsVisibilityLiveData  = MutableLiveData<Int>(View.GONE)
     fun startLoading(id : String){
         isLoading = true
+        notifyItem()
        // messageRepository?.startLoading(id )
-        notifyData()
+  //      notifyData()
     }
 
     fun stopLoading(id : String){
         isLoading = false
+       notifyItem()
       //  messageRepository?.updateErrorAccepted(id , isAccepted,isError,errorString,commentString)
-        notifyData()
+    //    notifyData()
     }
 
     constructor(){}
@@ -77,6 +98,17 @@ abstract class BaseItemMessage : IChatItem {
     fun notifyData(){
         notifyDataListener?.notifyData()
     }
+
+    fun getStatusString():String{
+        if (isError){
+          return "Error"
+        }
+        if (isAccepted){
+            return "Accepted"
+        }
+        return "Not accepted"
+    }
+
    open fun setupFromEvent(event: Event?){
         event?.let {
 
@@ -115,24 +147,7 @@ abstract class BaseItemMessage : IChatItem {
         }
     }
 
-    enum class MessageType{
-        Base,
-        Text,
-        Connect,
-        Connected,
-        ConnectError,
-        Offer,
-        OfferAccepted,
-        OfferError,
-        Prover,
-        ProverAccepted,
-        ProverError,
-        Question,
-        QuestionAccepted,
-        QuestionError,
-        ProposeCredential,
-        ProposeCredentialAccepted
-    }
+
 
     abstract fun getType() : MessageType
 

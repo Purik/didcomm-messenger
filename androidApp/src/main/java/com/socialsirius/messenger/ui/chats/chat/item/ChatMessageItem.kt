@@ -4,8 +4,9 @@ import android.R.id.message
 import android.util.Log
 import com.google.gson.Gson
 import com.socialsirius.messenger.models.ChatMessageStatus
+import com.socialsirius.messenger.ui.chats.chat.message.IChatItem
 
-
+@Deprecated("")
 class ChatMessageItem private constructor(
        // private val baseMessageRef: BaseMessageNew,
      //   val user: RosterUser?,

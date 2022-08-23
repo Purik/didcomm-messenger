@@ -1,4 +1,4 @@
-package  com.socialsirius.messenger.ui.chats.chat.item
+package  com.socialsirius.messenger.ui.chats.chat.message
 
 
 import java.text.SimpleDateFormat

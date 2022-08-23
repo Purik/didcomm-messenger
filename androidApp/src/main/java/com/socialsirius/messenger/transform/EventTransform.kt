@@ -1,11 +1,8 @@
 package com.socialsirius.messenger.transform
 
 
-import com.socialsirius.messenger.ui.chats.chats.message.*
 import com.socialsirius.messenger.models.ui.ItemActions
 import com.socialsirius.messenger.models.ui.ItemContacts
-import com.socialsirius.messenger.repository.EventRepository
-
 
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.OfferCredentialMessage
 import com.sirius.library.agent.aries_rfc.feature_0037_present_proof.messages.RequestPresentationMessage
@@ -14,6 +11,7 @@ import com.sirius.library.agent.aries_rfc.feature_0113_question_answer.messages.
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
 import com.sirius.library.agent.listener.Event
+import com.socialsirius.messenger.ui.chats.chat.message.*
 import java.util.*
 
 
@@ -37,6 +35,7 @@ class EventTransform() {
             val contact = ItemContacts(id?:"", title, Date())
             return contact
         }
+
 
         fun eventToBaseItemMessage(event: Event?): BaseItemMessage {
             if (event == null) {

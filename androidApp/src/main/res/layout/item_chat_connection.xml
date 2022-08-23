@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/common_gap_16"
+    android:layout_marginTop="@dimen/common_gap_8"
+    android:layout_marginEnd="@dimen/common_gap_64"
+    android:layout_marginBottom="@dimen/common_gap_8"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/connectionMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_gap_8"
+        android:background="@drawable/bg_message_rounded_left_corner"
+        android:backgroundTint="@color/cardConnectionCredentials"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/common_gap_16"
+        android:paddingTop="@dimen/common_gap_16"
+        android:paddingEnd="@dimen/common_gap_16"
+        android:paddingBottom="@dimen/common_gap_8">
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/connectionIcon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="@dimen/common_gap_8"
+            android:background="@color/cardConnectionCredentials"
+            android:padding="3dp"
+
+
+            app:shapeAppearanceOverlay="@style/RoundImageCorners"
+            app:strokeColor="@color/white"
+            app:strokeWidth="5dp" />
+
+
+        <TextView
+            android:id="@+id/connectionTitleView"
+            style="@style/Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/backgroundColor"
+            tools:text="Demo demo" />
+
+        <TextView
+            android:id="@+id/connectionStatusView"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_gap_8"
+            android:textColor="@color/backgroundColor"
+            tools:text="Completed" />
+
+        <TextView
+            android:id="@+id/connectionTextView"
+            style="@style/Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_gap_8"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:textColor="@color/backgroundColor"
+            tools:text="kjhkgdjk fghkgo hgkdfgjdg jldkgkjgklfdlkg jdflkgjldkjfgldgdf" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:lines="1"
+            android:textColor="@color/backgroundColor"
+            tools:text="25.10" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/openConnectionButton"
+        style="@style/AccentButtonRoundedBigCorners"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/open_connection" />
+
+</LinearLayout>

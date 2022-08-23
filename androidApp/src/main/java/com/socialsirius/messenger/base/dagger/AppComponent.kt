@@ -26,6 +26,8 @@ import com.socialsirius.messenger.ui.chats.chat.ChatFragment
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateFragment
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewModel
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileFragment
+import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardFragment
+import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionRequestDetailFragment
 import com.socialsirius.messenger.ui.inviteUser.HandleWebInviteFragment
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.main.MainFragment
@@ -107,6 +109,8 @@ interface AppComponent {
     fun inject(fragment: CreatePinFragment)
     fun inject(fragment: EnterPinFragment)
     fun inject(fragment: GroupChatCreateFragment)
+    fun inject(fragment: ConnectionCardFragment)
+    fun inject(fragment: ConnectionRequestDetailFragment)
 
 
 

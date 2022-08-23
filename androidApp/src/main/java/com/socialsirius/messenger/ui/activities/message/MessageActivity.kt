@@ -8,6 +8,7 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityMessageBinding
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.ui.chats.chat.ChatFragment
 import com.socialsirius.messenger.ui.chats.chat.ChatFragment.Companion.newInstance
 
 class MessageActivity :
@@ -35,7 +36,7 @@ class MessageActivity :
             val chat = intent.getSerializableExtra("chat") as Chats?
             model!!.chat = chat
             if (chat != null) {
-                showPage(newInstance(chat))
+                showPage(ChatFragment.newInstance(chat))
             } else {
                 finish()
             }

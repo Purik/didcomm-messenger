@@ -17,8 +17,10 @@ class EventUseCase @Inject constructor(
 
 
 
-    fun readMessage(id: String, pairwiseDid:String) {
-        sdkUseCase.sendStatusFoMessage(id,pairwiseDid, Ack.Status.OK)
+    fun readMessage(id: String, pairwiseDid:String, onlyLocal : Boolean = false) {
+        if (!onlyLocal) {
+            sdkUseCase.sendStatusFoMessage(id,pairwiseDid, Ack.Status.OK)
+        }
         messageRepository.updateStatus(id, ChatMessageStatus.acknowlege)
     }
 

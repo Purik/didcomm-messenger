@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.socialsirius.messenger.R
-import com.socialsirius.messenger.ui.chats.chat.item.MessageActionItem
-import com.socialsirius.messenger.ui.chats.chat.item.MessageActionItemType
+import com.socialsirius.messenger.ui.chats.chat.message.MessageActionItem
+import com.socialsirius.messenger.ui.chats.chat.message.MessageActionItemType
+
 import kotlinx.android.synthetic.main.layout_chat_bottom_sheet.*
 
 

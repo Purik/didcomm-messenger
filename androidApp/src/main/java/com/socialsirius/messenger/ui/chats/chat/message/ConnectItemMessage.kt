@@ -1,4 +1,4 @@
-package com.socialsirius.messenger.ui.chats.chats.message
+package com.socialsirius.messenger.ui.chats.chat.message
 
 
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
+import com.socialsirius.messenger.base.ui.OnAdapterItemClick
 import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentChatBinding
 import com.socialsirius.messenger.design.AvatarView
@@ -28,8 +29,13 @@ import com.socialsirius.messenger.design.decorators.Decorator
 import com.socialsirius.messenger.design.decorators.StickyHeaderDecor
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.transform.LocalMessageTransform
-import com.socialsirius.messenger.ui.chats.chat.item.IChatItem
-import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
+import com.socialsirius.messenger.ui.chats.chat.message.BaseItemMessage
+import com.socialsirius.messenger.ui.chats.chat.message.MessageType
+import com.socialsirius.messenger.ui.chats.chat.message.OfferItemMessage
+import com.socialsirius.messenger.ui.chats.chat.message.ProverItemMessage
+import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardFragment
+
+
 import com.socialsirius.messenger.utils.FileUtils
 import com.socialsirius.messenger.utils.FileUtils.generateFileName
 import com.socialsirius.messenger.utils.FileUtils.generateFileVideoName
@@ -93,24 +99,38 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         })
 
         adapter = MessagesAdapter()
-        adapter!!.onCustomBtnClick = object : OnCustomBtnClick<IChatItem> {
-            override fun onBtnClick(btnId: Int, item: IChatItem?, position: Int) {
+        adapter!!.onCustomBtnClick = object : OnCustomBtnClick<BaseItemMessage> {
+            override fun onBtnClick(btnId: Int, item: BaseItemMessage?, position: Int) {
                 if (btnId == MessagesAdapter.readActionId) {
-                    model.readUnread(item?.getMessageId())
+                    model.readUnread(item?.getMessageId(), false)
+                }
+                if (btnId == MessagesAdapter.localReadActionId) {
+                    model.readUnread(item?.getMessageId(), true)
                 }
                 if (btnId == R.id.mainPanelView) {
                     model.onMessageShortClick(item)
                 }
             }
 
-            override fun onLongBtnClick(btnId: Int, item: IChatItem?, position: Int) {
+            override fun onLongBtnClick(btnId: Int, item: BaseItemMessage?, position: Int) {
                 if (btnId == R.id.mainPanelView) {
-                 //   model.onMessageLongClick(item)
+                    //   model.onMessageLongClick(item)
                 }
             }
 
         }
-   //     dataBinding.chatRecyclerView.addItemDecoration(decorator)
+        adapter!!.onAdapterItemClick = object : OnAdapterItemClick<BaseItemMessage> {
+            override fun onItemClick(item: BaseItemMessage) {
+
+                if (item is OfferItemMessage || item is ProverItemMessage) {
+                    val title = model.chatLiveData.value?.title
+                    baseActivity.pushPage(ConnectionCardFragment.newInstance(item, title))
+                }
+            }
+
+        }
+
+        //     dataBinding.chatRecyclerView.addItemDecoration(decorator)
 
 
         dataBinding.chatRecyclerView.adapter = adapter
@@ -136,37 +156,53 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
 
 
-         dataBinding.chatPanelView.onSoundListener = (object : ChatPanelView.OnSoundListener {
-             override fun onSoundStart(): Boolean {
-                 return PermissionHelper.checkPermissionsForAudio(baseActivity, SOUND_PERMISSION_CODE)
-             }
+        dataBinding.chatPanelView.onSoundListener = (object : ChatPanelView.OnSoundListener {
+            override fun onSoundStart(): Boolean {
+                return PermissionHelper.checkPermissionsForAudio(
+                    baseActivity,
+                    SOUND_PERMISSION_CODE
+                )
+            }
 
-             override fun onSoundStartRecord() {
-                 ConstraintSet().let {
-                     it.clone(dataBinding.mainView)
-                     it.connect(R.id.chatRecyclerView, ConstraintSet.BOTTOM, R.id.chatPanelSpace, ConstraintSet.TOP)
-                     it.applyTo(dataBinding.mainView)
-                 }
-              //   model.startSoundRecord()
-             }
+            override fun onSoundStartRecord() {
+                ConstraintSet().let {
+                    it.clone(dataBinding.mainView)
+                    it.connect(
+                        R.id.chatRecyclerView,
+                        ConstraintSet.BOTTOM,
+                        R.id.chatPanelSpace,
+                        ConstraintSet.TOP
+                    )
+                    it.applyTo(dataBinding.mainView)
+                }
+                //   model.startSoundRecord()
+            }
 
-             override fun onSoundCancel() {
-             //    model.deleteCurrentFileFromFilename()
-             }
+            override fun onSoundCancel() {
+                //    model.deleteCurrentFileFromFilename()
+            }
 
-             override fun onSoundStopRecord(isSend: Boolean, time: Long, type: ChatPanelView.SendType) {
-                 ConstraintSet().let {
-                     it.clone(dataBinding.mainView)
-                     it.connect(R.id.chatRecyclerView, ConstraintSet.BOTTOM, R.id.chatPanelView, ConstraintSet.TOP)
-                     it.applyTo(dataBinding.mainView)
-                 }
-            //     model.stopSoundRecord()
-                 if (isSend) {
-             //        model.sendSound(time, type)
-                 }
-             }
-         })
-
+            override fun onSoundStopRecord(
+                isSend: Boolean,
+                time: Long,
+                type: ChatPanelView.SendType
+            ) {
+                ConstraintSet().let {
+                    it.clone(dataBinding.mainView)
+                    it.connect(
+                        R.id.chatRecyclerView,
+                        ConstraintSet.BOTTOM,
+                        R.id.chatPanelView,
+                        ConstraintSet.TOP
+                    )
+                    it.applyTo(dataBinding.mainView)
+                }
+                //     model.stopSoundRecord()
+                if (isSend) {
+                    //        model.sendSound(time, type)
+                }
+            }
+        })
 
 
 /*
@@ -174,7 +210,8 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
              model.removeUser()
          }*/
         dataBinding.chatPanelView.setOnAttachmentClickListener(View.OnClickListener {
-            val checkPermissionsForCamera = PermissionHelper.checkPermissionsForCamera(baseActivity, CAMERA_PERMISSION_CODE)
+            val checkPermissionsForCamera =
+                PermissionHelper.checkPermissionsForCamera(baseActivity, CAMERA_PERMISSION_CODE)
             if (checkPermissionsForCamera) {
                 openAttachmentDialog()
             }
@@ -219,39 +256,39 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
         model.moreActionLiveData.observe(this, Observer { options ->
             options?.let {
-                PopupMenu(requireContext(),dataBinding.moreButton).apply {
+                PopupMenu(requireContext(), dataBinding.moreButton).apply {
                     options.forEach { menu.add(it) }
                     setOnMenuItemClickListener {
                         when (it.title) {
-                          /*  getString(R.string.menu_fragment_messages_chat_add_to_favorite) -> {
-                                model.addToFavorite()
-                            }
-                            getString(R.string.menu_fragment_messages_chat_del_from_favorite) -> {
-                                model.deleteFromFavorite()
-                            }
-                            getString(R.string.menu_fragment_messages_create_secret_chat) -> {
-                                model.inviteToSecret()
-                            }*/
+                            /*  getString(R.string.menu_fragment_messages_chat_add_to_favorite) -> {
+                                  model.addToFavorite()
+                              }
+                              getString(R.string.menu_fragment_messages_chat_del_from_favorite) -> {
+                                  model.deleteFromFavorite()
+                              }
+                              getString(R.string.menu_fragment_messages_create_secret_chat) -> {
+                                  model.inviteToSecret()
+                              }*/
                             getString(R.string.menu_fragment_messages_chat_clear) -> {
                                 model.deleteChatRequest()
                             }
-                         /*   getString(R.string.title_settings) -> {
-                                baseActivity.pushPage(GroupEditFragment.newInstance(model.getCurrentChat()
-                                    ?: Chats()))
-                            }
-                            getString(R.string.leave_chat) -> {
-                                model.leaveGroupChat()
-                            }
-                            getString(R.string.menu_fragment_messages_chat_add_users) -> {
-                                baseActivity.pushPage(GroupAddFragment.newInstance(RoomsResponse(model.getCurrentChat()
-                                    ?: Chats())))
-                            }
-                            getString(R.string.add_user) -> {
-                                model.addUserToContacts()
-                            }
-                            getString(R.string.menu_fragment_messages_send_propose) -> {
-                                model.sendTestProposeCredential()
-                            }*/
+                            /*   getString(R.string.title_settings) -> {
+                                   baseActivity.pushPage(GroupEditFragment.newInstance(model.getCurrentChat()
+                                       ?: Chats()))
+                               }
+                               getString(R.string.leave_chat) -> {
+                                   model.leaveGroupChat()
+                               }
+                               getString(R.string.menu_fragment_messages_chat_add_users) -> {
+                                   baseActivity.pushPage(GroupAddFragment.newInstance(RoomsResponse(model.getCurrentChat()
+                                       ?: Chats())))
+                               }
+                               getString(R.string.add_user) -> {
+                                   model.addUserToContacts()
+                               }
+                               getString(R.string.menu_fragment_messages_send_propose) -> {
+                                   model.sendTestProposeCredential()
+                               }*/
 
                         }
                         return@setOnMenuItemClickListener true
@@ -271,17 +308,20 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
             }
         })
 
-    /*    model.lastActivityAllLiveData.observe(this, Observer {
-            model.updateLastActivity()
-        })*/
+        /*    model.lastActivityAllLiveData.observe(this, Observer {
+                model.updateLastActivity()
+            })*/
 
-    /*    model.activityStatusLiveData.observe(this, Observer {
-            view?.findViewWithTag<AvatarView>(it.first)?.updateStatus(it.second)
-            adapter?.updateActivityStatus(it)
-        })*/
+        /*    model.activityStatusLiveData.observe(this, Observer {
+                view?.findViewWithTag<AvatarView>(it.first)?.updateStatus(it.second)
+                adapter?.updateActivityStatus(it)
+            })*/
 
         model.messageActionLiveData.observe(this, Observer {
-            MessageActionDialogFragment(it).show(parentFragmentManager, MessageActionDialogFragment::class.java.simpleName)
+            MessageActionDialogFragment(it).show(
+                parentFragmentManager,
+                MessageActionDialogFragment::class.java.simpleName
+            )
         })
         model.updateMessageLiveData.observe(this, Observer {
             model.updateMessageStatus(it)
@@ -425,33 +465,33 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
     }
 
     private fun openAttachmentDialog() {
-           val alertDialog = AlertDialog.Builder(baseActivity)
+        val alertDialog = AlertDialog.Builder(baseActivity)
 
-            val chooseList: MutableList<String> = ArrayList()
-            chooseList.add(getString(R.string.alert_dialog_create_photo))
-            chooseList.add(getString(R.string.alert_dialog_create_video))
-            chooseList.add(getString(R.string.alert_dialog_from_gallery))
-            chooseList.add(getString(R.string.alert_dialog_from_file))
+        val chooseList: MutableList<String> = ArrayList()
+        chooseList.add(getString(R.string.alert_dialog_create_photo))
+        chooseList.add(getString(R.string.alert_dialog_create_video))
+        chooseList.add(getString(R.string.alert_dialog_from_gallery))
+        chooseList.add(getString(R.string.alert_dialog_from_file))
 
-            val array = chooseList.toTypedArray()
-            alertDialog.setItems(array) { dialog, position ->
-                when (position) {
-                    0 -> {
-                        startCamera()
-                    }
-                    1 -> {
-                        startVideoCamera()
-                    }
-                    2 -> {
-                        openGallery()
-                    }
-                    3 -> {
-                        openFileChooser()
-                    }
+        val array = chooseList.toTypedArray()
+        alertDialog.setItems(array) { dialog, position ->
+            when (position) {
+                0 -> {
+                    startCamera()
+                }
+                1 -> {
+                    startVideoCamera()
+                }
+                2 -> {
+                    openGallery()
+                }
+                3 -> {
+                    openFileChooser()
                 }
             }
+        }
 
-            alertDialog.show()
+        alertDialog.show()
     }
 
     private fun openGallery() {
@@ -490,9 +530,9 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
     }
 
     private fun openFileChooser() {
-  /*      val i2 = Intent(activity, FileChooser::class.java)
-        i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal)
-        startActivityForResult(i2, Utils.RC_PROFILE_IMAGE_FIELD_FILE)*/
+        /*      val i2 = Intent(activity, FileChooser::class.java)
+              i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal)
+              startActivityForResult(i2, Utils.RC_PROFILE_IMAGE_FIELD_FILE)*/
     }
 
     private fun startCamera() {
@@ -513,27 +553,49 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         startActivityForResult(intent, Utils.RC_PROFILE_IMAGE_FIELD_CAMERA)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        PermissionHelper.onRequestPermissionsResult(CAMERA_PERMISSION_CODE, requestCode, permissions, grantResults, object : PermissionHelper.OnRequestPermissionListener {
-            override fun onRequestFail() {
-                Toast.makeText(baseActivity, R.string.check_file_permission_error, Toast.LENGTH_SHORT).show()
-            }
+        PermissionHelper.onRequestPermissionsResult(
+            CAMERA_PERMISSION_CODE,
+            requestCode,
+            permissions,
+            grantResults,
+            object : PermissionHelper.OnRequestPermissionListener {
+                override fun onRequestFail() {
+                    Toast.makeText(
+                        baseActivity,
+                        R.string.check_file_permission_error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-            override fun onRequestSuccess() {
-                openAttachmentDialog()
-            }
+                override fun onRequestSuccess() {
+                    openAttachmentDialog()
+                }
 
-        })
-        PermissionHelper.onRequestPermissionsResult(SOUND_PERMISSION_CODE, requestCode, permissions, grantResults, object : PermissionHelper.OnRequestPermissionListener {
-            override fun onRequestFail() {
-                Toast.makeText(baseActivity, R.string.check_audio_permission_error, Toast.LENGTH_SHORT).show()
-            }
+            })
+        PermissionHelper.onRequestPermissionsResult(
+            SOUND_PERMISSION_CODE,
+            requestCode,
+            permissions,
+            grantResults,
+            object : PermissionHelper.OnRequestPermissionListener {
+                override fun onRequestFail() {
+                    Toast.makeText(
+                        baseActivity,
+                        R.string.check_audio_permission_error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-            override fun onRequestSuccess() {
+                override fun onRequestSuccess() {
 
-            }
-        })
+                }
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -542,7 +604,7 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
             super.onActivityResult(requestCode, resultCode, data)
             when (requestCode) {
                 Utils.RC_PROFILE_IMAGE_FIELD_CAMERA -> {
-                  //  model.sendImageVideo()
+                    //  model.sendImageVideo()
                 }
                 Utils.RC_PROFILE_IMAGE_FIELD_GALLERY -> {
                     if (data != null) {
@@ -550,7 +612,7 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
                         val imageFilePath = FileUtils.getPath(App.getContext(), uri)
                         if (imageFilePath != null) {
                             model.fileName = imageFilePath
-                      //      model.sendImageVideo()
+                            //      model.sendImageVideo()
                         }
                     }
                 }
@@ -560,7 +622,7 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
                         val filePath = file.path
                         if (filePath != null && "" != filePath) {
                             model.fileName = filePath
-                         //   model.sendImageVideo()
+                            //   model.sendImageVideo()
                         }
                     }
                 }

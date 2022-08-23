@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.socialsirius.messenger.base.App
+import com.socialsirius.messenger.ui.chats.chat.BaseMessagesViewHolder
+import com.socialsirius.messenger.ui.chats.chat.message.BaseItemMessage
 
 /**
  * Created by IGOR on 15.03.2017.

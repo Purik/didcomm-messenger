@@ -1,36 +1,33 @@
-package com.socialsirius.messenger.ui.chats.chats.message
+package com.socialsirius.messenger.ui.chats.chat.message
 
 
 import android.util.Log
+import com.socialsirius.messenger.models.ui.ItemCredentialsDetails
+import com.socialsirius.messenger.repository.models.LocalMessage
 
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.OfferCredentialMessage
-import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposedAttrib
 import com.sirius.library.agent.listener.Event
 import com.sirius.library.mobile.helpers.ScenarioHelper
 import com.sirius.library.mobile.scenario.EventAction
 import com.sirius.library.mobile.scenario.EventActionListener
-import com.sirius.library.utils.JSONArray
-import com.socialsirius.messenger.models.ui.ItemCredentialsDetails
-import com.socialsirius.messenger.repository.models.LocalMessage
 import com.socialsirius.messenger.utils.DateUtils
-import org.json.JSONObject
 
 
 import java.util.*
 
-class OfferItemMessage : BaseItemMessage {
+class ProposeCredentialItemMessage : BaseItemMessage {
 
     constructor(event: Event?) : super(event)
     constructor(localMessage: LocalMessage?) : super(localMessage)
 
     override fun getType(): MessageType {
         if(isError){
-            return MessageType.OfferAccepted
+            return MessageType.ProposeCredentialAccepted
         }
         return if (isAccepted) {
-            MessageType.OfferAccepted
+            MessageType.ProposeCredentialAccepted
         } else {
-            MessageType.Offer
+            MessageType.ProposeCredential
         }
     }
 
@@ -74,38 +71,15 @@ class OfferItemMessage : BaseItemMessage {
 
         var offerAttaches = offerMessage?.messageObj?.getJSONArray("~attach")
         if (offerAttaches != null) {
-          //  val att = offerAttaches.optJSONObject(0)
-
-
-           for(attach in offerAttaches){
-               val att = attach as? com.sirius.library.utils.JSONObject
-               if (att != null) {
-                   val type = att.optString("@type") ?: ""
-                   if (type.endsWith("/issuer-schema")) {
-                       val dataObject = att.optJSONObject("data")
-                       val jsonObject = dataObject?.optJSONObject("json")
-                       name = jsonObject?.optString("name")
-                   }
-                   if (type.endsWith("/credential-translation")) {
-                       val dataObject = att.optJSONObject("data")
-                       val jsonArray = dataObject?.optJSONArray("json") ?: JSONArray()
-                       for(jsonObject in jsonArray){
-                           val att = jsonObject as? com.sirius.library.utils.JSONObject
-                           val name = att?.optString("attrib_name")
-                           val translation = att?.optString("translation")
-                           val attrib = ProposedAttrib(name,translation)
-                          val filtered =  detailList?.firstOrNull() {
-                               attrib.name == it.name
-                           }
-                           filtered?.name = translation
-                       }
-                  //     name = jsonObject?.optString("name")
-                   }
-               }
-           }
-
-
-
+            val att = offerAttaches.optJSONObject(0)
+            if (att != null) {
+                val type = att.optString("@type") ?: ""
+                if (type.endsWith("/issuer-schema")) {
+                    val dataObject = att.optJSONObject("data")
+                    val jsonObject = dataObject?.optJSONObject("json")
+                    name = jsonObject?.optString("name")
+                }
+            }
         }
     }
 

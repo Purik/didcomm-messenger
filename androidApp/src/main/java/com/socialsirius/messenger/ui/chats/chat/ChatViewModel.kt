@@ -32,9 +32,8 @@ import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chat.item.*
-import com.socialsirius.messenger.ui.chats.chats.message.BaseItemMessage
-import com.socialsirius.messenger.ui.chats.chats.message.ConnectItemMessage
-import com.socialsirius.messenger.ui.chats.chats.message.TextItemMessage
+import com.socialsirius.messenger.ui.chats.chat.message.*
+
 import com.socialsirius.messenger.use_cases.EventUseCase
 import com.socialsirius.messenger.utils.DateUtils
 import com.socialsirius.messenger.utils.FileUtils
@@ -127,8 +126,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun readUnread(id: String?) {
-        id?.let {  eventUseCase.readMessage(id, currentChat?.id ?: "") }
+    fun readUnread(id: String?, onlyLocal : Boolean) {
+        id?.let {  eventUseCase.readMessage(id, currentChat?.id ?: "",onlyLocal) }
     }
 
     private fun createList() {
