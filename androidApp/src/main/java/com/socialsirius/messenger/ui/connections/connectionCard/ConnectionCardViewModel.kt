@@ -9,6 +9,7 @@ import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.models.ui.ItemCredentials
 import com.socialsirius.messenger.ui.chats.chat.message.BaseItemMessage
 import com.socialsirius.messenger.ui.chats.chat.message.OfferItemMessage
 import com.socialsirius.messenger.ui.chats.chat.message.ProverItemMessage
@@ -88,9 +89,13 @@ class ConnectionCardViewModel @Inject constructor() : BaseViewModel() {
                 fillOffer(it)
             } else if (it is ProverItemMessage) {
                 fillProver(it)
+            }else if (it is ItemCredentials) {
+                fillCredentials(it)
             }
         }
     }
+
+
 
     fun fillBase(item: BaseItemMessage) {
         connectionUserLiveData.postValue(titleUser)
@@ -103,8 +108,6 @@ class ConnectionCardViewModel @Inject constructor() : BaseViewModel() {
         if (item.commentString!=null){
             commentLiveData.postValue(item.commentString)
         }
-
-
         var action1Text: String? = null
         var action2Text: String? = "Details"
         var action3Text: String? = null
@@ -117,7 +120,6 @@ class ConnectionCardViewModel @Inject constructor() : BaseViewModel() {
             action1Text = "Accept"
             action3Text = "Cancel"
         }
-
         showAction1LiveData.postValue(action1Text)
         showAction2LiveData.postValue(action2Text)
         showAction3LiveData.postValue(action3Text)
@@ -147,13 +149,22 @@ class ConnectionCardViewModel @Inject constructor() : BaseViewModel() {
             )
         )
         topIconLiveData.postValue(App.getContext().resources.getDrawable(R.drawable.ic_connection_credentials2))
-
-
-        //  itemView.connectionMessage.backgroundTintList = App.getContext().resources.getColorStateList(
-        //        R.color.cardOrange)
-        //      itemView.connectionIcon.setImageDrawable(App.getContext().resources.getDrawable(R.drawable.ic_connection_credentials2))
-        //   itemView.connectionIcon.backgroundTintList = App.getContext().resources.getColorStateList(R.color.cardOrange)
     }
+
+    fun fillCredentials(item: ItemCredentials){
+        showAction2LiveData.postValue(null)
+        connectionTypeLiveData.postValue("Credentials")
+        connectionDetailsLiveData.postValue(item.detailList)
+        topViewColorLiveData.postValue(
+            App.getContext().resources.getColorStateList(
+                R.color.cardOrange
+            )
+        )
+        topIconLiveData.postValue(App.getContext().resources.getDrawable(R.drawable.ic_connection_credentials2))
+
+
+    }
+
 }
 
 /*

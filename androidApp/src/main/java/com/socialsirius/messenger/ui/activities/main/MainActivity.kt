@@ -20,6 +20,7 @@ import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityMainBinding
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.ui.activities.credentials.CredentialsActivity
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.message.MessageActivity
@@ -130,6 +131,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
                 R.id.nav_about -> {
 
                 }
+                R.id.nav_credentials -> {
+                    CredentialsActivity.newInstance(this)
+                }
+
             }
             drawerLayout.closeDrawers()
             return@setNavigationItemSelectedListener true

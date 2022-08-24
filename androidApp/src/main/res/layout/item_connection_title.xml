@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/titleTextView"
+    style="@style/Headline6"
+    tools:text="2891379812cj"
+    android:layout_marginTop="@dimen/common_gap_24"
+    android:layout_marginBottom="@dimen/common_gap_16"/>

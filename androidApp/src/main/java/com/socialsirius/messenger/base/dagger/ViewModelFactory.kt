@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivityModel
+import com.socialsirius.messenger.ui.activities.credentials.CredentialsActivityModel
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivityModel
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivityModel
@@ -29,6 +30,7 @@ import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewMo
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileViewModel
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardViewModel
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionRequestDetailViewModel
+import com.socialsirius.messenger.ui.credentials.CredentialsViewModel
 import com.socialsirius.messenger.ui.inviteUser.HandleWebInviteViewModel
 import com.socialsirius.messenger.ui.inviteUser.InviteUserViewModel
 import com.socialsirius.messenger.ui.main.MainViewModel
@@ -162,6 +164,11 @@ abstract class ViewModelModule {
     @ViewModelKey(GroupCreateActivityModel::class)
     internal abstract fun bindGroupCreateActivityModel(viewModel: GroupCreateActivityModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(CredentialsActivityModel::class)
+    internal abstract fun bindCredentialsActivityModel(viewModel: CredentialsActivityModel): ViewModel
+
 
     /**
      * Fragments viewModel Here
@@ -276,6 +283,13 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ConnectionRequestDetailViewModel::class)
     internal abstract fun bindConnectionRequestDetailViewModel(viewModel: ConnectionRequestDetailViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CredentialsViewModel::class)
+    internal abstract fun bindCredentialsViewModel(viewModel: CredentialsViewModel): ViewModel
+
 
 
 

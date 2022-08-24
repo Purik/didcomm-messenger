@@ -2,6 +2,7 @@ package com.socialsirius.messenger.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.j256.ormlite.stmt.QueryBuilder
 
 
 import com.socialsirius.messenger.base.App
@@ -25,7 +26,7 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     val invitationErrorLiveData: MutableLiveData<Pair<Boolean, String?>?> = MutableLiveData()
     val invitationSuccessLiveData: MutableLiveData<String?> = MutableLiveData()
     val invitationPolicemanSuccessLiveData: MutableLiveData<String?> = MutableLiveData()
-    val updateMessageLiveData : MutableLiveData<String?> = MutableLiveData(null)
+    val updateMessageLiveData: MutableLiveData<String?> = MutableLiveData(null)
 
     val pongMutableLiveData = MutableLiveData<Pair<Boolean, String>?>()
 
@@ -40,6 +41,15 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     }
 
 
+    fun getMessagesWithMessageLike(search: String): List<LocalMessage> {
+        try {
+            return getDatabase().getQueryeBuilder().where().like("message", "%$search%").query()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return emptyList()
+    }
+
     fun deleteAllForPairwiseDid(did: String, deleteInvite: Boolean) {
         if (deleteInvite) {
             deleteAllFor("pairwiseDid", did)
@@ -51,10 +61,10 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     }
 
 
-    fun deleteForPairwiseDidExceptInvite(did : String) {
+    fun deleteForPairwiseDidExceptInvite(did: String) {
         try {
             val builder = getDatabase().getDeleteBuilder()
-            builder.where().eq("pairwiseDid", did).and().not().like("message","%/invitation%")
+            builder.where().eq("pairwiseDid", did).and().not().like("message", "%/invitation%")
             builder.delete()
         } catch (throwables: SQLException) {
             throwables.printStackTrace()

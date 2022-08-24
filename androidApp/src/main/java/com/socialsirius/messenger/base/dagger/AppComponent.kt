@@ -4,6 +4,7 @@ import android.app.Application
 import com.socialsirius.messenger.repository.UserRepository
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
+import com.socialsirius.messenger.ui.activities.credentials.CredentialsActivity
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
@@ -28,6 +29,7 @@ import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewMo
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileFragment
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardFragment
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionRequestDetailFragment
+import com.socialsirius.messenger.ui.credentials.CredentialsFragment
 import com.socialsirius.messenger.ui.inviteUser.HandleWebInviteFragment
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.main.MainFragment
@@ -86,6 +88,7 @@ interface AppComponent {
     fun inject(activity: ScanActivity)
     fun inject(activity: GroupCreateActivity)
     fun inject(activity: HandleWebInviteActivity)
+    fun inject(activity: CredentialsActivity)
 
 
     //Fragments
@@ -111,6 +114,7 @@ interface AppComponent {
     fun inject(fragment: GroupChatCreateFragment)
     fun inject(fragment: ConnectionCardFragment)
     fun inject(fragment: ConnectionRequestDetailFragment)
+    fun inject(fragment: CredentialsFragment)
 
 
 
