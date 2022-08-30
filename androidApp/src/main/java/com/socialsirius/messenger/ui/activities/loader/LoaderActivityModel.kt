@@ -22,7 +22,7 @@ class LoaderActivityModel @Inject constructor(
 
         fun initSdk(context: Context){
             userRepository.setupUserFromPref()
-            var  login = userRepository.myUser.uid ?: ""
+            var  login = "defaultWalletLogin" // userRepository.myUser.uid ?: ""
             var  pass = userRepository.myUser.pass ?:""
             var  label = userRepository.myUser.name ?:""
             sdkUseCase.initSdk(context,login,pass, label,object : SDKUseCase.OnInitListener{

@@ -175,13 +175,12 @@ class SDKUseCase @Inject constructor(
         onInitListener?.initStart()
         val mainDirPath = context.filesDir.absolutePath
         val walletDirPath = mainDirPath + File.separator + "wallet"
-        val alias = userJid
         val passForWallet = pass
         val projDir = File(walletDirPath)
         if (!projDir.exists()) {
             projDir.mkdirs()
         }
-        val walletId = alias
+        val walletId = userJid
 
         val sender = object : BaseSender() {
             override fun sendTo(endpoint: String?, data: ByteArray?): Boolean {
@@ -225,59 +224,45 @@ class SDKUseCase @Inject constructor(
                 closeSocket(context)
             }
 
-
         }
         val mediatorAddress = "wss://mediator.socialsirius.com/ws"
         val recipientKeys = "DjgWN49cXQ6M6JayBkRCwFsywNhomn8gdAXHJ4bb98im"
-
-
+        val localLang = "en"
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                GlobalScope.launch(Dispatchers.Default) {
-
-                    SiriusSDK.getInstance().initializeCorouitine(
-                        alias = walletId,
-                        pass = passForWallet,
-                        mainDirPath = mainDirPath,
-                        mediatorAddress = mediatorAddress,
-                        recipientKeys = listOf(recipientKeys),
-                        label = label,
-                        "default_mobile",
-                        serverUri = "https://messenger.socialsirius.com/invitation",
-                        baseSender = sender
-                    )
-                    ChanelHelper.getInstance().initListener()
-                    SiriusSDK.getInstance().connectToMediator()
-                    initScenario()
-                    onInitListener?.initEnd()
-                }
+                startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,localLang,sender,null,onInitListener )
                 return@OnCompleteListener
             }
             val token = task.result
-            GlobalScope.launch(Dispatchers.Default) {
-
-                SiriusSDK.getInstance().initializeCorouitine(
-                    alias = walletId,
-                    pass = passForWallet,
-                    mainDirPath = mainDirPath,
-                    mediatorAddress = mediatorAddress,
-                    recipientKeys = listOf(recipientKeys),
-                    label = label,
-                    "default_mobile",
-                    serverUri = "https://messenger.socialsirius.com/invitation",
-                    baseSender = sender
-                )
-                ChanelHelper.getInstance().initListener()
-                SiriusSDK.getInstance().connectToMediator(token)
-                initScenario()
-                isInitiated = true
-                onInitListener?.initEnd()
-            }
+            startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,localLang,sender,token,onInitListener )
         })
 
 
+    }
+
+    fun startSdk(walletId : String,passForWallet : String,mainDirPath:String,mediatorAddress :  String,
+                 recipientKeys : String,label : String,localLang: String,sender : BaseSender,token : String?,  onInitListener: OnInitListener?){
+        GlobalScope.launch(Dispatchers.Default) {
+
+            SiriusSDK.getInstance().initializeCorouitine(
+                alias = walletId,
+                pass = passForWallet,
+                mainDirPath = mainDirPath,
+                mediatorAddress = mediatorAddress,
+                recipientKeys = listOf(recipientKeys),
+                label = label,
+                "default_mobile",
+                serverUri = "https://messenger.socialsirius.com/$localLang/invitation",
+                baseSender = sender
+            )
+            ChanelHelper.getInstance().initListener()
+            SiriusSDK.getInstance().connectToMediator(token)
+            initScenario()
+            isInitiated = true
+            onInitListener?.initEnd()
+        }
     }
 
     fun deleteWallet(context: Context) {

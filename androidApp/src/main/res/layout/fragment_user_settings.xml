@@ -80,6 +80,7 @@
                     android:layout_marginTop="@dimen/common_gap_16"
                     android:layout_marginEnd="@dimen/common_gap_8"
                     android:focusable="true"
+                    android:maxLength="20"
                     android:focusedByDefault="true"
                     android:inputType="textPersonName"
                     android:hint="@string/first_middle_name"

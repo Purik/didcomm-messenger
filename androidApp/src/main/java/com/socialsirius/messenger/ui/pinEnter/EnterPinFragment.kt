@@ -22,7 +22,13 @@ import com.socialsirius.messenger.databinding.FragmentEnterPinBinding
 import com.socialsirius.messenger.service.BiometricPromptUtils.createBiometricPrompt
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
+import com.socialsirius.messenger.ui.pinCreate.CreatePinFragment
 
+
+enum class GoToAfterSuccess {
+    Loader,
+    CreatePin
+}
 
 class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewModel>() {
 
@@ -32,6 +38,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
         App.getInstance().appComponent.inject(this)
     }
 
+    var goToAfterSuccess: GoToAfterSuccess = GoToAfterSuccess.Loader
     override fun setModel() {
         dataBinding!!.viewModel = model
     }
@@ -55,13 +62,13 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                 model.onShowToastLiveData.postValue("No biometric available. Please go to settings and add new biometric feature.")
                 // Prompts the user to create credentials that your app accepts.
-           /*     val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
-                    putExtra(
-                        Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                        BiometricManager.Authenticators.BIOMETRIC_WEAK
-                    )
-                }
-                startActivityForResult(enrollIntent, 1200)*/
+                /*     val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                         putExtra(
+                             Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                             BiometricManager.Authenticators.BIOMETRIC_WEAK
+                         )
+                     }
+                     startActivityForResult(enrollIntent, 1200)*/
             }
         }
 
@@ -91,7 +98,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
                 if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
                     model.onShowToastLiveData.postValue("Use Pin if you do not want use biometric")
                     // loginWithPassword() // Because in this app, the negative button allows the user to enter an account password. This is completely optional and your app doesn’t have to do it.
-                }else{
+                } else {
                     model.openWallet(false, false)
                 }
             }
@@ -99,7 +106,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
                 model.openWallet(false, false)
-            //    model.onShowToastLiveData.postValue("Authentication failed for an unknown reason")
+                //    model.onShowToastLiveData.postValue("Authentication failed for an unknown reason")
                 //   Log.d("TAG", "Authentication failed for an unknown reason")
             }
 
@@ -107,7 +114,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
                 super.onAuthenticationSucceeded(result)
                 model.protectUseBiometric()
                 model.openWallet(false, true)
-             //   showAdditionalPinCodeAlert()
+                //   showAdditionalPinCodeAlert()
                 Log.d("TAG", "Authentication was successful")
                 // Proceed with viewing the private encrypted message.
                 //  showEncryptedMessage(result.cryptoObject)
@@ -197,7 +204,11 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
 
         model.indicatorSuccesLiveData.observe(this, Observer {
             deletePinFragment()
-            goToLoader()
+            if (goToAfterSuccess == GoToAfterSuccess.Loader) {
+                goToLoader()
+            } else if (goToAfterSuccess == GoToAfterSuccess.CreatePin) {
+                goToCreatePin()
+            }
             onWalletOpenListener?.OnWalletOpen()
         })
         model.indicatorErrorLiveData.observe(this, Observer {
@@ -206,6 +217,13 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
         })
         model.attemptsCountLiveData.observe(this, Observer {
             dataBinding.attemptsTextView.text = it.toString()
+        })
+
+        model.gotoAuthActivity.observe(this, Observer {
+            if (it) {
+                baseActivity.finishAffinity()
+                AuthActivity.newInstance(requireContext())
+            }
         })
     }
 
@@ -216,6 +234,10 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
 
     }
 
+    private fun goToCreatePin() {
+        baseActivity.pushPageAdd(CreatePinFragment())
+
+    }
 
     private fun goToLoader() {
         if (baseActivity is LoaderActivity) {

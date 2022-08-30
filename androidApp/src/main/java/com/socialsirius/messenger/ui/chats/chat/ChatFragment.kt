@@ -85,6 +85,8 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         super.setupViews()
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)

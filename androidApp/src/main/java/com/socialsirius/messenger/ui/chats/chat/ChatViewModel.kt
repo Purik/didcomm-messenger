@@ -85,7 +85,13 @@ class ChatViewModel @Inject constructor(
         currentChat?.let {
             chatLiveData.value = it
         }
+        messageRepository.visiblePairwiseDid = currentChat?.id
         createList()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        messageRepository.visiblePairwiseDid = null
     }
 
     override fun setupViews() {

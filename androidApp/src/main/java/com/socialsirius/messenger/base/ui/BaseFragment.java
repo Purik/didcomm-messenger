@@ -91,6 +91,12 @@ public abstract class BaseFragment<VB extends ViewDataBinding, VM extends BaseVi
         setRetainInstance(true);
     }
 
+    @Override
+    public void onPause() {
+        model.onPause();
+        super.onPause();
+    }
+
     public void setupViews() {
         if(model !=null){
             model.setupViews();

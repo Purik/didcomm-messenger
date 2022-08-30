@@ -9,6 +9,7 @@ import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.repository.UserRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
+import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 
 import javax.inject.Inject
 
@@ -28,6 +29,7 @@ class EnterPinViewModel @Inject constructor(
     val indicatorSuccesLiveData = MutableLiveData<Boolean>()
     val hintTextLiveData = MutableLiveData<String>()
     val exitButtonClick = MutableLiveData<Boolean>()
+    val gotoAuthActivity = MutableLiveData<Boolean>()
     var countForDigit: Int = 0
 
     override fun onViewCreated() {
@@ -68,6 +70,8 @@ class EnterPinViewModel @Inject constructor(
          if (AppPref.getInstance().getUserCodeTryCount() <= 0) {
              logout(true)
              AppPref.getInstance().setUserCodeTryCount(3)
+             gotoAuthActivity.postValue(true)
+
          }
     }
 
@@ -82,6 +86,7 @@ class EnterPinViewModel @Inject constructor(
     fun logout(forceLogout: Boolean) {
         userRepository.logout()
         sdkUseCase.logoutFromSDK()
+
         /*     showProgressDialog()
              loginUseCase.logout(forceLogout)*/
     }

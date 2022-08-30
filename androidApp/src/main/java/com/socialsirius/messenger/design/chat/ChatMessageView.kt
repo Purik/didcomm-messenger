@@ -252,6 +252,10 @@ class ChatMessageView @JvmOverloads constructor(
                 ChatMessageStatus.error -> R.color.errorColor
                 else -> R.color.hintColor
             }))
+            messageStatusImageView.visibility =  when (status){
+                ChatMessageStatus.sent -> View.GONE
+                else->View.VISIBLE
+            }
             messageStatusImageView.setImageDrawable(ContextCompat.getDrawable(this.context, when (status) {
                 ChatMessageStatus.sent -> R.color.transparent
                 ChatMessageStatus.received -> R.drawable.ic_sent_not_read

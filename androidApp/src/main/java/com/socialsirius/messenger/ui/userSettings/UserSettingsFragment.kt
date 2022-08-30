@@ -16,6 +16,8 @@ import com.socialsirius.messenger.databinding.FragmentUserSettingsBinding
 import com.socialsirius.messenger.design.dialogs.SelectorDialogFragment
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.pinCreate.CreatePinFragment
+import com.socialsirius.messenger.ui.pinEnter.EnterPinFragment
+import com.socialsirius.messenger.ui.pinEnter.GoToAfterSuccess
 import com.socialsirius.messenger.utils.PermissionHelper
 
 
@@ -122,11 +124,19 @@ class UserSettingsFragment : BaseFragment<FragmentUserSettingsBinding, UserSetti
 
 
         model.backupPeriodicClickLiveData.observe(this, Observer {
-            SelectorDialogFragment(it, model::onSetBackupPeriod).show(parentFragmentManager, SelectorDialogFragment::class.java.simpleName)
+            SelectorDialogFragment(it, model::onSetBackupPeriod).show(
+                parentFragmentManager,
+                SelectorDialogFragment::class.java.simpleName
+            )
         })
 
         model.changePinClickLiveData.observe(this, Observer {
-            baseActivity.pushPageAdd(CreatePinFragment())
+            if (it) {
+                model.changePinClickLiveData.value = false
+                var enterPin = EnterPinFragment()
+                enterPin.goToAfterSuccess = GoToAfterSuccess.CreatePin
+                baseActivity.pushPageAdd(enterPin)
+            }
         })
         model.lastBackupTimeLiveData.observe(this, Observer {
             dataBinding.lastbackupRestoreTimeText.text = it

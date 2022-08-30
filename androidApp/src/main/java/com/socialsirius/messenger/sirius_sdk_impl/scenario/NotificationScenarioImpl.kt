@@ -34,8 +34,10 @@ class NotificationScenarioImpl(
         val label = event?.pairwise?.their?.label
         val pairwiseDid = event?.pairwise?.their?.did
         val baseItem = LocalMessageTransform.toBaseItemMessage(localMessage)
-        NotificationsUtils.callMessageNotify(label, baseItem.getText(), label, null)
         sdkUseCase.sendStatusFoMessage(id, pairwiseDid ?: "", Ack.Status.PENDING)
+        if(pairwiseDid != messageRepository.visiblePairwiseDid){
+            NotificationsUtils.callMessageNotify(label, baseItem.getText(), label, null)
+        }
         return Pair(true, null)
     }
 

@@ -21,6 +21,11 @@ abstract class BaseViewModel() : ViewModel() {
     open fun  onCreateview(){
 
     }
+
+    open fun  onPause(){
+
+    }
+
     open fun onViewCreated() {}
 
     open fun onDestroy() {

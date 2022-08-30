@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, String>() {
 
-
+    var visiblePairwiseDid : String? = null
     val eventStartLiveData: MutableLiveData<String> = MutableLiveData()
     val eventStoreLiveData: MutableLiveData<String> = MutableLiveData()
     val eventStopLiveData: MutableLiveData<String> = MutableLiveData()

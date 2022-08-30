@@ -41,7 +41,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding,AuthViewModel>() {
     override fun setupViews() {
         super.setupViews()
         dataBinding.nameEditText.addTextChangedListener {
-            model.authName.value = it.toString()
+           model.onNameChanged(it.toString())
         }
     }
     override fun setModel() {

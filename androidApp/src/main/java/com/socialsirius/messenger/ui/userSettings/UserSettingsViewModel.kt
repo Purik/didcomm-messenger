@@ -127,8 +127,12 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun onNameChanged(name: String) {
-        userRepository.myUser.name = name
-        userRepository.saveUserToPref()
+        if(name.count()<=20){
+            userRepository.myUser.name = name
+            userRepository.saveUserToPref()
+        }else{
+            onShowToastLiveData.postValue(resourceProvider.getString(R.string.user_name_count_error))
+        }
 
     }
 
