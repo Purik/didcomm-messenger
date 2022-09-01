@@ -227,23 +227,23 @@ class SDKUseCase @Inject constructor(
         }
         val mediatorAddress = "wss://mediator.socialsirius.com/ws"
         val recipientKeys = "DjgWN49cXQ6M6JayBkRCwFsywNhomn8gdAXHJ4bb98im"
-        val localLang = "en"
+
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,localLang,sender,null,onInitListener )
+                startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,sender,null,onInitListener )
                 return@OnCompleteListener
             }
             val token = task.result
-            startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,localLang,sender,token,onInitListener )
+            startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,sender,token,onInitListener )
         })
 
 
     }
 
     fun startSdk(walletId : String,passForWallet : String,mainDirPath:String,mediatorAddress :  String,
-                 recipientKeys : String,label : String,localLang: String,sender : BaseSender,token : String?,  onInitListener: OnInitListener?){
+                 recipientKeys : String,label : String,sender : BaseSender,token : String?,  onInitListener: OnInitListener?){
         GlobalScope.launch(Dispatchers.Default) {
 
             SiriusSDK.getInstance().initializeCorouitine(
@@ -254,7 +254,6 @@ class SDKUseCase @Inject constructor(
                 recipientKeys = listOf(recipientKeys),
                 label = label,
                 "default_mobile",
-                serverUri = "https://messenger.socialsirius.com/$localLang/invitation",
                 baseSender = sender
             )
             ChanelHelper.getInstance().initListener()
@@ -287,21 +286,22 @@ class SDKUseCase @Inject constructor(
         ScenarioHelper.getInstance()
             .addScenario("Question", QuestionAnswerScenarioImp(messageRepository, eventRepository))
         ScenarioHelper.getInstance()
-            .addScenario("Notification", NotificationScenarioImpl(messageRepository, this))
+            .addScenario("Notification", NotificationScenarioImpl(messageRepository))
         ScenarioHelper.getInstance()
             .addScenario("Ping", PingScenarioImpl(this))
         ScenarioHelper.getInstance()
             .addScenario("Pong", PongScenarioImpl(eventRepository, messageRepository ))
         ScenarioHelper.getInstance()
             .addScenario("Ack", AckScenarioImpl(eventRepository, messageRepository ))
-
+        ScenarioHelper.getInstance()
+            .addScenario("Status", MessageStatusScenarioImpl(this))
 
     }
 
 
     fun sendMessageWithAttachForPairwise(pairwiseDid: String, attach: FileAttach): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
-        val message = Message.builder().setContent(attach.messageText).build()
+        val message = Message.builder().setContent(attach.messageText).setOutTime(com.sirius.library.utils.Date()).build()
         val att: Attach =
             Attach().setId(attach.id).setMimeType("image/png").setFileName(attach.fileName)
                 .setData(attach.fileBase64Bytes ?: ByteArray(0))
@@ -321,7 +321,7 @@ class SDKUseCase @Inject constructor(
 
     fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
         val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
-        val message = Message.builder().setContent(messageText).build()
+        val message = Message.builder().setContent(messageText).setOutTime(com.sirius.library.utils.Date()).build()
         val localMessage = LocalMessage(id = message.getId(), pairwiseDid = pairwiseDid)
         localMessage.isMine = true
         localMessage.type = "text"
@@ -385,7 +385,9 @@ class SDKUseCase @Inject constructor(
 
     fun generateInvitation(): String? {
         val inviter = ScenarioHelper.getInstance().getScenarioBy("Inviter") as? InviterScenario
-        return inviter?.generateInvitation()
+        val localLang = "en"
+        val serverUri = "https://messenger.socialsirius.com/$localLang/invitation"
+        return inviter?.generateInvitation(serverUri)
     }
 
 

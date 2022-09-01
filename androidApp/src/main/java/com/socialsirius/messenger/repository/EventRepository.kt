@@ -40,11 +40,13 @@ class EventRepository @Inject constructor(val messageRepository: MessageReposito
           }else if(event?.second is ProposeCredentialMessage){
               localMessage.type = "propose"
           }
-          if (event?.second?.messageObjectHasKey("sent_time") == true) {
-              val sentTime = event?.second?.getStringFromJSON("sent_time")
+
+          if (event?.second?.messageObjectHasKey("~timing") == true) {
+              val sentTimeObject = event?.second?.getJSONOBJECTFromJSON("~timing")
+              val outTimeString = sentTimeObject?.optString("out_time")
               localMessage.sentTime = DateUtils.getDateFromString(
-                  sentTime,
-                  DateUtils.PATTERN_ROSTER_STATUS_RESPONSE2, true
+                  outTimeString,
+                  RequestPresentationMessage.TIME_FORMAT, true
               )
           }
           if (localMessage.sentTime == null) {

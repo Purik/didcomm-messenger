@@ -19,7 +19,7 @@ class TutorialActivityModel @Inject constructor(
     val nextClickLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val startClickLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val skipVisibilityLiveData: MutableLiveData<Int> = MutableLiveData(View.VISIBLE)
-    val nextTextLiveData: MutableLiveData<String> = MutableLiveData("resourceProvider.getString(R.string.auth_next)")
+    val nextTextLiveData: MutableLiveData<String> = MutableLiveData(resourceProvider.getString(R.string.next))
 
     fun onSkipBtnClick(v: View) {
         startClickLiveData.postValue(true)
@@ -40,11 +40,11 @@ class TutorialActivityModel @Inject constructor(
             resourceProvider.getString(R.string.tutorial_text_1), R.drawable.logo_sirius)
         val item2= ItemTutorial(2,resourceProvider.getString(R.string.tutorial_title_2),resourceProvider.getString(R.string.tutorial_text_2), R.drawable.tutorial_2)
         val item3= ItemTutorial(3,resourceProvider.getString(R.string.tutorial_title_3),resourceProvider.getString(R.string.tutorial_text_3), R.drawable.tutorial_3)
-        val item4= ItemTutorial(4,resourceProvider.getString(R.string.tutorial_title_4),resourceProvider.getString(R.string.tutorial_text_4), R.drawable.tutorial_4)
+       val item4= ItemTutorial(4,resourceProvider.getString(R.string.tutorial_title_4),resourceProvider.getString(R.string.tutorial_text_4), R.drawable.tutorial_4)
         list.add(item1)
         list.add(item2)
        list.add(item3)
-       list.add(item4)
+     //  list.add(item4)
         itemListLiveData.postValue(list)
     }
 }

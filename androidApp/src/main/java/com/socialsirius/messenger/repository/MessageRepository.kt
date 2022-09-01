@@ -37,7 +37,7 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
 
 
     fun getMessagesForPairwiseDid(did: String): LiveData<List<LocalMessage>> {
-        return getItemsBy("pairwiseDid", did)
+        return getItemsBy("pairwiseDid", did, "sentTime")
     }
 
 

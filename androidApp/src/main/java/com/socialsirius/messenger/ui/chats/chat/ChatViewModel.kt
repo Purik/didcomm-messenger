@@ -89,6 +89,11 @@ class ChatViewModel @Inject constructor(
         createList()
     }
 
+    override fun onResume() {
+        super.onResume()
+        messageRepository.visiblePairwiseDid = currentChat?.id
+    }
+
     override fun onPause() {
         super.onPause()
         messageRepository.visiblePairwiseDid = null

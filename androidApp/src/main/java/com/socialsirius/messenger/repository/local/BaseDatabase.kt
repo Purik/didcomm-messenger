@@ -125,11 +125,15 @@ abstract class BaseDatabase<T, M>(ctx: Context?) {
         return liveData
     }
 
-    fun getItemsBy(args: Map<String, Any>): LiveData<List<T>> {
+    fun getItemsBy(args: Map<String, Any>, orderByColumn : String? , ascending : Boolean): LiveData<List<T>> {
         val liveData = MutableLiveData<List<T>>()
         try {
             val builder = getQueryeBuilder()
+            if(orderByColumn!=null){
+                builder.orderBy(orderByColumn, ascending)
+            }
             val wherBuilder = builder.where()
+
             var i = 0
             args.forEach {
                 wherBuilder.eq(it.key, it.value)
