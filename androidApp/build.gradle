@@ -50,12 +50,12 @@ dependencies {
     implementation "androidx.work:work-gcm:$work_version"
 
     //FIREBASE ON X
-    implementation 'com.google.firebase:firebase-core:21.1.0'
-    implementation 'com.google.firebase:firebase-analytics:21.1.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-analytics:21.1.1'
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
-    implementation 'com.google.firebase:firebase-messaging:23.0.7'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.12'
+    implementation 'com.google.firebase:firebase-messaging:23.0.8'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.13'
     implementation 'me.dm7.barcodescanner:zxing:1.9.13'
     implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
     implementation project(':sirius-sdk-kotlin')
@@ -96,8 +96,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
         release {
@@ -110,6 +110,6 @@ android {
         dataBinding true
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
