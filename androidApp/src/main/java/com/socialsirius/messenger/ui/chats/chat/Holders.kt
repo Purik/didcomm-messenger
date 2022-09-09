@@ -1,17 +1,13 @@
 package com.socialsirius.messenger.ui.chats.chat
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
-import com.socialsirius.messenger.base.ui.OnAdapterItemClick
-import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.design.chat.AudioMessageView
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
 import com.socialsirius.messenger.ui.chats.chat.message.*
 import com.socialsirius.messenger.ui.connections.connectionCard.BaseViewHolder
-import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardFragment
 import com.socialsirius.messenger.utils.DateUtils
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_connection.view.*
@@ -63,7 +59,7 @@ class MessagesViewHolder(itemView: View) : BaseMessagesViewHolder<TextItemMessag
         itemView.chatMessageView.setMessage(item.getText(), item)
         val isShowCorner = true
         itemView.chatMessageView.showCorner = isShowCorner
-        itemView.chatMessageView.setStatus(item.status ?: ChatMessageStatus.default)
+        itemView.chatMessageView.setStatus(item.status ?: ChatMessageStatus.defaultSended)
         // itemView.chatMessageView.updateOwnerAndCorners()
         itemView.chatMessageView.setDateTime(DateUtils.parseDateToHhmmString(item.date))
 

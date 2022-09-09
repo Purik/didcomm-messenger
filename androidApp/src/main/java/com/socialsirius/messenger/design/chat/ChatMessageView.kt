@@ -3,12 +3,10 @@ package com.socialsirius.messenger.design.chat
 import android.content.Context
 import android.text.util.Linkify
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.Gravity.END
 import android.view.Gravity.START
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.webkit.WebView
 import android.widget.*
@@ -19,9 +17,6 @@ import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
 import com.socialsirius.messenger.ui.chats.chat.message.TextItemMessage
-
-
-import java.io.File
 
 
 class ChatMessageView @JvmOverloads constructor(
@@ -260,7 +255,7 @@ class ChatMessageView @JvmOverloads constructor(
                 ChatMessageStatus.sent -> R.color.transparent
                 ChatMessageStatus.received -> R.drawable.ic_sent_not_read
                 ChatMessageStatus.acknowlege -> R.drawable.ic_sent_and_read
-                ChatMessageStatus.default -> R.drawable.ic_watch_later
+                ChatMessageStatus.defaultSended -> R.drawable.ic_watch_later
                 ChatMessageStatus.error -> R.drawable.ic_send_error
             }))
         } else {

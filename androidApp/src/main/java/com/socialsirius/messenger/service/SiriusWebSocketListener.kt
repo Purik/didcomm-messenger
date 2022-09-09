@@ -294,7 +294,7 @@ class SiriusWebSocketListener() : WebSocketListener {
 
     @Throws(Exception::class)
     override fun onStateChanged(webSocket: WebSocket?, webSocketState: WebSocketState?) {
-        Log.d(TAG, "onStateChanged ");
+        Log.d(TAG, "onStateChanged $webSocket $webSocketState");
     }
 
     @Throws(java.lang.Exception::class)

@@ -97,11 +97,16 @@ class SDKUseCase @Inject constructor(
 
 
     private fun sendMessToSocket(context: Context, endpoint: String, data: ByteArray) {
-        val intent = Intent(context, WebSocketService::class.java)
-        intent.setAction(WebSocketService.EXTRA_SEND)
-        intent.putExtra("data", data)
-        intent.putExtra("url", endpoint)
-        context.startService(intent)
+        try{
+            val intent = Intent(context, WebSocketService::class.java)
+            intent.setAction(WebSocketService.EXTRA_SEND)
+            intent.putExtra("data", data)
+            intent.putExtra("url", endpoint)
+            context.startService(intent)
+        }catch (e :Exception){
+            e.printStackTrace()
+        }
+
     }
 
 
@@ -207,6 +212,7 @@ class SDKUseCase @Inject constructor(
 
                     }).start()
                 } else if (endpoint?.startsWith("ws") == true) {
+                    println("SOCKET sendMessToSocket=$endpoint")
                     sendMessToSocket(context, endpoint, data ?: ByteArray(0))
                 }
 

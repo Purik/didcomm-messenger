@@ -25,8 +25,7 @@ import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentChatBinding
 import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.design.chat.ChatPanelView
-import com.socialsirius.messenger.design.decorators.Decorator
-import com.socialsirius.messenger.design.decorators.StickyHeaderDecor
+
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.ui.chats.chat.message.BaseItemMessage
@@ -74,11 +73,11 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         App.getInstance().appComponent.inject(this)
     }
 
-    val decorator by lazy<RecyclerView.ItemDecoration> {
+  /*  val decorator by lazy<RecyclerView.ItemDecoration> {
         Decorator.Builder()
             .overlay(StickyHeaderDecor())
             .build()
-    }
+    }*/
 
     override fun setupViews() {
         model.setChat(arguments?.getSerializable(CHAT_ITEM) as? Chats)

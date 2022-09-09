@@ -4,21 +4,13 @@ package  com.socialsirius.messenger.ui.chats.allChats
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.ui.SimpleBaseRecyclerViewAdapter
 import com.socialsirius.messenger.databinding.ItemChatBinding
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
-import com.socialsirius.messenger.repository.models.LocalMessage
 import com.socialsirius.messenger.transform.LocalMessageTransform
-import com.socialsirius.messenger.ui.chats.chat.MessagesAdapter
 import com.socialsirius.messenger.utils.DateUtils
-
-import kotlinx.android.extensions.LayoutContainer
-
-import java.util.*
 
 class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBaseRecyclerViewAdapter<Chats, ChatsAdapter.ChatsViewHolder>() {
 
@@ -143,7 +135,7 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
                 ChatMessageStatus.received -> {
                     binding?. sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_sent_not_read))
                 }
-                ChatMessageStatus.default -> {
+                ChatMessageStatus.defaultSended -> {
                     binding?. sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.drawable.ic_watch_later))
                 }
                 else -> {

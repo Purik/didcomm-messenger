@@ -64,7 +64,7 @@ class LocalMessage : DatabaseIdModel , Serializable{
     var canceledCause: String? = null
 
     @DatabaseField(columnName = "status")
-    var status : ChatMessageStatus = ChatMessageStatus.default
+    var status : ChatMessageStatus = ChatMessageStatus.defaultSended
 
     fun message(): Message? {
         var restored: Message? = null

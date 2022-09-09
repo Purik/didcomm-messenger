@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Main item decorator for drawing all decors of RecyclerView and ViewHolders decors
  */
+/*
 class MasterDecorator(private val decorsBridge: DecorsBridge) : RecyclerView.ItemDecoration() {
 
     override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -40,4 +41,4 @@ class MasterDecorator(private val decorsBridge: DecorsBridge) : RecyclerView.Ite
         super.getItemOffsets(outRect, view, parent, state)
         decorsBridge.getItemOffsets(outRect, view, parent, state)
     }
-}
+}*/

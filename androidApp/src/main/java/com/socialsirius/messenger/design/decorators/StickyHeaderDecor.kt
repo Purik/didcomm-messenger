@@ -1,3 +1,4 @@
+/*
 package com.socialsirius.messenger.design.decorators
 
 import android.graphics.Bitmap
@@ -55,4 +56,4 @@ class StickyHeaderDecor() : Decorator.RecyclerViewDecor {
             canvas.drawBitmap(it, 0f, bitmapTopOffset, paint)
         }
     }
-}
+}*/

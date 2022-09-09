@@ -7,7 +7,7 @@ enum class ChatMessageStatus {
     /**
      * Отправляется
      */
-    default,
+    defaultSended,
     /**
      * Отправлено, но не доставлено
      */

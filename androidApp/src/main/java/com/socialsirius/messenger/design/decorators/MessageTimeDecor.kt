@@ -1,3 +1,4 @@
+/*
 package com.socialsirius.messenger.design.decorators
 
 import android.content.Context
@@ -21,7 +22,8 @@ class MessageTimeDecor(private val context: Context) : Decorator.ViewHolderDecor
 
     override fun draw(canvas: Canvas, view: View, recyclerView: RecyclerView, state: RecyclerView.State) {
 
-      /*  val timeView = view.findViewById<TextView>(R.id.time_tv)
+      */
+/*  val timeView = view.findViewById<TextView>(R.id.time_tv)
 
         val textRectAreaOrigin = Rect()
 
@@ -45,6 +47,7 @@ class MessageTimeDecor(private val context: Context) : Decorator.ViewHolderDecor
 
         textRectAreaMapped.inset(-scaleValue, -scaleValue)
 
-        canvas.drawRoundRect(textRectAreaMapped, 10.px.toFloat(), 10.px.toFloat(), paint)*/
+        canvas.drawRoundRect(textRectAreaMapped, 10.px.toFloat(), 10.px.toFloat(), paint)*//*
+
     }
-}
+}*/

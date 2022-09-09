@@ -12,7 +12,8 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-*/
+*//*
+
 
 package com.socialsirius.messenger.design.decorators
 
@@ -24,9 +25,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.socialsirius.messenger.design.decorators.Decorator.EACH_VIEW
 
 
+*/
 /**
  * Calls appropriate drawers for every ViewHolder or RecyclerView
- */
+ *//*
+
 class DecorsBridge(
     private val underlays: List<DecorDrawer<Decorator.ViewHolderDecor>>,
     private val underlaysRecycler: List<Decorator.RecyclerViewDecor>,
@@ -39,27 +42,33 @@ class DecorsBridge(
     private val groupedOverlays = overlays.groupBy { it.viewItemType }
     private val associatedOffsets = offsets.associateBy { it.viewItemType }
 
-    /**
+    */
+/**
      * Draws all decors on underlay
-     */
+     *//*
+
     fun onDrawUnderlay(canvas: Canvas, recyclerView: RecyclerView, state: RecyclerView.State) {
         underlaysRecycler.drawRecyclerViewDecors(canvas, recyclerView, state)
         groupedUnderlays.drawNotAttachedDecors(canvas, recyclerView, state)
         groupedUnderlays.drawAttachedDecors(canvas, recyclerView, state)
     }
 
-    /**
+    */
+/**
      * Draws all decors on overlay
-     */
+     *//*
+
     fun onDrawOverlay(canvas: Canvas, recyclerView: RecyclerView, state: RecyclerView.State) {
         groupedOverlays.drawAttachedDecors(canvas, recyclerView, state)
         groupedOverlays.drawNotAttachedDecors(canvas, recyclerView, state)
         overlaysRecycler.drawRecyclerViewDecors(canvas, recyclerView, state)
     }
 
-    /**
+    */
+/**
      * Draws all offset decors
-     */
+     *//*
+
     fun getItemOffsets(outRect: Rect, view: View, recyclerView: RecyclerView, state: RecyclerView.State) {
         drawOffset(EACH_VIEW, outRect, view, recyclerView, state)
         recyclerView.findContainingViewHolder(view)?.itemViewType?.let { itemViewType ->
@@ -105,4 +114,4 @@ class DecorsBridge(
                 ?.drawer
                 ?.getItemOffsets(outRect, view, recyclerView, state)
     }
-}
+}*/

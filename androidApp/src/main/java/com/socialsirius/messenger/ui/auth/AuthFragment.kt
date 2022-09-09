@@ -1,6 +1,8 @@
 package com.socialsirius.messenger.ui.auth
 
-import androidx.core.widget.addTextChangedListener
+
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.lifecycle.Observer
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
@@ -40,9 +42,20 @@ class AuthFragment : BaseFragment<FragmentAuthBinding,AuthViewModel>() {
 
     override fun setupViews() {
         super.setupViews()
-        dataBinding.nameEditText.addTextChangedListener {
-           model.onNameChanged(it.toString())
-        }
+        dataBinding.nameEditText.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                model.onNameChanged(s.toString())
+            }
+
+        })
     }
     override fun setModel() {
             dataBinding.viewModel = model
