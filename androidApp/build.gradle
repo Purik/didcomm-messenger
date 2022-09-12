@@ -14,7 +14,7 @@ version = '1.0-SNAPSHOT'
 dependencies {
     implementation project(':shared')
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -40,8 +40,8 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.43.2'
 
     //DATABASE
-    implementation 'com.j256.ormlite:ormlite-core:5.1'
-    implementation 'com.j256.ormlite:ormlite-android:5.1'
+
+    implementation 'com.j256.ormlite:ormlite-android:6.1'
 
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -61,9 +61,10 @@ dependencies {
    // implementation 'com.github.Sirius-social.sirius-sdk-kotlin:library:0.9.1'
    //MAVEN LOCAL  implementation 'com.sirius.library:sdkkotlin-android:0.9.1'
     implementation "cash.z.ecc.android:kotlin-bip39:1.0.2"
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
     implementation 'io.github.ponnamkarthik:richlinkpreview:1.0.9'
     implementation("androidx.biometric:biometric:1.1.0")
+  //  implementation 'io.crossbar.autobahn:autobahn-android:21.7.1'
 }
 
 android {
