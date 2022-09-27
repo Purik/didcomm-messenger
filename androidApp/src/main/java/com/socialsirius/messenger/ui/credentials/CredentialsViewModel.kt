@@ -33,7 +33,7 @@ class CredentialsViewModel @Inject constructor(val messageRepository: MessageRep
 
     private fun createList(): List<ItemCredentials> {
 
-        val credentilas = PairwiseHelper.getInstance().getAllCredentials()
+        val credentilas = PairwiseHelper.getAllCredentials()
         val list = credentilas.map {
             var nameUser = ""
             var textComment = ""
@@ -45,7 +45,7 @@ class CredentialsViewModel @Inject constructor(val messageRepository: MessageRep
                 val did = firstMessage?.pairwiseDid
 
                 did?.let {
-                    val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = did)
+                    val pairwise = PairwiseHelper.getPairwise(theirDid = did)
                     nameUser = pairwise?.their?.label?:""
 
                 }

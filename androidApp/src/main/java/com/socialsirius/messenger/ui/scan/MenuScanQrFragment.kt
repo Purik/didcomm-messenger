@@ -3,6 +3,7 @@ package com.socialsirius.messenger.ui.scan
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
@@ -49,7 +50,6 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
             startCamera()
         }
 
-
     }
 
     var dialog: AlertDialog? = null
@@ -75,8 +75,20 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
     }
 
     override fun subscribe() {
-        model.goToNewSecretChatLiveData.observe(this, Observer {
-            /*  it?.let {
+        model.showInvitationBottomSheetLiveData.observe(this, Observer {
+            if(it!=null){
+                model.showInvitationBottomSheetLiveData.value = null
+                baseActivity.model.showInvitationBottomSheetLiveData.postValue(it)
+            }
+        })
+        model.showErrorBottomSheetLiveData.observe(this, Observer {
+            if(it!=null){
+                model.showErrorBottomSheetLiveData.value = null
+                baseActivity.model.showErrorBottomSheetLiveData.postValue(it)
+            }
+        })
+     /*   model.goToNewSecretChatLiveData.observe(this, Observer {
+            *//*  it?.let {
                   Log.d("mylog2080", "goToNewSecretChatLiveData=" + it);
                   (baseActivity as? MainActivity)?.showChats()
                   val messageIntent = Intent(context, MessageActivity::class.java).apply {
@@ -84,114 +96,38 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
                   }
                   startActivity(messageIntent)
                   model.goToNewSecretChatLiveData.postValue(null)
-              }*/
+              }*//*
 
 
         })
 
+*/
 
-        model.invitationStartLiveData.observe(this, Observer {
-            if (it != null) {
-                model.invitationStartLiveData.value = null
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Connecting...")
-                builder.setMessage("Please wait,secure connection is being established")
-                builder.setCancelable(false)
-                dialog = builder.show()
-            }
-        })
-
-        model.invitationErrorLiveData.observe(this, Observer {
-            if (it != null) {
-                model.invitationErrorLiveData.value = null
-                dialog?.cancel()
-                model.onShowToastLiveData.postValue(it.second)
-            }
-
-        })
-
-        model.invitationSuccessLiveData.observe(this, Observer {
+ /*       model.invitationSuccessLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationSuccessLiveData.value = null
+                model.isConnectionInvit = true
                 val item = model.getMessage(it)
                 dialog?.cancel()
                 baseActivity.finish()
                 MessageActivity.newInstance(requireContext(), item)
                 //   popPage(ChatsFragment.newInstance(item))
             }
-        })
+        })*/
 
-        model.invitationPolicemanSuccessLiveData.observe(this, Observer {
+     /*   model.invitationPolicemanSuccessLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationPolicemanSuccessLiveData.value = null
                 val item = model.getMessage(it)
                 dialog?.cancel()
                 //  popPage(DocumentShareFragment.newInstance(item))
             }
-        })
+        })*/
 
-        model.showInvitationBottomSheetLiveData.observe(this, Observer {
-            it?.let {
-                mScannerView?.stopCameraPreview()
-                model.showInvitationBottomSheetLiveData.value = null
-                showInvitationSheet(it)
-            }
-        })
 
-        model.showErrorBottomSheetLiveData.observe(this, Observer {
-            it?.let {
-                mScannerView?.stopCameraPreview()
-                model.showErrorBottomSheetLiveData.value = null
-                showErrorSheet(it)
-            }
-        })
     }
 
 
-    fun showErrorSheet(text : String) {
-        val invitationSheet = BottomSheetDialog(requireContext())
-        val view = layoutInflater.inflate(R.layout.view_error_bootom_sheet, null,false)
-        val binding =  DataBindingUtil.bind<ViewErrorBootomSheetBinding>(view)
-        binding?.errorText?.text = text
-        binding?.connectButton?.setOnClickListener {
-            invitationSheet.dismiss()
-        }
-        invitationSheet.setContentView(view)
-        invitationSheet.show()
-        invitationSheet.setOnDismissListener {
-            mScannerView?.resumeCameraPreview(this)
-        }
-    }
-
-
-    fun showInvitationSheet(invitation : Invitation) {
-        val invitationSheet = InvitationBottomSheet(requireContext())
-        val view = layoutInflater.inflate(R.layout.view_invitation_bootom_sheet, null,false)
-       val binding =  DataBindingUtil.bind<ViewInvitationBootomSheetBinding>(view)
-        binding?.labelText?.text = invitation.label()
-        binding?.receipentLabel?.text = String.format(App.getContext().getString(R.string.recipient_keys), invitation.label())
-
-        binding?.receipentKeyText?.text = invitation.recipientKeys().getOrNull(0)
-       // binding?.endpointText?.text = invitation.endpoint()
-        if(invitation.endpoint()==model.getMyEndpoint()){
-            binding?.connectButton?.visibility = View.GONE
-        }
-        binding?.connectButton?.setOnClickListener {
-            model.connectToInvitation(invitation)
-        }
-        binding?.moreBtn?.setOnClickListener{
-            binding?.receipentLabel?.visibility = View.VISIBLE
-            binding?.receipentKeyText?.visibility = View.VISIBLE
-        //    binding?.endpointLabel?.visibility = View.VISIBLE
-        //    binding?.endpointText?.visibility = View.VISIBLE
-            binding?.moreBtn?.visibility = View.GONE
-        }
-        invitationSheet.setContentView(view)
-        invitationSheet.show()
-        invitationSheet.setOnDismissListener {
-            mScannerView?.resumeCameraPreview(this)
-        }
-    }
 
     override fun handleResult(rawResult: Result?) {
         rawResult?.let {

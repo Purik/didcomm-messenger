@@ -50,8 +50,8 @@ class HandleWebInviteFragment :
     }
 
     override fun subscribe() {
-        model.goToNewSecretChatLiveData.observe(this, Observer {
-            /*      it?.let {
+     /*   model.goToNewSecretChatLiveData.observe(this, Observer {
+            *//*      it?.let {
                       Log.d("mylog2080", "goToNewSecretChatLiveData=" + it);
                       (baseActivity as? MainActivity)?.showChats()
                       val messageIntent = Intent(context, MessageActivity::class.java).apply {
@@ -59,19 +59,19 @@ class HandleWebInviteFragment :
                       }
                       startActivity(messageIntent)
                       model.goToNewSecretChatLiveData.postValue(null)
-                  }*/
-        })
+                  }*//*
+        })*/
 
 
 
-        model.invitationStartLiveData.observe(this, Observer {
+      /*  model.invitationStartLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationStartLiveData.value = null
                 val builder = AlertDialog.Builder(requireContext())
             }
-        })
+        })*/
 
-        model.invitationErrorLiveData.observe(this, Observer {
+    /*    model.invitationErrorLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationErrorLiveData.value = null
                 showErrorSheet(it.second ?: "")
@@ -87,20 +87,22 @@ class HandleWebInviteFragment :
                 MainActivity.newInstance(requireContext(),item)
                 baseActivity.finish()
             }
-        })
+        })*/
 
         model.showInvitationBottomSheetLiveData.observe(this, Observer {
             it?.let {
                 model.showInvitationBottomSheetLiveData.value = null
-                showInvitationSheet(it)
+                baseActivity.model.showInvitationBottomSheetLiveData.postValue(it)
+              //  showInvitationSheet(it)
             }
         })
 
         model.showErrorBottomSheetLiveData.observe(this, Observer {
             it?.let {
                 model.showErrorBottomSheetLiveData.value = null
+                baseActivity.model.showErrorBottomSheetLiveData.postValue(it)
                // model.setError(it)
-                showErrorSheet(it ?: "")
+              //  showErrorSheet(it ?: "")
             }
         })
     }
@@ -135,7 +137,7 @@ class HandleWebInviteFragment :
     }
 
 
-    fun showInvitationSheet(invitation : Invitation) {
+ /*   fun showInvitationSheet(invitation : Invitation) {
         model.loadingVisibilityLiveData.postValue(View.GONE)
         val invitationSheet = InvitationBottomSheet(requireContext())
         val view = layoutInflater.inflate(R.layout.view_invitation_bootom_sheet, null,false)
@@ -175,5 +177,5 @@ class HandleWebInviteFragment :
                 baseActivity.finish()
             }
         }
-    }
+    }*/
 }

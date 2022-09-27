@@ -114,10 +114,14 @@ class UserSettingsFragment : BaseFragment<FragmentUserSettingsBinding, UserSetti
             dataBinding?.nameEditText?.addTextChangedListener(nameEditTextWatcher)
         })
         model.pinCodeTimeClickLiveData.observe(this, Observer {
-            SelectorDialogFragment(it, model::onSetPinCodeTimer).show(
-                parentFragmentManager,
-                SelectorDialogFragment::class.java.simpleName
-            )
+            if (it !=null){
+                model.pinCodeTimeClickLiveData.value = null
+                SelectorDialogFragment(it, model::onSetPinCodeTimer).show(
+                    parentFragmentManager,
+                    SelectorDialogFragment::class.java.simpleName
+                )
+            }
+
         })
 
 

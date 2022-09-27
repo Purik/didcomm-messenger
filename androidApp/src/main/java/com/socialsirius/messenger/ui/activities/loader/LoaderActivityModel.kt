@@ -11,6 +11,7 @@ import com.neovisionaries.ws.client.WebSocketExtension
 import com.neovisionaries.ws.client.WebSocketFactory
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseActivityModel
+import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.UserRepository
 import com.socialsirius.messenger.service.SiriusWebSocketListener
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
@@ -39,9 +40,10 @@ import javax.net.ssl.X509TrustManager
 class LoaderActivityModel @Inject constructor(
     resourceProvider: ResourcesProvider,
     private val sdkUseCase: SDKUseCase,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    messageRepository: MessageRepository
 ) :
-    BaseActivityModel() {
+    BaseActivityModel(messageRepository) {
     val initStartLiveData = MutableLiveData<Boolean>()
     val initEndLiveData = MutableLiveData<Boolean>()
 

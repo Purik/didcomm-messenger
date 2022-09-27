@@ -1,45 +1,39 @@
 package com.socialsirius.messenger.sirius_sdk_impl
 
+
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.socialsirius.messenger.service.WebSocketService
-import com.socialsirius.messenger.utils.DateUtils.PATTERN_ROSTER_STATUS_RESPONSE2
 import com.sirius.library.agent.BaseSender
 import com.sirius.library.agent.aries_rfc.AriesProtocolMessage
 import com.sirius.library.agent.aries_rfc.concept_0017_attachments.Attach
 import com.sirius.library.agent.aries_rfc.feature_0015_ack.Ack
+import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
+import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Ping
+import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Pong
 import com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message
-
 import com.sirius.library.agent.aries_rfc.feature_0113_question_answer.messages.QuestionMessage
 import com.sirius.library.agent.aries_rfc.feature_0113_question_answer.messages.Recipes
-
 import com.sirius.library.mobile.SiriusSDK
 import com.sirius.library.mobile.helpers.ChanelHelper
 import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.sirius.library.mobile.helpers.ScenarioHelper
-import com.sirius.library.mobile.scenario.impl.InviterScenario
-import com.sirius.library.mobile.utils.HashUtils
-
-
-import com.socialsirius.messenger.repository.EventRepository
-import com.socialsirius.messenger.repository.MessageRepository
-import com.socialsirius.messenger.repository.UserRepository
-import com.socialsirius.messenger.repository.models.LocalMessage
-import com.socialsirius.messenger.sirius_sdk_impl.scenario.*
-import com.socialsirius.messenger.utils.FileUtils
-import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.OfferCredentialMessage
-import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
-import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Ping
-import com.sirius.library.agent.aries_rfc.feature_0048_trust_ping.Pong
 import com.sirius.library.mobile.models.CredentialsRecord
 import com.socialsirius.messenger.base.data.api.HttpLoggingInterceptorMy
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.FileAttach
-import com.socialsirius.messenger.use_cases.EventUseCase
-import com.sodium.LibSodium
+import com.socialsirius.messenger.repository.EventRepository
+import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.repository.UserRepository
+import com.socialsirius.messenger.repository.models.LocalMessage
+import com.socialsirius.messenger.service.WebSocketService
+import com.socialsirius.messenger.sirius_sdk_impl.scenario.*
+import com.socialsirius.messenger.utils.FileUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,8 +42,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import org.json.JSONObject
-
 import java.io.File
 import java.security.KeyManagementException
 import java.security.NoSuchAlgorithmException
@@ -80,19 +72,35 @@ class SDKUseCase @Inject constructor(
         context.startService(intent)
     }
 
-    private fun connectToSocket(context: Context, url: String) {
-        val intent = Intent(context, WebSocketService::class.java)
-        intent.setAction(WebSocketService.EXTRA_CONNECT)
-        intent.putExtra("url", url)
-        context.startService(intent)
 
+    private fun connectToSocket(context: Context, url: String) {
+        try{
+            val intent = Intent(context, WebSocketService::class.java)
+            intent.setAction(WebSocketService.EXTRA_CONNECT)
+            intent.putExtra("url", url)
+            context.startService(intent)
+            context.bindService(intent, object : ServiceConnection {
+                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                    //retrieve an instance of the service here from the IBinder returned
+                    //from the onBind method to communicate with
+                }
+
+                override fun onServiceDisconnected(name: ComponentName?) {}
+            }, Context.BIND_AUTO_CREATE)
+        }catch (e :Exception){
+            e.printStackTrace()
+        }
     }
 
 
     private fun closeSocket(context: Context) {
+        try{
         val intent = Intent(context, WebSocketService::class.java)
         intent.setAction(WebSocketService.EXTRA_CLOSE)
         context.startService(intent)
+        }catch (e :Exception){
+            e.printStackTrace()
+        }
     }
 
 
@@ -103,6 +111,14 @@ class SDKUseCase @Inject constructor(
             intent.putExtra("data", data)
             intent.putExtra("url", endpoint)
             context.startService(intent)
+            context.bindService(intent, object : ServiceConnection {
+                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                    //retrieve an instance of the service here from the IBinder returned
+                    //from the onBind method to communicate with
+                }
+
+                override fun onServiceDisconnected(name: ComponentName?) {}
+            }, Context.BIND_AUTO_CREATE)
         }catch (e :Exception){
             e.printStackTrace()
         }
@@ -252,7 +268,7 @@ class SDKUseCase @Inject constructor(
                  recipientKeys : String,label : String,sender : BaseSender,token : String?,  onInitListener: OnInitListener?){
         GlobalScope.launch(Dispatchers.Default) {
 
-            SiriusSDK.getInstance().initializeCorouitine(
+            SiriusSDK.initializeCorouitine(
                 alias = walletId,
                 pass = passForWallet,
                 mainDirPath = mainDirPath,
@@ -262,8 +278,8 @@ class SDKUseCase @Inject constructor(
                 "default_mobile",
                 baseSender = sender
             )
-            ChanelHelper.getInstance().initListener()
-            SiriusSDK.getInstance().connectToMediator(token)
+            ChanelHelper.initListener()
+            SiriusSDK.connectToMediator(token)
             initScenario()
             isInitiated = true
             onInitListener?.initEnd()
@@ -278,35 +294,47 @@ class SDKUseCase @Inject constructor(
         FileUtils.cleanDirectory(File(walletDirPath))
         FileUtils.deleteDirectory(File(walletDirPath))
     }
+    open interface ScenarioName {
+        var name : String
+    }
+    enum class Scenario : ScenarioName{
+        Holder,
+        Text,
+        Prover,
+        Question,
+        Ping,
+        Pong,
+        Ack,
+        Status,
+        PersistentInvitation,
+        Inviter,
+        Invitee,
+        Notification
+
+
+    }
 
     private fun initScenario() {
-        ScenarioHelper.getInstance().addScenario("Inviter", InviterScenarioImpl(messageRepository, eventRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Invitee", InviteeScenarioImp(messageRepository, eventRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Holder", HolderScenarioImp(messageRepository, eventRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Text", TextScenarioImpl(messageRepository, eventRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Prover", ProverScenarioImpl(messageRepository, eventRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Question", QuestionAnswerScenarioImp(messageRepository, eventRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Notification", NotificationScenarioImpl(messageRepository))
-        ScenarioHelper.getInstance()
-            .addScenario("Ping", PingScenarioImpl(this))
-        ScenarioHelper.getInstance()
-            .addScenario("Pong", PongScenarioImpl(eventRepository, messageRepository ))
-        ScenarioHelper.getInstance()
-            .addScenario("Ack", AckScenarioImpl(eventRepository, messageRepository ))
-        ScenarioHelper.getInstance()
-            .addScenario("Status", MessageStatusScenarioImpl(this))
+       // ScenarioHelper.addScenario(Scenario.Inviter.name, InviterScenarioImpl(messageRepository, eventRepository))
+      //  ScenarioHelper.addScenario(Scenario.Invitee.name, InviteeScenarioImp(messageRepository, eventRepository))
+
+        ScenarioHelper.addScenario(Scenario.Holder.name, HolderScenarioImp(messageRepository, eventRepository))
+        ScenarioHelper.addScenario(Scenario.Text.name, TextScenarioImpl(messageRepository, eventRepository))
+        ScenarioHelper.addScenario(Scenario.Prover.name, ProverScenarioImpl(messageRepository, eventRepository))
+        ScenarioHelper.addScenario(Scenario.Question.name, QuestionAnswerScenarioImp(messageRepository, eventRepository))
+        ScenarioHelper.addScenario(Scenario.Ping.name, PingScenarioImpl(this))
+        ScenarioHelper.addScenario(Scenario.Pong.name, PongScenarioImpl(eventRepository, messageRepository ))
+        ScenarioHelper.addScenario(Scenario.Ack.name, AckScenarioImpl(eventRepository, messageRepository ))
+        ScenarioHelper.addScenario(Scenario.Status.name, MessageStatusScenarioImpl(this))
+        ScenarioHelper
+           .addScenario(Scenario.PersistentInvitation.name, Persistent0160Impl(messageRepository,eventRepository))
+        ScenarioHelper.addScenario(Scenario.Notification.name, NotificationScenarioImpl(messageRepository))
 
     }
 
 
     fun sendMessageWithAttachForPairwise(pairwiseDid: String, attach: FileAttach): LocalMessage {
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val message = Message.builder().setContent(attach.messageText).setOutTime(com.sirius.library.utils.Date()).build()
         val att: Attach =
             Attach().setId(attach.id).setMimeType("image/png").setFileName(attach.fileName)
@@ -320,13 +348,13 @@ class SDKUseCase @Inject constructor(
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
         pairwise?.let {
-            SiriusSDK.getInstance().context.sendTo(message, pairwise)
+            SiriusSDK.context?.sendTo(message, pairwise)
         }
         return localMessage
     }
 
     fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val message = Message.builder().setContent(messageText).setOutTime(com.sirius.library.utils.Date()).build()
         val localMessage = LocalMessage(id = message.getId(), pairwiseDid = pairwiseDid)
         localMessage.isMine = true
@@ -335,25 +363,25 @@ class SDKUseCase @Inject constructor(
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
         pairwise?.let {
-            SiriusSDK.getInstance().context.sendTo(message, pairwise)
+            SiriusSDK.context?.sendTo(message, pairwise)
         }
         return localMessage
     }
 
 
     fun sendTrustPingMessageForPairwise(pairwiseDid: String, pingId : String?=null){
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         var message : AriesProtocolMessage = Ping.builder().setResponseRequested(true).build()
         if(pingId!=null){
              message = Pong.builder().setPingId(pingId).build()
         }
         pairwise?.let {
-            SiriusSDK.getInstance().context.sendTo(message, pairwise)
+            SiriusSDK.context?.sendTo(message, pairwise)
         }
     }
 
     fun sendRequestToPairwise(pairwiseDid: String): LocalMessage {
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val proposMessage =
             ProposeCredentialMessage.builder().setCredDefId("4565").setSchemaId("465").build()
         //  val message = Message.builder().setContent(messageText).build()
@@ -363,7 +391,7 @@ class SDKUseCase @Inject constructor(
         localMessage.message = proposMessage.serialize()
         localMessage.sentTime = Date()
         pairwise?.let {
-            SiriusSDK.getInstance().context.sendTo(proposMessage, pairwise)
+            SiriusSDK.context?.sendTo(proposMessage, pairwise)
         }
         return localMessage
     }
@@ -372,7 +400,7 @@ class SDKUseCase @Inject constructor(
         pairwiseDid: String,
         credentialsRecord: CredentialsRecord
     ): LocalMessage {
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val proposMessage =
             ProposeCredentialMessage.builder().setCredDefId(credentialsRecord.cred_def_id)
                 .setCredentialProposal(credentialsRecord.getAttributes())
@@ -384,13 +412,13 @@ class SDKUseCase @Inject constructor(
         localMessage.message = proposMessage.serialize()
         localMessage.sentTime = Date()
         pairwise?.let {
-            SiriusSDK.getInstance().context.sendTo(proposMessage, pairwise)
+            SiriusSDK.context?.sendTo(proposMessage, pairwise)
         }
         return localMessage
     }
 
     fun generateInvitation(): String? {
-        val inviter = ScenarioHelper.getInstance().getScenarioBy("Inviter") as? InviterScenario
+        val inviter = ScenarioHelper.getScenarioBy(Scenario.PersistentInvitation.name) as? Persistent0160Impl
         val localLang = "en"
         val serverUri = "https://messenger.socialsirius.com/$localLang/invitation"
         return inviter?.generateInvitation(serverUri)
@@ -398,15 +426,15 @@ class SDKUseCase @Inject constructor(
 
 
     fun sendStatusFoMessage(id : String, pairwiseDid: String, status : Ack.Status) {
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val ack: Ack = Ack.builder().setStatus(status).build()
         ack.setThreadId(id)
-        SiriusSDK.getInstance().context.currentHub.getAgenti()?.sendMessage(ack,pairwise?.their?.endpointAddress)
+        SiriusSDK.context?.currentHub?.getAgenti()?.sendMessage(ack,pairwise?.their?.endpointAddress)
     }
 
 
     fun sendTestQuestion(pairwiseDid: String): LocalMessage {
-        val pairwise = PairwiseHelper.getInstance().getPairwise(theirDid = pairwiseDid)
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val message = QuestionMessage.builder()
             .setQuestionText("Alice, are you on the phone with Bob from Faber Bank right now?")
             .setValidResponses(listOf("Yes, it's me", "No, that's not me!"))
@@ -420,7 +448,7 @@ class SDKUseCase @Inject constructor(
         localMessage.message = message.serialize()
         Thread(Runnable {
             pairwise?.let {
-                Recipes.askAndWaitAnswer(SiriusSDK.getInstance().context, message, pairwise)
+                SiriusSDK.context?.let { it1 -> Recipes.askAndWaitAnswer(it1, message, pairwise) }
             }
         }).start()
         return localMessage
@@ -433,6 +461,6 @@ class SDKUseCase @Inject constructor(
     }
 
     fun changeLabel(){
-        SiriusSDK.getInstance().label = userRepository.myUser.name
+        SiriusSDK.label = userRepository.myUser.name
     }
 }

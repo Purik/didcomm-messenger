@@ -106,8 +106,7 @@ class SiriusWebSocketListener() : WebSocketListener {
                     "mylog2090",
                     "messageWrapper?.messageString=" + messageWrapper?.messageString
                 );
-                ChanelHelper.getInstance()
-                    .parseMessage(messageWrapper?.messageFromMessageString ?: "")
+                ChanelHelper.parseMessage(messageWrapper?.messageFromMessageString ?: "")
             }
         }
 
@@ -200,8 +199,7 @@ class SiriusWebSocketListener() : WebSocketListener {
                     "mylog2090",
                     "messageWrapper?.messageString=" + messageWrapper?.messageString
                 );
-                ChanelHelper.getInstance()
-                    .parseMessage(messageWrapper?.messageFromMessageString ?: "")
+                ChanelHelper.parseMessage(messageWrapper?.messageFromMessageString ?: "")
             }
         }
 
@@ -212,6 +210,7 @@ class SiriusWebSocketListener() : WebSocketListener {
     }
 
     companion object {
+        var isForeground = false
         fun parseSocketMessage(messagePayload: String?): ChannelMessageWrapper? {
             try {
                 val gson = GsonBuilder().create()

@@ -284,6 +284,49 @@ public class NotificationsUtils {
         }
     }
 
+    public static void callNewConnectionNotify(String title, String jidFrom) {
+        int hash = jidFrom.hashCode();
+        NotificationManager notificationManager = (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        long time = System.currentTimeMillis();
+        String channelId = CHANNELID_MESSAGE_SOUND_VIBRO;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(App.getContext(), channelId);
+        builder.setSmallIcon(R.drawable.logo_sirius);
+        builder.setContentTitle(App.getContext().getString(R.string.notification_new_connection_title));
+        String text =  String.format(App.getContext().getString(R.string.notification_new_connection),title);
+        builder.setContentText(text);
+        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        builder.setContentText(text);
+        builder.setPriority(NotificationCompat.PRIORITY_MAX);
+
+        Intent notificationIntent = new Intent(App.getContext(), MainActivity.class);
+        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(App.getContext(), hash, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        builder.setContentIntent(notificationPendingIntent);
+        Notification nt = builder.build();
+
+            timestamp = time;
+            // if (AppPref.getInstance().getIsSoundNewMessage()) {
+            Uri path = Uri.parse("android.resource://" + App.getContext().getPackageName() + "/" + R.raw.new_chat_message);
+            nt.sound = path;
+            // }
+            // if (AppPref.getInstance().isSoundNewMessageVibro()) {
+            nt.defaults |= Notification.DEFAULT_VIBRATE;
+            //  }
+
+        nt.flags |= Notification.FLAG_AUTO_CANCEL;
+        nt.flags |= Notification.FLAG_SHOW_LIGHTS;
+        nt.ledARGB = Color.RED;
+        nt.ledOffMS = 500;
+        nt.ledOnMS = 500;
+
+        if (notificationManager != null) {
+            notificationManager.notify(hash, nt);
+        }
+    }
+
 
     static final long[] DEFAULT_VIBRATE_PATTERN = {0, 250, 250, 250};
 

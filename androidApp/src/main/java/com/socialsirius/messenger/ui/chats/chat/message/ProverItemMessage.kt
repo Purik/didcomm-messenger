@@ -96,7 +96,7 @@ class ProverItemMessage : BaseItemMessage {
         }
 
         try{
-            val string2 = SiriusSDK.getInstance().context.anonCreds.
+            val string2 = SiriusSDK.context?.anonCreds?.
             proverSearchCredentialsForProofReq(requestPresentationMessage?.proofRequest(), limitReferents = 1)
 
 
@@ -160,7 +160,7 @@ class ProverItemMessage : BaseItemMessage {
 
 
     override fun accept(comment: String?) {
-        ScenarioHelper.getInstance().acceptScenario("Prover", message?.getId() ?: "", comment, object :
+        ScenarioHelper.acceptScenario("Prover", message?.getId() ?: "", comment, object :
             EventActionListener {
             override fun onActionStart(action: EventAction, id: String, comment: String?) {
                 startLoading(id)
@@ -184,7 +184,7 @@ class ProverItemMessage : BaseItemMessage {
     }
 
     override fun cancel() {
-        ScenarioHelper.getInstance().stopScenario("Prover", message?.getId() ?: "", "Canceled By Me",
+        ScenarioHelper.stopScenario("Prover", message?.getId() ?: "", "Canceled By Me",
             object : EventActionListener {
                 override fun onActionStart(action: EventAction, id: String, comment: String?) {
                     startLoading(id)

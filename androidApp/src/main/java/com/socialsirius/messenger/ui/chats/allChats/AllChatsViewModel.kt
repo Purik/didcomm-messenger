@@ -173,7 +173,7 @@ class AllChatsViewModel @Inject constructor(
     }
 
     private fun createList(): List<Chats> {
-        val pairwises = PairwiseHelper.getInstance().getAllPairwise()
+        val pairwises = PairwiseHelper.getAllPairwise()
         val list = pairwises.map {
            val lastMess =  messageRepository.getLastMessagesForPairwiseDid2(it.their.did?:"")
            val unreadCount =  messageRepository.getUnreadcountForDid(it.their.did?:"")

@@ -16,6 +16,10 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.navigation.NavigationView
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
@@ -23,6 +27,7 @@ import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityMainBinding
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.service.ConnectSocketWorker
 import com.socialsirius.messenger.ui.activities.credentials.CredentialsActivity
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
@@ -34,6 +39,7 @@ import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.scan.MenuScanQrFragment
 import com.socialsirius.messenger.ui.userSettings.UserSettingsFragment
 import com.socialsirius.messenger.utils.NotificationsUtils
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
@@ -72,9 +78,20 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
         return R.id.mainFrame
     }
 
+
+    fun startSocketWorker(){
+        val work = PeriodicWorkRequestBuilder<ConnectSocketWorker>(15, TimeUnit.MINUTES).
+        setInitialDelay(10, TimeUnit.MINUTES)
+            .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "SocketWork",
+        ExistingPeriodicWorkPolicy.KEEP,
+            work)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotificationsUtils.createChannelsForNotifications()
+        startSocketWorker()
         //   val drawerLayout: DrawerLayout = dataBinding.drawerLayout
         val navView: NavigationView = dataBinding.navView
         //  val toolbar: Toolbar = findViewById(R.id.toolbar)

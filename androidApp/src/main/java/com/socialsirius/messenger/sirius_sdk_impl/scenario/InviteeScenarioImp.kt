@@ -18,9 +18,9 @@ class InviteeScenarioImp  constructor(val messageRepository: MessageRepository,
     }
 
     override fun onScenarioEnd(id: String,success: Boolean, error: String?) {
-        messageRepository.invitationStartLiveData.postValue(id)
+        messageRepository.invitationStartLiveData.postValue(null)
         val message = messageRepository.getItemBy(id)
-        ScenarioHelper.getInstance().acceptScenario("Invitee", message?.getId() as? String ?: "", "", object :
+        ScenarioHelper.acceptScenario("Invitee", message?.getId() as? String ?: "", "", object :
             EventActionListener {
             override fun onActionStart(action: EventAction, id: String, comment: String?) {
 

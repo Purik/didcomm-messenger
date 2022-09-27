@@ -39,7 +39,7 @@ class ConnectItemMessage : BaseItemMessage {
 
 
     override fun accept(comment: String?) {
-        ScenarioHelper.getInstance().acceptScenario("Invitee", message?.getId() ?: "", comment, object :
+        ScenarioHelper.acceptScenario("Invitee", message?.getId() ?: "", comment, object :
             EventActionListener {
             override fun onActionStart(action: EventAction, id: String, comment: String?) {
                 startLoading(id)
@@ -67,7 +67,7 @@ class ConnectItemMessage : BaseItemMessage {
     }
 
     override fun cancel() {
-        ScenarioHelper.getInstance()
+        ScenarioHelper
             .stopScenario("Invitee", message?.getId() ?: "", "Canceled By Me", object :
                 EventActionListener {
                 override fun onActionStart(action: EventAction, id: String, comment: String?) {

@@ -78,7 +78,7 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
             }
         })*/
 
-        model.invitationStartLiveData.observe(this, Observer {
+       /* model.invitationStartLiveData.observe(this, Observer {
             if (it != null) {
                 model.invitationStartLiveData.value = null
                 val builder = AlertDialog.Builder(requireContext())
@@ -87,7 +87,7 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
                 builder.setCancelable(false)
                 dialog = builder.show()
             }
-        })
+        })*/
 
         model.invitationErrorLiveData.observe(this, Observer {
             if (it != null) {
@@ -143,7 +143,7 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
             }
             val bitmap = Bitmap.createBitmap(pixels, 0, mWidth, mWidth, mHeight, RGB_565)
             dataBinding.qrCodeImageView.setImageBitmap(bitmap)
-        } catch (e: WriterException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

@@ -46,7 +46,7 @@ class UserSettingsViewModel @Inject constructor(
 
     val updateNotificationsClickLiveData = MutableLiveData<List<String>>()
     val changePinClickLiveData = MutableLiveData<Boolean>()
-    val pinCodeTimeClickLiveData = MutableLiveData<List<String>>()
+    val pinCodeTimeClickLiveData = MutableLiveData<List<String>?>()
     val backupPeriodicClickLiveData = MutableLiveData<List<String>>()
     val showRestoreWalletAlert = MutableLiveData<Boolean>(false)
     val showDeleteWalletAlert = MutableLiveData<Boolean>(false)
@@ -197,6 +197,7 @@ class UserSettingsViewModel @Inject constructor(
 
     fun onPinCodeTimerClick() {
         pinCodeTimeClickLiveData.value = listOf(
+              //  resourceProvider.getString(R.string.settings_safety_safety_never),
                 resourceProvider.getString(R.string.settings_safety_safety_30),
                 resourceProvider.getString(R.string.settings_safety_safety_15),
                 resourceProvider.getString(R.string.settings_safety_safety_3),

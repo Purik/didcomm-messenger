@@ -14,7 +14,7 @@ class FirebaseChannelWorker(appContext: Context, workerParams: WorkerParameters)
        val payloadText = Gson().toJson(map)
        val messageWrapper = SiriusWebSocketListener.parseSocketMessage(payloadText)
        if(messageWrapper?.topic == "indy.transport"){
-           ChanelHelper.getInstance().parseMessage(messageWrapper?.messageFromMessageString ?: "")
+           ChanelHelper.parseMessage(messageWrapper?.messageFromMessageString ?: "")
        }
        return Result.success()
    }

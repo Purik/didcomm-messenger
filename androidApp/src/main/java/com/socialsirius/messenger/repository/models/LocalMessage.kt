@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 import com.sirius.library.agent.pairwise.Pairwise
 import com.sirius.library.messaging.Message
+import com.sirius.library.messaging.MessageUtil
 import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.models.ChatMessageStatus
 import java.io.Serializable
@@ -69,7 +70,7 @@ class LocalMessage : DatabaseIdModel , Serializable{
     fun message(): Message? {
         var restored: Message? = null
         try {
-            restored =  Message.restoreMessageInstance(message).second
+            restored =  MessageUtil.restoreMessageInstance(message).second
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -77,6 +78,6 @@ class LocalMessage : DatabaseIdModel , Serializable{
     }
 
     fun restorePairwise() : Pairwise?{
-       return PairwiseHelper.getInstance().getPairwise(pairwiseDid)
+       return PairwiseHelper.getPairwise(pairwiseDid)
     }
 }

@@ -261,7 +261,9 @@ public abstract class BaseFragment<VB extends ViewDataBinding, VM extends BaseVi
 
     public void baseSubscribe(){
         model.getOnShowToastLiveData().observe(getViewLifecycleOwner(), message -> {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            if(message!=null && !message.equals("")){
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            }
         });
 
         model.getOnShowAlertDialogLiveData().observe(getViewLifecycleOwner(), new Observer<Pair<String, String>>() {

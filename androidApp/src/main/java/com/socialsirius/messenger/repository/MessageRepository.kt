@@ -3,6 +3,7 @@ package com.socialsirius.messenger.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.j256.ormlite.stmt.QueryBuilder
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
 
 
 import com.socialsirius.messenger.base.App
@@ -20,9 +21,10 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
 
     var visiblePairwiseDid : String? = null
     val eventStartLiveData: MutableLiveData<String> = MutableLiveData()
-    val eventStoreLiveData: MutableLiveData<String> = MutableLiveData()
+    val eventStoreLiveData: MutableLiveData<String?> = MutableLiveData()
     val eventStopLiveData: MutableLiveData<String> = MutableLiveData()
-    val invitationStartLiveData: MutableLiveData<String?> = MutableLiveData()
+    val invitationStarInviteeLiveData: MutableLiveData<String?> = MutableLiveData()
+    val invitationStartLiveData: MutableLiveData<ConnRequest?> = MutableLiveData()
     val invitationErrorLiveData: MutableLiveData<Pair<Boolean, String?>?> = MutableLiveData()
     val invitationSuccessLiveData: MutableLiveData<String?> = MutableLiveData()
     val invitationPolicemanSuccessLiveData: MutableLiveData<String?> = MutableLiveData()

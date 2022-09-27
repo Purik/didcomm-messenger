@@ -3,31 +3,22 @@ package com.socialsirius.messenger.ui.scan
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.net.Uri
 import android.os.Handler
-import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
-import com.sirius.library.messaging.Message
 import com.sirius.library.mobile.SiriusSDK
 import com.sirius.library.mobile.helpers.ChanelHelper
 import com.sirius.library.mobile.helpers.InvitationHelper
-import com.sirius.library.utils.SDK
+import com.sirius.library.mobile.helpers.ScenarioHelper
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.Chats
-import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
 
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
 import javax.inject.Inject
 
 open class MenuScanQrViewModel @Inject constructor(
@@ -40,33 +31,26 @@ open class MenuScanQrViewModel @Inject constructor(
 
 ) : BaseViewModel() {
 
-    val invitationStartLiveData = messageRepository.invitationStartLiveData
-    val invitationErrorLiveData = messageRepository.invitationErrorLiveData
-    val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
-    val invitationPolicemanSuccessLiveData = messageRepository.invitationPolicemanSuccessLiveData
+  //  val invitationStartLiveData = messageRepository.invitationStarInviteeLiveData
+   // val invitationErrorLiveData = messageRepository.invitationErrorLiveData
+   // val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
+   // val invitationPolicemanSuccessLiveData = messageRepository.invitationPolicemanSuccessLiveData
 
-    val goToNewSecretChatLiveData = MutableLiveData<Chats?>()
+   // val goToNewSecretChatLiveData = MutableLiveData<Chats?>()
 
     val showInvitationBottomSheetLiveData = MutableLiveData<Invitation?>()
-    val showErrorBottomSheetLiveData = MutableLiveData<String>()
+    val showErrorBottomSheetLiveData = MutableLiveData<String?>()
 
     override fun onViewCreated() {
         super.onViewCreated()
     }
 
-    fun getMyEndpoint(): String {
-        return SiriusSDK.getInstance().context.endpointAddressWithEmptyRoutingKeys
-    }
 
-    var isConnecting = false
-    fun connectToInvitation(message: Invitation) {
-        isConnecting = true
-        ChanelHelper.getInstance().parseMessage(message.serialize())
-    }
+
 
 
     open fun onCodeScanned(result: String, type: Int): Boolean {
-        val message = InvitationHelper.getInstance().parseInvitationLink(result)
+        val message = InvitationHelper.parseInvitationLink(result)
         if (message != null) {
             showInvitationBottomSheetLiveData.postValue(message)
             return true

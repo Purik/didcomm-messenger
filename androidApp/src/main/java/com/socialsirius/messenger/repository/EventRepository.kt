@@ -18,44 +18,49 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EventRepository @Inject constructor(val messageRepository: MessageRepository) : EventStorageAbstract {
+class EventRepository @Inject constructor(val messageRepository: MessageRepository) :
+    EventStorageAbstract {
 
 
+    override fun eventStore(id: String, event: Pair<String?, Message?>?, accepted: Boolean) {
+        val localMessage = LocalMessage(id, event?.first)
+        localMessage.message = event?.second?.serialize()
+        localMessage.isAccepted = accepted
+        if (event?.second is com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message) {
+            localMessage.type = "text"
+        } else if (event?.second is Invitation) {
+            localMessage.type = "invitation"
+            if( localMessage.pairwiseDid.isNullOrEmpty()){
+                localMessage.pairwiseDid = (event?.second as? Invitation)?.recipientKeys()?.get(0)
+            }else{
+                localMessage.pairwiseDid = event.first
+            }
+        } else if ( event?.second is ConnRequest) {
+            localMessage.type = "invitation"
+        } else if (event?.second is OfferCredentialMessage) {
+            localMessage.type = "offer"
+        } else if (event?.second is RequestPresentationMessage) {
+            localMessage.type = "prover"
+        } else if (event?.second is QuestionMessage) {
+            localMessage.type = "question"
+        } else if (event?.second is ProposeCredentialMessage) {
+            localMessage.type = "propose"
+        }
 
+        if (event?.second?.messageObjectHasKey("~timing") == true) {
+            val sentTimeObject = event?.second?.getJSONOBJECTFromJSON("~timing")
+            val outTimeString = sentTimeObject?.optString("out_time")
+            localMessage.sentTime = DateUtils.getDateFromString(
+                outTimeString,
+                RequestPresentationMessage.TIME_FORMAT, true
+            )
+        }
+        if (localMessage.sentTime == null) {
+            localMessage.sentTime = Date()
+        }
 
-      override fun eventStore(id: String, event: Pair<String?, Message?>?, accepted: Boolean) {
-          val localMessage = LocalMessage(id, event?.first)
-          localMessage.message = event?.second?.serialize()
-          localMessage.isAccepted = accepted
-          if(event?.second is com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message){
-              localMessage.type = "text"
-          }else if(event?.second is Invitation || event?.second is ConnRequest){
-              localMessage.type = "invitation"
-          }else if(event?.second is OfferCredentialMessage){
-              localMessage.type = "offer"
-          }else if(event?.second is RequestPresentationMessage){
-              localMessage.type = "prover"
-          }else if(event?.second is QuestionMessage){
-              localMessage.type = "question"
-          }else if(event?.second is ProposeCredentialMessage){
-              localMessage.type = "propose"
-          }
-
-          if (event?.second?.messageObjectHasKey("~timing") == true) {
-              val sentTimeObject = event?.second?.getJSONOBJECTFromJSON("~timing")
-              val outTimeString = sentTimeObject?.optString("out_time")
-              localMessage.sentTime = DateUtils.getDateFromString(
-                  outTimeString,
-                  RequestPresentationMessage.TIME_FORMAT, true
-              )
-          }
-          if (localMessage.sentTime == null) {
-              localMessage.sentTime = Date()
-          }
-
-          messageRepository.createOrUpdateItem(localMessage)
-      }
-
+        messageRepository.createOrUpdateItem(localMessage)
+    }
 
 
     override fun eventRemove(id: String) {

@@ -111,7 +111,7 @@ class OfferItemMessage : BaseItemMessage {
 
 
     override fun accept(comment: String?) {
-        ScenarioHelper.getInstance()
+        ScenarioHelper
             .acceptScenario("Holder", message?.getId() ?: "", comment, object :
                 EventActionListener {
                 override fun onActionStart(action: EventAction, id: String, comment: String?) {
@@ -136,7 +136,7 @@ class OfferItemMessage : BaseItemMessage {
     }
 
     override fun cancel() {
-        ScenarioHelper.getInstance()
+        ScenarioHelper
             .stopScenario("Holder", message?.getId() ?: "", "Canceled By Me", object :
                 EventActionListener {
                 override fun onActionStart(action: EventAction, id: String, comment: String?) {

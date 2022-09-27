@@ -51,13 +51,4 @@ class InviteActivity : BaseActivity<ActivityInviteBinding, InviteActivityModel>(
         showPage(InviteUserFragment())
     }
 
-
-
-
-    override fun subscribe() {
-        super.subscribe()
-
-    }
-
-
 }

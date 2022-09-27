@@ -64,7 +64,7 @@
     <string name="profile_public">Public account</string>
     <string name="user_sync_contacts">Sync contacts</string>
     <string name="update_notifications">Notifications</string>
-    <string name="settings_new_message">New message</string>
+    <string name="settings_new_message">New message sound alert</string>
     <string name="settings_reminder_task">Task reminder</string>
     <string name="navigation_organizier">Organizer</string>
     <string name="settings_save">Save</string>
@@ -227,6 +227,7 @@
     <string name="create_biometric_additional">If you want you can add biometric for an alternative login or  you can do it later in settings.</string>
 
     <string name="settings_safety_safety_hint">Application lock</string>
+    <string name="settings_safety_safety_never">Never</string>
     <string name="settings_safety_safety_30">After 30 seconds</string>
     <string name="settings_safety_safety_15">After 1.5 minutes</string>
     <string name="settings_safety_safety_3">After 3 minutes</string>
@@ -241,4 +242,8 @@
     <string name="proof_request_details">Details</string>
 
     <string name="user_name_count_error">Username cannot be more than 20 characters</string>
+    <string name="notification_new_connection">You have new income connection from %s. If you want to accept it please go to Sirius Messenger and accept it.</string>
+    <string name="notification_new_connection_title">New Connection</string>
+
+    <string name="invitation_later_error">Connection is too long. We have sent a connection request, you will be notified when the connection is ready.</string>
 </resources>

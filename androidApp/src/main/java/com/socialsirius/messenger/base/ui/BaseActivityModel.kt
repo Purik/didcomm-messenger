@@ -1,22 +1,109 @@
 package com.socialsirius.messenger.base.ui
 
+import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
+import com.sirius.library.mobile.SiriusSDK
+import com.sirius.library.mobile.helpers.ChanelHelper
+import com.sirius.library.mobile.helpers.ScenarioHelper
+import com.socialsirius.messenger.R
+import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.design.BottomNavView
+import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.service.SiriusWebSocketListener
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
+import com.socialsirius.messenger.transform.LocalMessageTransform
 
 
-abstract class BaseActivityModel() : BaseViewModel()  {
+abstract class BaseActivityModel(val messageRepository: MessageRepository) : BaseViewModel() {
 
-    val  bottomNavClick : MutableLiveData<BottomNavView.BottomTab> =  MutableLiveData(BottomNavView.BottomTab.Menu)
+    val invitationStartLiveData = messageRepository.invitationStartLiveData
+    val invitationStartInviteeLiveData = messageRepository.invitationStarInviteeLiveData
+    val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
+    val bottomNavClick: MutableLiveData<BottomNavView.BottomTab> =
+        MutableLiveData(BottomNavView.BottomTab.Menu)
     var selectedTab = MutableLiveData(BottomNavView.BottomTab.Menu)
-    val  isVisibleUnauthBottomBar   : MutableLiveData<Pair<Boolean,Boolean>> =  MutableLiveData<Pair<Boolean,Boolean>>(Pair(false,false))
+    val isVisibleUnauthBottomBar: MutableLiveData<Pair<Boolean, Boolean>> =
+        MutableLiveData<Pair<Boolean, Boolean>>(Pair(false, false))
 
-    fun getOnBottomNavClickListner() : BottomNavView.OnbottomNavClickListener{
-        return object : BottomNavView.OnbottomNavClickListener{
+
+    val invitationErrorLiveData = messageRepository.invitationErrorLiveData
+    val showInvitationBottomSheetLiveData = MutableLiveData<Invitation?>()
+    val showErrorBottomSheetLiveData = MutableLiveData<String>()
+
+    override fun onResume() {
+        super.onResume()
+        connect()
+        SiriusWebSocketListener.isForeground = true
+    }
+
+    fun getMessage(id: String): Chats {
+        val localMessage = messageRepository.getItemBy(id)
+        return LocalMessageTransform.toItemContacts(localMessage)
+    }
+
+    fun connect(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                SiriusSDK.connectToMediator()
+                return@OnCompleteListener
+            }
+            val token = task.result
+            SiriusSDK.connectToMediator(token)
+        })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        SiriusWebSocketListener.isForeground = false
+    }
+
+    fun getOnBottomNavClickListner(): BottomNavView.OnbottomNavClickListener {
+        return object : BottomNavView.OnbottomNavClickListener {
             override fun onBottomClick(tab: BottomNavView.BottomTab) {
                 bottomNavClick.postValue(tab)
             }
         }
+    }
+
+    fun getMyEndpoint(): String {
+        return SiriusSDK.context?.endpointAddressWithEmptyRoutingKeys ?:""
+    }
+
+
+
+
+    fun startInvitationTimeout(){
+
+        Handler().postDelayed(Runnable {
+            if(isConnecting){
+                isConnecting =false
+                showErrorBottomSheetLiveData.postValue(App.getContext().getString(R.string.invitation_later_error))
+               // invitationErrorLiveData.postValue(Pair(true, App.getContext().getString(R.string.invitation_later_error)))
+            }
+        },30*1000)
+    }
+
+    var isConnecting = false
+    fun acceptInvitation(id: String) {
+
+        ScenarioHelper.acceptScenario(SDKUseCase.Scenario.PersistentInvitation.name,id,null)
+        startInvitationTimeout()
+        // ChanelHelper.parseMessage(message.serialize())
+    }
+
+    fun connectToInvitation(message: Invitation) {
+        isConnecting = true
+        startInvitationTimeout()
+      //  isConnecting = true
+        //  ScenarioHelper.acceptScenario(SDKUseCase.Scenario.PersistentInvitation.name,message.getId()?:"",null)
+        ChanelHelper.parseMessage(message.serialize())
     }
 
 }

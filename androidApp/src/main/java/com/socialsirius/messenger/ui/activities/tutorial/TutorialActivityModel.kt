@@ -7,12 +7,14 @@ import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseActivityModel
 import com.socialsirius.messenger.models.ui.ItemTutorial
+import com.socialsirius.messenger.repository.MessageRepository
 import javax.inject.Inject
 
 class TutorialActivityModel @Inject constructor(
-    val resourceProvider: ResourcesProvider
+    val resourceProvider: ResourcesProvider,
+    messageRepository: MessageRepository
 ) :
-    BaseActivityModel() {
+    BaseActivityModel(messageRepository) {
 
 
     val itemListLiveData: MutableLiveData<List<ItemTutorial>> = MutableLiveData()

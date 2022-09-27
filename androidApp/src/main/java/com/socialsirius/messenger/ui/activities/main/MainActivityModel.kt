@@ -13,12 +13,11 @@ import com.socialsirius.messenger.transform.LocalMessageTransform
 import javax.inject.Inject
 
 
-class MainActivityModel @Inject constructor(val messageRepository: MessageRepository)
-: BaseActivityModel() {
+class MainActivityModel @Inject constructor(messageRepository: MessageRepository)
+: BaseActivityModel(messageRepository) {
 
-   val invitationStartLiveData = messageRepository.invitationStartLiveData
-   val invitationErrorLiveData = messageRepository.invitationErrorLiveData
-   val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
+
+
 
     val invitationPolicemanSuccessLiveData = messageRepository.invitationPolicemanSuccessLiveData
 
@@ -31,8 +30,5 @@ class MainActivityModel @Inject constructor(val messageRepository: MessageReposi
         super.onViewCreated()
     }
 
-    fun getMessage(id : String) : Chats {
-        val localMessage = messageRepository.getItemBy(id)
-        return LocalMessageTransform.toItemContacts(localMessage)
-    }
+
 }

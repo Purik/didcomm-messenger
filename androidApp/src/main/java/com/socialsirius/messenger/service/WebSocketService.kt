@@ -50,7 +50,17 @@ class WebSocketService : LifecycleService() {
     var webSockets: MutableMap<String, WebSocket> = HashMap()
     fun getWebSocket(endpoint: String): WebSocket? {
         return if (webSockets.containsKey(endpoint)) {
-            webSockets[endpoint]
+            val socket = webSockets[endpoint]
+            if(socket?.isOpen==true){
+                webSockets[endpoint]
+            }else{
+                val socketNew = connectToWebSocket(endpoint)
+                if (socketNew != null) {
+                    webSockets[endpoint] = socketNew
+                }
+                socketNew
+            }
+
         } else {
             val socket = connectToWebSocket(endpoint)
             if (socket != null) {
@@ -130,11 +140,14 @@ class WebSocketService : LifecycleService() {
                 if (ws != null) {
                     Log.d("mylog200", "EXTRA_SEND ws.isOpen()=" + ws.isOpen)
                     if (ws.isOpen) {
-                    //    ws.sendBinary(data)
+                        ws.sendBinary(data)
                     }
                 }
             }
 
+        } else if (EXTRA_CLOSE == intent.action) {
+            this.stopSelf()
+            //   connect()
         }
     }
 
@@ -198,7 +211,7 @@ class WebSocketService : LifecycleService() {
                 .addListener(SiriusWebSocketListener())
                 .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
                 .setPingInterval((60 * 3 * 1000).toLong())
-                .connectAsynchronously()
+                .connect()
         } catch (e: WebSocketException) {
             e.printStackTrace()
         } catch (e: IOException) {

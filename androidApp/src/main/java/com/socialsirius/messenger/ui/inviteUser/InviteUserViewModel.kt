@@ -27,7 +27,7 @@ class InviteUserViewModel @Inject constructor(
     //val repositoryCreatedLiveData = chatsRepository.oneChatCreatedUpdateLiveData
     val qrCodeLiveData = MutableLiveData<String>()
     val shareButtonAction = MutableLiveData<String>()
-    val invitationStartLiveData = messageRepository.invitationStartLiveData
+    //val invitationStartLiveData = messageRepository.invitationStartLiveData
     val invitationErrorLiveData = messageRepository.invitationErrorLiveData
     val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
 
