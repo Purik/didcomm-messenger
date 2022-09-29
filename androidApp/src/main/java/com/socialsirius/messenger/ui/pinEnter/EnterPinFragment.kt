@@ -203,17 +203,25 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
         })
 
         model.indicatorSuccesLiveData.observe(this, Observer {
-            deletePinFragment()
-            if (goToAfterSuccess == GoToAfterSuccess.Loader) {
-                goToLoader()
-            } else if (goToAfterSuccess == GoToAfterSuccess.CreatePin) {
-                goToCreatePin()
+            if(it){
+                model.indicatorSuccesLiveData.value = false
+                deletePinFragment()
+                if (goToAfterSuccess == GoToAfterSuccess.Loader) {
+                    goToLoader()
+                } else if (goToAfterSuccess == GoToAfterSuccess.CreatePin) {
+                    goToCreatePin()
+                }
+                onWalletOpenListener?.OnWalletOpen()
             }
-            onWalletOpenListener?.OnWalletOpen()
+
         })
         model.indicatorErrorLiveData.observe(this, Observer {
-            errorAction()
-            model.onDeleteLongDigitClick()
+            if(it){
+                model.indicatorErrorLiveData.value = false
+                errorAction()
+                model.onDeleteLongDigitClick()
+            }
+
         })
         model.attemptsCountLiveData.observe(this, Observer {
             dataBinding.attemptsTextView.text = it.toString()
@@ -221,6 +229,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
 
         model.gotoAuthActivity.observe(this, Observer {
             if (it) {
+                model.gotoAuthActivity.value = false
                 baseActivity.finishAffinity()
                 AuthActivity.newInstance(requireContext())
             }
