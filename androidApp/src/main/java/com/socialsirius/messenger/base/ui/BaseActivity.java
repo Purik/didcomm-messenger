@@ -436,7 +436,6 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
                         showConnectedSheet();
                          // showInvitationSheet(connRequest);
                     }
-
                     model.setConnecting(false);
 
                 }
@@ -495,11 +494,11 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
             public void onChanged(String s) {
 
                 if (s != null) {
+                    model.getShowErrorBottomSheetLiveData().setValue(null);
                     model.setConnecting(false);
                     if(dialog!=null){
                         dialog.cancel();
                     }
-                    model.getShowErrorBottomSheetLiveData().setValue(null);
                     //  mScannerView ?.stopCameraPreview()
                     showErrorSheet(s);
                 }

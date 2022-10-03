@@ -105,7 +105,9 @@ class Persistent0160Impl(
                         eventRepository.messageRepository.getItemBy(it)
                     }
                 Log.d("mylog20901","ackMessage="+ackMessage +" threadId="+threadId+" invitationEvent="+invitationEvent)
-                messageRepository?.invitationSuccessLiveData?.postValue(id)
+                if (invitationEvent!=null){
+                    messageRepository?.invitationSuccessLiveData?.postValue(id)
+                }
             }
 
 
