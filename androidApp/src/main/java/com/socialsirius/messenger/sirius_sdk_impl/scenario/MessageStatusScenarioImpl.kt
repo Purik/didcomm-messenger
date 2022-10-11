@@ -35,7 +35,7 @@ class MessageStatusScenarioImpl(val sdkUseCase: SDKUseCase) : BaseScenario() {
 
     }
 
-    override fun start(event: Event): Pair<Boolean, String?> {
+    override suspend fun start(event: Event): Pair<Boolean, String?> {
         val pairwiseDid = event?.pairwise?.their?.did
         sdkUseCase.sendStatusFoMessage(id, pairwiseDid ?: "", Ack.Status.PENDING)
         return Pair(true, null)

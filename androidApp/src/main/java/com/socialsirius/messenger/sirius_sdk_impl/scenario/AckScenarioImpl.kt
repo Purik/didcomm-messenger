@@ -32,7 +32,7 @@ class AckScenarioImpl(val eventRepository: EventRepository, val messageRepositor
         NotificationsUtils.callMessageNotify(baseItem.getTitle(),baseItem.getText(),label,null)*/
     }
 
-    override fun start(event: Event): Pair<Boolean, String?> {
+    override suspend fun start(event: Event): Pair<Boolean, String?> {
         Log.d("mylog2090","PongScenarioImpl event="+event.messageObj)
        val ackMessage =  event.message() as? Ack
        val messId =  ackMessage?.getThreadId() ?:""

@@ -37,6 +37,7 @@ import com.socialsirius.messenger.utils.FileUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -74,7 +75,7 @@ class SDKUseCase @Inject constructor(
 
 
     private fun connectToSocket(context: Context, url: String) {
-        try{
+        try {
             val intent = Intent(context, WebSocketService::class.java)
             intent.setAction(WebSocketService.EXTRA_CONNECT)
             intent.putExtra("url", url)
@@ -87,25 +88,25 @@ class SDKUseCase @Inject constructor(
 
                 override fun onServiceDisconnected(name: ComponentName?) {}
             }, Context.BIND_AUTO_CREATE)
-        }catch (e :Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
 
     private fun closeSocket(context: Context) {
-        try{
-        val intent = Intent(context, WebSocketService::class.java)
-        intent.setAction(WebSocketService.EXTRA_CLOSE)
-        context.startService(intent)
-        }catch (e :Exception){
+        try {
+            val intent = Intent(context, WebSocketService::class.java)
+            intent.setAction(WebSocketService.EXTRA_CLOSE)
+            context.startService(intent)
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
 
     private fun sendMessToSocket(context: Context, endpoint: String, data: ByteArray) {
-        try{
+        try {
             val intent = Intent(context, WebSocketService::class.java)
             intent.setAction(WebSocketService.EXTRA_SEND)
             intent.putExtra("data", data)
@@ -119,7 +120,7 @@ class SDKUseCase @Inject constructor(
 
                 override fun onServiceDisconnected(name: ComponentName?) {}
             }, Context.BIND_AUTO_CREATE)
-        }catch (e :Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -145,7 +146,7 @@ class SDKUseCase @Inject constructor(
         //  okHttpClient.addInterceptor(new ResponseInterceptor());
         val logInterceptor = HttpLoggingInterceptorMy()
         logInterceptor.setLevel(HttpLoggingInterceptorMy.Level.BODY)
-      //  okHttpClient.addInterceptor(LogoutInterceptor(useAuthorize))
+        //  okHttpClient.addInterceptor(LogoutInterceptor(useAuthorize))
         okHttpClient.addInterceptor(logInterceptor)
         okHttpClient.followRedirects(true)
         okHttpClient.followSslRedirects(true)
@@ -185,6 +186,27 @@ class SDKUseCase @Inject constructor(
         return okHttpClient.build()
     }
 
+    suspend fun sendTo(endpoint: String?, data: ByteArray?): Boolean {
+        val ssiAgentWire: MediaType = "application/ssi-agent-wire".toMediaType()
+        var client: OkHttpClient = provideOkHttpClient()
+        Log.d("mylog200", "requset=" + String(data ?: ByteArray(0)))
+        val body: RequestBody =
+            RequestBody.create(ssiAgentWire, data ?: ByteArray(0))
+        val request: Request = Request.Builder()
+            .url(endpoint ?: "")
+            .post(body)
+            .build()
+        try {
+
+            client.newCall(request).execute().use { response ->
+                Log.d("mylog200", "response=" + response.body?.string())
+                return response.isSuccessful
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
 
     fun initSdk(
         context: Context,
@@ -204,29 +226,32 @@ class SDKUseCase @Inject constructor(
         val walletId = userJid
 
         val sender = object : BaseSender() {
-            override fun sendTo(endpoint: String?, data: ByteArray?): Boolean {
+            override suspend fun sendTo(endpoint: String?, data: ByteArray?): Boolean {
                 if (endpoint?.startsWith("http") == true) {
-                    Thread(Runnable {
-                        //content-type
-                        val ssiAgentWire: MediaType = "application/ssi-agent-wire".toMediaType()
-                        var client: OkHttpClient = provideOkHttpClient()
-                        Log.d("mylog200", "requset=" + String(data ?: ByteArray(0)))
-                        val body: RequestBody =
-                            RequestBody.create(ssiAgentWire, data ?: ByteArray(0))
-                        val request: Request = Request.Builder()
-                            .url(endpoint ?: "")
-                            .post(body)
-                            .build()
-                        try {
-                            client.newCall(request).execute().use { response ->
-                                Log.d("mylog200", "response=" + response.body?.string())
-                                response.isSuccessful
+                    return withContext(Dispatchers.Default) {
+                        sendTo(endpoint, data)
+                    }
+                    /*    Thread(Runnable {
+                            //content-type
+                            val ssiAgentWire: MediaType = "application/ssi-agent-wire".toMediaType()
+                            var client: OkHttpClient = provideOkHttpClient()
+                            Log.d("mylog200", "requset=" + String(data ?: ByteArray(0)))
+                            val body: RequestBody =
+                                RequestBody.create(ssiAgentWire, data ?: ByteArray(0))
+                            val request: Request = Request.Builder()
+                                .url(endpoint ?: "")
+                                .post(body)
+                                .build()
+                            try {
+                                client.newCall(request).execute().use { response ->
+                                    Log.d("mylog200", "response=" + response.body?.string())
+                                    response.isSuccessful
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
                             }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
 
-                    }).start()
+                        }).start()*/
                 } else if (endpoint?.startsWith("ws") == true) {
                     println("SOCKET sendMessToSocket=$endpoint")
                     sendMessToSocket(context, endpoint, data ?: ByteArray(0))
@@ -254,18 +279,47 @@ class SDKUseCase @Inject constructor(
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,sender,null,onInitListener )
+                startSdk(
+                    walletId,
+                    passForWallet,
+                    mainDirPath,
+                    mediatorAddress,
+                    recipientKeys,
+                    label,
+                    sender,
+                    null,
+                    onInitListener
+                )
                 return@OnCompleteListener
             }
             val token = task.result
-            startSdk(walletId,passForWallet,mainDirPath,mediatorAddress,recipientKeys,label,sender,token,onInitListener )
+            startSdk(
+                walletId,
+                passForWallet,
+                mainDirPath,
+                mediatorAddress,
+                recipientKeys,
+                label,
+                sender,
+                token,
+                onInitListener
+            )
         })
 
 
     }
 
-    fun startSdk(walletId : String,passForWallet : String,mainDirPath:String,mediatorAddress :  String,
-                 recipientKeys : String,label : String,sender : BaseSender,token : String?,  onInitListener: OnInitListener?){
+    fun startSdk(
+        walletId: String,
+        passForWallet: String,
+        mainDirPath: String,
+        mediatorAddress: String,
+        recipientKeys: String,
+        label: String,
+        sender: BaseSender,
+        token: String?,
+        onInitListener: OnInitListener?
+    ) {
         GlobalScope.launch(Dispatchers.Default) {
 
             SiriusSDK.initializeCorouitine(
@@ -294,10 +348,12 @@ class SDKUseCase @Inject constructor(
         FileUtils.cleanDirectory(File(walletDirPath))
         FileUtils.deleteDirectory(File(walletDirPath))
     }
+
     open interface ScenarioName {
-        var name : String
+        var name: String
     }
-    enum class Scenario : ScenarioName{
+
+    enum class Scenario : ScenarioName {
         Holder,
         Text,
         Prover,
@@ -315,27 +371,52 @@ class SDKUseCase @Inject constructor(
     }
 
     private fun initScenario() {
-       // ScenarioHelper.addScenario(Scenario.Inviter.name, InviterScenarioImpl(messageRepository, eventRepository))
-      //  ScenarioHelper.addScenario(Scenario.Invitee.name, InviteeScenarioImp(messageRepository, eventRepository))
+        // ScenarioHelper.addScenario(Scenario.Inviter.name, InviterScenarioImpl(messageRepository, eventRepository))
+        //  ScenarioHelper.addScenario(Scenario.Invitee.name, InviteeScenarioImp(messageRepository, eventRepository))
 
-        ScenarioHelper.addScenario(Scenario.Holder.name, HolderScenarioImp(messageRepository, eventRepository))
-        ScenarioHelper.addScenario(Scenario.Text.name, TextScenarioImpl(messageRepository, eventRepository))
-        ScenarioHelper.addScenario(Scenario.Prover.name, ProverScenarioImpl(messageRepository, eventRepository))
-        ScenarioHelper.addScenario(Scenario.Question.name, QuestionAnswerScenarioImp(messageRepository, eventRepository))
+        ScenarioHelper.addScenario(
+            Scenario.Holder.name,
+            HolderScenarioImp(messageRepository, eventRepository)
+        )
+        ScenarioHelper.addScenario(
+            Scenario.Text.name,
+            TextScenarioImpl(messageRepository, eventRepository)
+        )
+        ScenarioHelper.addScenario(
+            Scenario.Prover.name,
+            ProverScenarioImpl(messageRepository, eventRepository)
+        )
+        ScenarioHelper.addScenario(
+            Scenario.Question.name,
+            QuestionAnswerScenarioImp(messageRepository, eventRepository)
+        )
         ScenarioHelper.addScenario(Scenario.Ping.name, PingScenarioImpl(this))
-        ScenarioHelper.addScenario(Scenario.Pong.name, PongScenarioImpl(eventRepository, messageRepository ))
-        ScenarioHelper.addScenario(Scenario.Ack.name, AckScenarioImpl(eventRepository, messageRepository ))
+        ScenarioHelper.addScenario(
+            Scenario.Pong.name,
+            PongScenarioImpl(eventRepository, messageRepository)
+        )
+        ScenarioHelper.addScenario(
+            Scenario.Ack.name,
+            AckScenarioImpl(eventRepository, messageRepository)
+        )
         ScenarioHelper.addScenario(Scenario.Status.name, MessageStatusScenarioImpl(this))
         ScenarioHelper
-           .addScenario(Scenario.PersistentInvitation.name, Persistent0160Impl(messageRepository,eventRepository))
-        ScenarioHelper.addScenario(Scenario.Notification.name, NotificationScenarioImpl(messageRepository))
+            .addScenario(
+                Scenario.PersistentInvitation.name,
+                Persistent0160Impl(messageRepository, eventRepository)
+            )
+        ScenarioHelper.addScenario(
+            Scenario.Notification.name,
+            NotificationScenarioImpl(messageRepository)
+        )
 
     }
 
 
     fun sendMessageWithAttachForPairwise(pairwiseDid: String, attach: FileAttach): LocalMessage {
         val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
-        val message = Message.builder().setContent(attach.messageText).setOutTime(com.sirius.library.utils.Date()).build()
+        val message = Message.builder().setContent(attach.messageText)
+            .setOutTime(com.sirius.library.utils.Date()).build()
         val att: Attach =
             Attach().setId(attach.id).setMimeType("image/png").setFileName(attach.fileName)
                 .setData(attach.fileBase64Bytes ?: ByteArray(0))
@@ -355,7 +436,9 @@ class SDKUseCase @Inject constructor(
 
     fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
         val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
-        val message = Message.builder().setContent(messageText).setOutTime(com.sirius.library.utils.Date()).build()
+        val message =
+            Message.builder().setContent(messageText).setOutTime(com.sirius.library.utils.Date())
+                .build()
         val localMessage = LocalMessage(id = message.getId(), pairwiseDid = pairwiseDid)
         localMessage.isMine = true
         localMessage.type = "text"
@@ -369,11 +452,11 @@ class SDKUseCase @Inject constructor(
     }
 
 
-    fun sendTrustPingMessageForPairwise(pairwiseDid: String, pingId : String?=null){
+    fun sendTrustPingMessageForPairwise(pairwiseDid: String, pingId: String? = null) {
         val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
-        var message : AriesProtocolMessage = Ping.builder().setResponseRequested(true).build()
-        if(pingId!=null){
-             message = Pong.builder().setPingId(pingId).build()
+        var message: AriesProtocolMessage = Ping.builder().setResponseRequested(true).build()
+        if (pingId != null) {
+            message = Pong.builder().setPingId(pingId).build()
         }
         pairwise?.let {
             SiriusSDK.context?.sendTo(message, pairwise)
@@ -418,18 +501,22 @@ class SDKUseCase @Inject constructor(
     }
 
     fun generateInvitation(): String? {
-        val inviter = ScenarioHelper.getScenarioBy(Scenario.PersistentInvitation.name) as? Persistent0160Impl
+        val inviter =
+            ScenarioHelper.getScenarioBy(Scenario.PersistentInvitation.name) as? Persistent0160Impl
         val localLang = "en"
         val serverUri = "https://messenger.socialsirius.com/$localLang/invitation"
         return inviter?.generateInvitation(serverUri)
     }
 
 
-    fun sendStatusFoMessage(id : String, pairwiseDid: String, status : Ack.Status) {
+    fun sendStatusFoMessage(id: String, pairwiseDid: String, status: Ack.Status) {
         val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
         val ack: Ack = Ack.builder().setStatus(status).build()
         ack.setThreadId(id)
-        SiriusSDK.context?.currentHub?.getAgenti()?.sendMessage(ack,pairwise?.their?.endpointAddress)
+        GlobalScope.launch {
+            SiriusSDK.context?.currentHub?.getAgenti()
+                ?.sendMessage(ack, pairwise?.their?.endpointAddress)
+        }
     }
 
 
@@ -446,21 +533,21 @@ class SDKUseCase @Inject constructor(
         localMessage.type = "question"
         localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
-        Thread(Runnable {
+        GlobalScope.launch {
             pairwise?.let {
                 SiriusSDK.context?.let { it1 -> Recipes.askAndWaitAnswer(it1, message, pairwise) }
             }
-        }).start()
+        }
         return localMessage
     }
 
     fun logoutFromSDK() {
         SiriusSDK.cleanInstance()
         //TODO close websoket, delete firebase Token and some other
-      //  WebSocketService.
+        //  WebSocketService.
     }
 
-    fun changeLabel(){
+    fun changeLabel() {
         SiriusSDK.label = userRepository.myUser.name
     }
 }

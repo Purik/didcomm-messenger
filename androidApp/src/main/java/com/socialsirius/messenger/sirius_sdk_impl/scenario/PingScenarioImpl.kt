@@ -14,7 +14,7 @@ class PingScenarioImpl(val sdkUseCase: SDKUseCase) : BaseScenario() {
         return listOf(Ping::class)
     }
 
-    override fun start(event: Event): Pair<Boolean, String?> {
+    override suspend fun start(event: Event): Pair<Boolean, String?> {
         Log.d("mylog2090","PingScenarioImpl event="+event.messageObj)
         val pingMessageId = event.message()?.getId()
         sdkUseCase.sendTrustPingMessageForPairwise(event.pairwise?.their?.did ?: "", pingMessageId)

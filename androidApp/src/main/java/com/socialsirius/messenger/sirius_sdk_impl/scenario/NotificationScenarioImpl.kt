@@ -28,7 +28,7 @@ class NotificationScenarioImpl(
 
     }
 
-    override fun start(event: Event): Pair<Boolean, String?> {
+    override suspend fun start(event: Event): Pair<Boolean, String?> {
         val localMessage = messageRepository.getItemBy(id)
         val label = event?.pairwise?.their?.label
         val pairwiseDid = event?.pairwise?.their?.did

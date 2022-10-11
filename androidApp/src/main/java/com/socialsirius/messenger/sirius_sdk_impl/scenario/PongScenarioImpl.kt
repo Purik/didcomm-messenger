@@ -34,7 +34,7 @@ class PongScenarioImpl(val eventRepository: EventRepository, val messageReposito
         NotificationsUtils.callMessageNotify(baseItem.getTitle(),baseItem.getText(),label,null)*/
     }
 
-    override fun start(event: Event): Pair<Boolean, String?> {
+    override suspend fun start(event: Event): Pair<Boolean, String?> {
         Log.d("mylog2090","PongScenarioImpl event="+event.messageObj)
         return Pair(true,event.pairwise?.their?.did)
     }
