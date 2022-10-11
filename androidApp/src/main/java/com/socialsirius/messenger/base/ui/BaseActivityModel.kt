@@ -18,6 +18,8 @@ import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.service.SiriusWebSocketListener
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 abstract class BaseActivityModel(val messageRepository: MessageRepository) : BaseViewModel() {
@@ -49,13 +51,15 @@ abstract class BaseActivityModel(val messageRepository: MessageRepository) : Bas
 
     fun connect(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                SiriusSDK.connectToMediator()
-                return@OnCompleteListener
+            GlobalScope.launch {
+                if (!task.isSuccessful) {
+                    Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                    SiriusSDK.connectToMediator()
+                }else{
+                    val token = task.result
+                    SiriusSDK.connectToMediator(token)
+                }
             }
-            val token = task.result
-            SiriusSDK.connectToMediator(token)
         })
     }
 

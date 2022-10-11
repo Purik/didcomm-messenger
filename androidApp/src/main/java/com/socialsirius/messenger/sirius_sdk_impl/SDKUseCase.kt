@@ -428,8 +428,10 @@ class SDKUseCase @Inject constructor(
         localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
-        pairwise?.let {
-            SiriusSDK.context?.sendTo(message, pairwise)
+        GlobalScope.launch {
+            pairwise?.let {
+                SiriusSDK.context?.sendTo(message, pairwise)
+            }
         }
         return localMessage
     }
@@ -445,8 +447,10 @@ class SDKUseCase @Inject constructor(
         localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
-        pairwise?.let {
-            SiriusSDK.context?.sendTo(message, pairwise)
+        GlobalScope.launch {
+            pairwise?.let {
+                SiriusSDK.context?.sendTo(message, pairwise)
+            }
         }
         return localMessage
     }
@@ -458,8 +462,10 @@ class SDKUseCase @Inject constructor(
         if (pingId != null) {
             message = Pong.builder().setPingId(pingId).build()
         }
-        pairwise?.let {
-            SiriusSDK.context?.sendTo(message, pairwise)
+        GlobalScope.launch {
+            pairwise?.let {
+                SiriusSDK.context?.sendTo(message, pairwise)
+            }
         }
     }
 
@@ -473,8 +479,10 @@ class SDKUseCase @Inject constructor(
         localMessage.type = "propose"
         localMessage.message = proposMessage.serialize()
         localMessage.sentTime = Date()
-        pairwise?.let {
-            SiriusSDK.context?.sendTo(proposMessage, pairwise)
+        GlobalScope.launch {
+            pairwise?.let {
+                SiriusSDK.context?.sendTo(proposMessage, pairwise)
+            }
         }
         return localMessage
     }
@@ -494,9 +502,12 @@ class SDKUseCase @Inject constructor(
         localMessage.type = "text"
         localMessage.message = proposMessage.serialize()
         localMessage.sentTime = Date()
-        pairwise?.let {
-            SiriusSDK.context?.sendTo(proposMessage, pairwise)
+        GlobalScope.launch {
+            pairwise?.let {
+                SiriusSDK.context?.sendTo(proposMessage, pairwise)
+            }
         }
+
         return localMessage
     }
 
