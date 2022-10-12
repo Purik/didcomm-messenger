@@ -9,6 +9,8 @@ import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.sirius.library.mobile.SiriusSDK
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class NetworkStateReceiver : BroadcastReceiver() {
@@ -23,13 +25,16 @@ class NetworkStateReceiver : BroadcastReceiver() {
 
     fun connect(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                SiriusSDK.connectToMediator()
-                return@OnCompleteListener
+            GlobalScope.launch {
+                if (!task.isSuccessful) {
+                    Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                    SiriusSDK.connectToMediator()
+                }else{
+                    val token = task.result
+                    SiriusSDK.connectToMediator(token)
+                }
             }
-            val token = task.result
-            SiriusSDK.connectToMediator(token)
+
         })
     }
 

@@ -186,7 +186,7 @@ class SDKUseCase @Inject constructor(
         return okHttpClient.build()
     }
 
-    suspend fun sendTo(endpoint: String?, data: ByteArray?): Boolean {
+    suspend fun sendToImpl(endpoint: String?, data: ByteArray?): Boolean {
         val ssiAgentWire: MediaType = "application/ssi-agent-wire".toMediaType()
         var client: OkHttpClient = provideOkHttpClient()
         Log.d("mylog200", "requset=" + String(data ?: ByteArray(0)))
@@ -229,29 +229,8 @@ class SDKUseCase @Inject constructor(
             override suspend fun sendTo(endpoint: String?, data: ByteArray?): Boolean {
                 if (endpoint?.startsWith("http") == true) {
                     return withContext(Dispatchers.Default) {
-                        sendTo(endpoint, data)
+                        sendToImpl(endpoint, data)
                     }
-                    /*    Thread(Runnable {
-                            //content-type
-                            val ssiAgentWire: MediaType = "application/ssi-agent-wire".toMediaType()
-                            var client: OkHttpClient = provideOkHttpClient()
-                            Log.d("mylog200", "requset=" + String(data ?: ByteArray(0)))
-                            val body: RequestBody =
-                                RequestBody.create(ssiAgentWire, data ?: ByteArray(0))
-                            val request: Request = Request.Builder()
-                                .url(endpoint ?: "")
-                                .post(body)
-                                .build()
-                            try {
-                                client.newCall(request).execute().use { response ->
-                                    Log.d("mylog200", "response=" + response.body?.string())
-                                    response.isSuccessful
-                                }
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                        }).start()*/
                 } else if (endpoint?.startsWith("ws") == true) {
                     println("SOCKET sendMessToSocket=$endpoint")
                     sendMessToSocket(context, endpoint, data ?: ByteArray(0))
@@ -436,23 +415,34 @@ class SDKUseCase @Inject constructor(
         return localMessage
     }
 
-    fun sendTextMessageForPairwise(pairwiseDid: String, messageText: String?): LocalMessage {
-        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
-        val message =
-            Message.builder().setContent(messageText).setOutTime(com.sirius.library.utils.Date())
-                .build()
+    fun createMessage(type : String, messageText: String?) : com.sirius.library.messaging.Message{
+        if(type == "text"){
+            val message =
+                Message.builder().setContent(messageText).setOutTime(com.sirius.library.utils.Date())
+                    .build()
+            return message
+        }
+        return com.sirius.library.messaging.Message()
+    }
+
+    fun createLocalMessage(type : String, pairwiseDid: String,
+                           message : com.sirius.library.messaging.Message) : LocalMessage{
         val localMessage = LocalMessage(id = message.getId(), pairwiseDid = pairwiseDid)
         localMessage.isMine = true
-        localMessage.type = "text"
+        localMessage.type = type
         localMessage.status = ChatMessageStatus.sent
         localMessage.message = message.serialize()
         localMessage.sentTime = Date()
-        GlobalScope.launch {
-            pairwise?.let {
-                SiriusSDK.context?.sendTo(message, pairwise)
-            }
-        }
         return localMessage
+    }
+
+    suspend fun sendMessageForPairwise(pairwiseDid: String, message: com.sirius.library.messaging.Message): Boolean {
+        val pairwise = PairwiseHelper.getPairwise(theirDid = pairwiseDid)
+        var isSended = false
+        pairwise?.let {
+            isSended = SiriusSDK.context?.sendTo(message, pairwise) ?: false
+        }
+        return isSended
     }
 
 

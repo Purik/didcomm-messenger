@@ -3,22 +3,14 @@ package  com.socialsirius.messenger.ui.chats.chat
 
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
-import android.graphics.Matrix
-import android.graphics.drawable.Drawable
-import android.media.MediaPlayer
-import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.providers.ResourcesProvider
@@ -26,8 +18,8 @@ import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.FileAttach
-import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.repository.models.LocalMessage
 
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
@@ -35,24 +27,19 @@ import com.socialsirius.messenger.ui.chats.chat.item.*
 import com.socialsirius.messenger.ui.chats.chat.message.*
 
 import com.socialsirius.messenger.use_cases.EventUseCase
-import com.socialsirius.messenger.utils.DateUtils
 import com.socialsirius.messenger.utils.FileUtils
 import com.socialsirius.messenger.utils.extensions.observeOnce
 import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.math.BigInteger
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 const val MESSAGES_LIMIT = 20
 
@@ -107,9 +94,9 @@ class ChatViewModel @Inject constructor(
     }
 
 
-    fun subscribe(){
+    fun subscribe() {
         pongLiveData.observeUntilDestroy(this) {
-            Log.d("mylog2090","pongLiveData= ${it?.second} ${currentChat?.id} ")
+            Log.d("mylog2090", "pongLiveData= ${it?.second} ${currentChat?.id} ")
             if (it?.second == currentChat?.id) {
                 isOnlineLiveData.postValue(it?.first ?: false)
             }
@@ -118,30 +105,33 @@ class ChatViewModel @Inject constructor(
 
     }
 
-    fun updateMessageStatus(idMess: String?){
-        if(idMess != null){
+    fun updateMessageStatus(idMess: String?) {
+        if (idMess != null) {
             updateMessageLiveData.value = null
-            val list =  adapterListLiveData.value.orEmpty().toMutableList()
-            var message  =list.firstOrNull {
+            val list = adapterListLiveData.value.orEmpty().toMutableList()
+
+            var message = list.firstOrNull {
                 it.id == idMess
             }
 
             message?.let {
-                val mess = messageRepository.getItemBy(idMess?:"")
-                val baseItem =  LocalMessageTransform.toBaseItemMessage(mess)
+                val mess = messageRepository.getItemBy(idMess ?: "")
+                val baseItem = LocalMessageTransform.toBaseItemMessage(mess)
                 message = baseItem
                 val index = list.indexOfFirst { it.id == idMess }
                 list[index] = baseItem
                 adapterListLiveData.postValue(list)
             }
         }
+
     }
 
-    fun readUnread(id: String?, onlyLocal : Boolean) {
-        id?.let {  eventUseCase.readMessage(id, currentChat?.id ?: "",onlyLocal) }
+    fun readUnread(id: String?, onlyLocal: Boolean) {
+        id?.let { eventUseCase.readMessage(id, currentChat?.id ?: "", onlyLocal) }
     }
 
     private fun createList() {
+
         messageRepository.getMessagesForPairwiseDid(currentChat?.id ?: "").observeOnce(this) {
             var list = it.map {
                 LocalMessageTransform.toBaseItemMessage(it)
@@ -155,7 +145,7 @@ class ChatViewModel @Inject constructor(
                 }.toMutableList()
             }
             if (list.isEmpty()) {
-                adapterListLiveData.postValue(list)
+                adapterListLiveData.value = list
             } else {
                 Collections.sort(
                     list,
@@ -174,7 +164,7 @@ class ChatViewModel @Inject constructor(
                     }
                     itemsToAdd.add(messMaps)
                 }
-                adapterListLiveData.postValue(itemsToAdd)
+                adapterListLiveData.value = itemsToAdd
             }
         }
     }
@@ -216,11 +206,19 @@ class ChatViewModel @Inject constructor(
     }
 
     fun sendMessageText(messageText: String) {
-        val message = sdkUseCase.sendTextMessageForPairwise(currentChat?.id ?: "", messageText)
-        message?.let {
-            messageRepository.createOrUpdateItem(it)
-            // eventRepository.storeEvent(message.message()?.id ?: "", message, "text")
-            clearTextLiveData.postValue(true)
+        val message = sdkUseCase.createMessage("text", messageText)
+        val localMessage = sdkUseCase.createLocalMessage("text", currentChat?.id ?: "", message)
+        val handler = Handler()
+        handler.post {  messageRepository.createOrUpdateItem(localMessage)}
+
+        clearTextLiveData.postValue(true)
+        GlobalScope.async {
+            val isSended = sdkUseCase.sendMessageForPairwise(currentChat?.id ?: "", message)
+            if (!isSended) {
+                handler.post {
+                    messageRepository.updateStatus(message.getId()?:"",ChatMessageStatus.error)
+                }
+            }
         }
     }
 
@@ -398,13 +396,13 @@ class ChatViewModel @Inject constructor(
                     ""
                 }
             }*/
-       /* val dateString: String = DateUtils.getStringFromDate(Date(), "dd.MM.yyyy", false)
-        val timeString: String = DateUtils.getStringFromDate(Date(), "HH:mm", false)
-        val string = java.lang.String.format(
-            App.getContext().getString(R.string.last_activity_was),
-            dateString, timeString
-        )
-        lastActivityLiveData.postValue(string)*/
+        /* val dateString: String = DateUtils.getStringFromDate(Date(), "dd.MM.yyyy", false)
+         val timeString: String = DateUtils.getStringFromDate(Date(), "HH:mm", false)
+         val string = java.lang.String.format(
+             App.getContext().getString(R.string.last_activity_was),
+             dateString, timeString
+         )
+         lastActivityLiveData.postValue(string)*/
     }
 
     fun deleteChatRequest() {
