@@ -15,6 +15,8 @@ class GroupChatCreateFragment  :
 
     }
 
+
+
     override fun setModel() {
         dataBinding!!.viewModel = model
     }

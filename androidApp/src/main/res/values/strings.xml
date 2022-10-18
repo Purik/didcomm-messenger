@@ -246,4 +246,10 @@
     <string name="notification_new_connection_title">New Connection</string>
 
     <string name="invitation_later_error">Connection is too long. We have sent a connection request, you will be notified when the connection is ready.</string>
+
+
+    <string name="create_group_btn">Create</string>
+    <string name="create_group_title">Create group</string>
+    <string name="create_group_hint">To invite users to group choose users from chats , show QR-code to implicity scan or share via other channel like SMS or messenger</string>
+    <string name="create_group_name_placeholder">Enter group name</string>
 </resources>

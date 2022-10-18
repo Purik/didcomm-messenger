@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="viewModel"
@@ -8,5 +10,92 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></LinearLayout>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/topView"
+            style="@style/TopBarStyle"
+            android:layout_width="match_parent"
+            android:background="@color/backgroundColor"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+           >
+
+            <ImageButton
+                android:id="@+id/backButton"
+                style="@style/BackButton"
+                android:layout_width="@dimen/common_button_size"
+                android:layout_height="@dimen/common_button_size"
+                android:onClick="@{viewModel::onBackButtonClick}"
+                android:src="@drawable/ic_arrow_back"
+               />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_button_size"
+                android:layout_marginStart="@dimen/common_gap_8"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/topBarView"
+                    style="@style/Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    tools:text="@string/create_group_title" />
+
+                <TextView
+                    android:id="@+id/detailsBarView"
+                    style="@style/Caption"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/defaultColor"
+                    tools:text="5 members" />
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_gap_16"
+            android:layout_marginTop="@dimen/common_gap_16"
+            android:layout_marginEnd="@dimen/common_gap_16"
+            android:focusable="true"
+            android:maxLength="20"
+            android:focusedByDefault="true"
+            android:inputType="textPersonName"
+            android:hint="@string/create_group_name_placeholder"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/accountTitle"
+            tools:text="" />
+
+        <Button
+            style="@style/AccentButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_gap_16"
+            android:layout_marginTop="@dimen/common_gap_32"
+            android:layout_marginEnd="@dimen/common_gap_16"
+
+            android:onClick="@{viewModel::onCreateBtnClick}"
+            android:text="@string/create_group_btn"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </layout>

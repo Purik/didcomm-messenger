@@ -7,8 +7,8 @@ import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.sirius.library.mobile.SiriusSDK
 import com.sirius.library.utils.Base64
+
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.ui.OnAdapterItemClick
 import com.socialsirius.messenger.base.ui.OnCustomBtnClick
