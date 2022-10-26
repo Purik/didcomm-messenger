@@ -46,6 +46,6 @@ abstract class SimpleBaseRecyclerViewAdapter<T, H : RecyclerView.ViewHolder?> :
     abstract class SimpleViewHolder<VB : ViewDataBinding, T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding  : VB? = DataBindingUtil.bind<VB>(itemView)
 
-        abstract fun bind(item : T)
+        abstract fun bind(item : T, position: Int)
     }
 }

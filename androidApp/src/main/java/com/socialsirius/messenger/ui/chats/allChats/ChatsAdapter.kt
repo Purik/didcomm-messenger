@@ -22,7 +22,7 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
 
     override fun onBind(holder: ChatsViewHolder, item : Chats , position: Int) {
         super.onBind(holder, item, position)
-        holder.bind(item)
+        holder.bind(item,position)
     }
 
 
@@ -101,7 +101,10 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
 
 
 
-        override fun bind(chat: Chats) {
+        override fun bind(chat: Chats, position: Int) {
+            binding?.avatarImageView?.setOnClickListener {
+                onCustomBtnClick?.onBtnClick(100,chat,position)
+            }
             binding?.nameTextView?.text = chat.title
             if (chat.unreadMessageNotInDB > 0) {
                 binding?.unreadTextView?.visibility = View.VISIBLE

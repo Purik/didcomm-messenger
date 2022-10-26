@@ -32,7 +32,8 @@ enum class MessageType {
     SECRET_INVITE_MESSAGE_ITEM,
     CONNECTION_MESSAGE_ITEM,
     HOLDER_MESSAGE_ITEM,
-    PROVER_MESSAGE_ITEM
+    PROVER_MESSAGE_ITEM,
+    QUESTION_MESSAGE_ITEM
 }
 
 private const val MAX_AUDIO_CACHE_SIZE = 200
@@ -112,7 +113,7 @@ class MessagesAdapter() :
             //   is SecretInviteItem -> SECRET_INVITE_MESSAGE_ITEM
             is TextItemMessage -> MessageType.CHAT_MESSAGE_ITEM.ordinal
             is ConnectItemMessage -> MessageType.SECRET_INVITE_MESSAGE_ITEM.ordinal
-            //is ChatConnectionItem -> CONNECTION_MESSAGE_ITEM
+            is QuestionItemMessage ->  MessageType.QUESTION_MESSAGE_ITEM.ordinal
             is OfferItemMessage -> MessageType.HOLDER_MESSAGE_ITEM.ordinal
             is ProverItemMessage -> MessageType.PROVER_MESSAGE_ITEM.ordinal
             else -> 0
@@ -147,6 +148,11 @@ class MessagesAdapter() :
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_chat_connection, parent, false)
                 ProverViewHolder(view)
+            }
+            MessageType.QUESTION_MESSAGE_ITEM.ordinal -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_chat_message, parent, false)
+                QuestionViewHolder(view)
             }
             /*    CONNECTION_MESSAGE_ITEM -> {
                     val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_connection, parent, false)

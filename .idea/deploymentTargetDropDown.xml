@@ -7,7 +7,7 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
-            <value value="e055d43f0404" />
+            <value value="XELNW19C04007969" />
           </Key>
         </deviceKey>
       </Target>
@@ -15,8 +15,8 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\igore\.android\avd\Pixel_2_API_30.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="e055d43f0404" />
           </Key>
         </deviceKey>
       </Target>

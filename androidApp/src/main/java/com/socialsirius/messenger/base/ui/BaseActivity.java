@@ -27,6 +27,7 @@ import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messa
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest;
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation;
 import com.sirius.library.mobile.SiriusSDK;
+import com.sirius.library.mobile.helpers.PairwiseHelper;
 import com.sirius.library.mobile.helpers.ScenarioHelper;
 import com.socialsirius.messenger.R;
 import com.socialsirius.messenger.base.App;
@@ -290,116 +291,6 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
     }
 
 
-    public void showConnectionSuccess(String id) {
-        //   model.getMessageRepository().getItemBy(id);
-        if (id != null) {
-          /*  model.getMessageRepository().getInvitationSuccessLiveData.value = null
-            model.isConnectionInvit = true
-            val item = model.getMessage(it)
-            dialog?.cancel()
-            baseActivity.finish()
-            MessageActivity.newInstance(requireContext(), item)*/
-
-        }
-    }
-
-
-    public void showConnectedSheet() {
-        InvitationBottomSheet invitationSheet = new InvitationBottomSheet(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.view_invitation_bootom_sheet, null, false);
-        ViewInvitationBootomSheetBinding binding = DataBindingUtil.bind(view);
-        binding.invitationTitle.setText("Connection with %s created");
-    //    binding.labelText.setText(connRequest.getLabel());
-     //   binding.receipentLabel.setText(String.format(App.getContext().getString(R.string.recipient_keys), connRequest.getLabel()));
-    /*    try {
-            ConnProtocolMessage.ExtractTheirInfoRes theirInfo = connRequest.extractTheirInfo();
-            binding.receipentKeyText.setText(theirInfo.getVerkey());
-            binding.endpointText.setText(theirInfo.getEndpoint());
-            String myEndpoint = SiriusSDK.INSTANCE.getContext().getEndpointAddressWithEmptyRoutingKeys();
-            if (Objects.equals(theirInfo.getEndpoint(), myEndpoint)) {
-                binding.connectButton.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
-/*        binding.connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ScenarioHelper.INSTANCE.acceptScenario(SDKUseCase.Scenario.PersistentInvitation.getName(), connRequest.getId(),
-                        null, null);
-                invitationSheet.dismiss();
-            }
-        });*/
-    /*    binding.moreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.receipentLabel.setVisibility(View.VISIBLE);
-                binding.receipentKeyText.setVisibility(View.VISIBLE);
-                //    binding?.endpointLabel?.visibility = View.VISIBLE
-                //    binding?.endpointText?.visibility = View.VISIBLE
-                binding.moreBtn.setVisibility(View.GONE);
-            }
-        });*/
-
-        invitationSheet.setContentView(view);
-        invitationSheet.show();
-        invitationSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                //mScannerView?.resumeCameraPreview(this)
-            }
-        });
-    }
-
-    public void showInvitationSheet(ConnRequest connRequest) {
-        InvitationBottomSheet invitationSheet = new InvitationBottomSheet(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.view_invitation_bootom_sheet, null, false);
-        ViewInvitationBootomSheetBinding binding = DataBindingUtil.bind(view);
-        binding.invitationTitle.setText("Request for connection from:");
-        binding.labelText.setText(connRequest.getLabel());
-        binding.receipentLabel.setText(String.format(App.getContext().getString(R.string.recipient_keys), connRequest.getLabel()));
-        try {
-            ConnProtocolMessage.ExtractTheirInfoRes theirInfo = connRequest.extractTheirInfo();
-            binding.receipentKeyText.setText(theirInfo.getVerkey());
-            binding.endpointText.setText(theirInfo.getEndpoint());
-            String myEndpoint = SiriusSDK.INSTANCE.getContext().getEndpointAddressWithEmptyRoutingKeys();
-            if (Objects.equals(theirInfo.getEndpoint(), myEndpoint)) {
-                binding.connectButton.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        binding.connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ScenarioHelper.INSTANCE.acceptScenario(SDKUseCase.Scenario.PersistentInvitation.getName(), connRequest.getId(),
-                        null, null);
-                invitationSheet.dismiss();
-            }
-        });
-        binding.moreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.receipentLabel.setVisibility(View.VISIBLE);
-                binding.receipentKeyText.setVisibility(View.VISIBLE);
-                //    binding?.endpointLabel?.visibility = View.VISIBLE
-                //    binding?.endpointText?.visibility = View.VISIBLE
-                binding.moreBtn.setVisibility(View.GONE);
-            }
-        });
-
-        invitationSheet.setContentView(view);
-        invitationSheet.show();
-        invitationSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                //mScannerView?.resumeCameraPreview(this)
-            }
-        });
-    }
-
     public void subscribe() {
         /*if (!isBottomNavigationEnabled()) {
             return;
@@ -433,7 +324,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
                             MessageActivity.Companion.newInstance( BaseActivity.this, item);
                         }
                     }else{
-                        showConnectedSheet();
+                        showConnectedSheet(s);
                          // showInvitationSheet(connRequest);
                     }
                     model.setConnecting(false);
@@ -536,8 +427,100 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
         dialog = builder.show();
     }
 
+
+    public void showConnectionSuccess(String id) {
+        //   model.getMessageRepository().getItemBy(id);
+        if (id != null) {
+          /*  model.getMessageRepository().getInvitationSuccessLiveData.value = null
+            model.isConnectionInvit = true
+            val item = model.getMessage(it)
+            dialog?.cancel()
+            baseActivity.finish()
+            MessageActivity.newInstance(requireContext(), item)*/
+
+        }
+    }
+
+    public void showConnectedSheet(String id) {
+        Chats chats = model.getMessage(id);
+        InvitationBottomSheet invitationSheet = new InvitationBottomSheet(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.view_invitation_bootom_sheet, null, false);
+        ViewInvitationBootomSheetBinding binding = DataBindingUtil.bind(view);
+        binding.invitationTitle.setText(String.format(App.getContext().getResources().getString(R.string.created_connection_title), chats.getTitle()));
+        binding.labelText.setText(R.string.created_connection_hint);
+        binding.connectButton.setText(R.string.open_chat_with);
+        binding.moreBtn.setVisibility(View.GONE);
+        binding.connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                invitationSheet.dismiss();
+                MessageActivity.Companion.newInstance(BaseActivity.this,  chats);
+            }
+        });
+        invitationSheet.setContentView(view);
+        invitationSheet.show();
+        invitationSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                model.getInvitationSheetDismissLiveData().postValue(true);
+            }
+        });
+    }
+
+    public BottomSheetDialog  currentBottomSheet =null;
+    public void showInvitationSheet(ConnRequest connRequest) {
+        InvitationBottomSheet invitationSheet = new InvitationBottomSheet(this);
+        currentBottomSheet = invitationSheet;
+        View view = LayoutInflater.from(this).inflate(R.layout.view_invitation_bootom_sheet, null, false);
+        ViewInvitationBootomSheetBinding binding = DataBindingUtil.bind(view);
+        binding.invitationTitle.setText("Request for connection from:");
+        binding.labelText.setText(connRequest.getLabel());
+        binding.receipentLabel.setText(String.format(App.getContext().getString(R.string.recipient_keys), connRequest.getLabel()));
+        try {
+            ConnProtocolMessage.ExtractTheirInfoRes theirInfo = connRequest.extractTheirInfo();
+            binding.receipentKeyText.setText(theirInfo.getVerkey());
+            binding.endpointText.setText(theirInfo.getEndpoint());
+            String myEndpoint = SiriusSDK.INSTANCE.getContext().getEndpointAddressWithEmptyRoutingKeys();
+            if (Objects.equals(theirInfo.getEndpoint(), myEndpoint)) {
+                binding.connectButton.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        binding.connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                invitationSheet.dismiss();
+                ScenarioHelper.INSTANCE.acceptScenario(SDKUseCase.Scenario.PersistentInvitation.getName(), connRequest.getId(),
+                        null, null);
+
+            }
+        });
+        binding.moreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.receipentLabel.setVisibility(View.VISIBLE);
+                binding.receipentKeyText.setVisibility(View.VISIBLE);
+                //    binding?.endpointLabel?.visibility = View.VISIBLE
+                //    binding?.endpointText?.visibility = View.VISIBLE
+                binding.moreBtn.setVisibility(View.GONE);
+            }
+        });
+
+        invitationSheet.setContentView(view);
+        invitationSheet.show();
+        invitationSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                model.getInvitationSheetDismissLiveData().postValue(true);
+            }
+        });
+    }
+
     public void showErrorSheet(String text) {
         BottomSheetDialog invitationSheet = new BottomSheetDialog(this);
+        currentBottomSheet = invitationSheet;
         View view = getLayoutInflater().inflate(R.layout.view_error_bootom_sheet, null, false);
         ViewErrorBootomSheetBinding binding = DataBindingUtil.bind(view);
         binding.errorText.setText(text);
@@ -553,7 +536,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
         invitationSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-             //   mScannerView ?.resumeCameraPreview(this);
+                model.getInvitationSheetDismissLiveData().postValue(true);
             }
         });
 
@@ -561,16 +544,24 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
 
     public void showInvitationSheet(Invitation invitation) {
         InvitationBottomSheet invitationSheet = new InvitationBottomSheet(this);
+        currentBottomSheet = invitationSheet;
         View view = getLayoutInflater().inflate(R.layout.view_invitation_bootom_sheet, null, false);
         ViewInvitationBootomSheetBinding binding = DataBindingUtil.bind(view);
         binding.labelText.setText(invitation.label());
         binding.receipentLabel.setText(String.format(App.getContext().getString(R.string.recipient_keys), invitation.label()));
+        if(invitation.recipientKeys().size()>0){
+            binding.receipentKeyText.setText(invitation.recipientKeys().get(0));
+        }
+
         if (Objects.equals(invitation.endpoint(), model.getMyEndpoint())) {
             binding.connectButton.setVisibility(View.GONE);
         }
+
+
         binding.connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                invitationSheet.dismiss();
                 model.connectToInvitation(invitation);
             }
         });
@@ -588,12 +579,14 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
         );
         invitationSheet.setContentView(view);
         invitationSheet.show();
+
         invitationSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-             //   mScannerView ?.resumeCameraPreview(this);
+                model.getInvitationSheetDismissLiveData().postValue(true);
             }
         });
+
     }
 
 

@@ -54,10 +54,13 @@ class InviteUserFragment : BaseFragment<FragmentInviteUserBinding, InviteUserVie
             updateQrCode(it)
         })
         model.shareButtonAction.observe(this, Observer {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, it)
-            startActivity(Intent.createChooser(intent, getString(R.string.send_share_via)))
+            if(it!=null){
+                model.shareButtonAction.value = null
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_TEXT, it)
+                startActivity(Intent.createChooser(intent, getString(R.string.send_share_via)))
+            }
         })
 
   /*      model.repositoryCreatedLiveData.observe(this, Observer {

@@ -87,6 +87,13 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
                 baseActivity.model.showErrorBottomSheetLiveData.postValue(it)
             }
         })
+
+        baseActivity.model.invitationSheetDismissLiveData.observe(this, Observer {
+            if(it){
+                baseActivity.model.invitationSheetDismissLiveData.value = false
+                mScannerView ?.resumeCameraPreview(this);
+            }
+        })
      /*   model.goToNewSecretChatLiveData.observe(this, Observer {
             *//*  it?.let {
                   Log.d("mylog2080", "goToNewSecretChatLiveData=" + it);

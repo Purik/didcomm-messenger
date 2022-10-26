@@ -220,6 +220,7 @@
     <string name="more_detail">Details</string>
     <string name="recipient_endpoint">Recipient public endpoint</string>
     <string name="connect">Connect</string>
+    <string name="open_chat_with">Open chat</string>
 
 
     <string name="create_pin_additional">Do you want to create a PIN code for an alternative login?</string>
@@ -247,6 +248,9 @@
 
     <string name="invitation_later_error">Connection is too long. We have sent a connection request, you will be notified when the connection is ready.</string>
 
+
+    <string name="created_connection_title">Connection with %s created</string>
+    <string name="created_connection_hint">You can go to chat now or open it later from chat list</string>
 
     <string name="create_group_btn">Create</string>
     <string name="create_group_title">Create group</string>

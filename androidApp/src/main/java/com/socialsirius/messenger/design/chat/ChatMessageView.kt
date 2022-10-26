@@ -16,6 +16,7 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.ui.chats.chat.item.ChatMessageItem
+import com.socialsirius.messenger.ui.chats.chat.message.BaseItemMessage
 import com.socialsirius.messenger.ui.chats.chat.message.TextItemMessage
 
 
@@ -189,7 +190,7 @@ class ChatMessageView @JvmOverloads constructor(
         avatarImageView.updateStatus(isOnline)
     }
 
-   fun setMessage(message: String?, parent: TextItemMessage) {
+   fun setMessage(message: String?, parent: BaseItemMessage) {
     //   if (parent.messageType == ContentType.text || parent.messageType == ContentType.services || parent.messageType == ContentType.answer) {
             messageTextView.text = message
             messageTextView.setLinkTextColor(ContextCompat.getColor(this.context,

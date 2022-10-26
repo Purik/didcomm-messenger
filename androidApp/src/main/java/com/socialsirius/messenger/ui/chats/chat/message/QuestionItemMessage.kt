@@ -94,10 +94,10 @@ class QuestionItemMessage : BaseItemMessage {
     }
 
     override fun getText(): String {
-        return "offer sample"
+        return name ?: ""
     }
 
     override fun getTitle(): String {
-        return name ?: ""
+        return hint ?: "Question"
     }
 }

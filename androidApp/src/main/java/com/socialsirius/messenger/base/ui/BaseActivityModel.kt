@@ -27,6 +27,7 @@ abstract class BaseActivityModel(val messageRepository: MessageRepository) : Bas
     val invitationStartLiveData = messageRepository.invitationStartLiveData
     val invitationStartInviteeLiveData = messageRepository.invitationStarInviteeLiveData
     val invitationSuccessLiveData = messageRepository.invitationSuccessLiveData
+    val invitationSheetDismissLiveData = MutableLiveData<Boolean>(false)
     val bottomNavClick: MutableLiveData<BottomNavView.BottomTab> =
         MutableLiveData(BottomNavView.BottomTab.Menu)
     var selectedTab = MutableLiveData(BottomNavView.BottomTab.Menu)

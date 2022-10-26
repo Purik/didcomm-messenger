@@ -50,6 +50,21 @@ class SecretInviteViewHolder(itemView: View) : BaseMessagesViewHolder<ConnectIte
 
 }
 
+class QuestionViewHolder(itemView: View) : BaseMessagesViewHolder<QuestionItemMessage>(itemView),
+    LayoutContainer {
+
+    override fun bind(item: QuestionItemMessage, position: Int) {
+        itemView.chatMessageView.isMine = item.isMine
+        itemView.chatMessageView.setMessage(item.getText() + " " + item.getTitle() + " " + item.answerList, item)
+        val isShowCorner = true
+        itemView.chatMessageView.showCorner = isShowCorner
+        itemView.chatMessageView.setStatus(item.status ?: ChatMessageStatus.defaultSended)
+        // itemView.chatMessageView.updateOwnerAndCorners()
+        itemView.chatMessageView.setDateTime(DateUtils.parseDateToHhmmString(item.date))
+
+    }
+
+}
 
 class MessagesViewHolder(itemView: View) : BaseMessagesViewHolder<TextItemMessage>(itemView),
     LayoutContainer {

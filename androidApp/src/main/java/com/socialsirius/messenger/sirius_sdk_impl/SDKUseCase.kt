@@ -132,10 +132,14 @@ class SDKUseCase @Inject constructor(
         fun initEnd()
     }
 
-    //  private static OkHttpClient ApiOkHttpClient;
-    private fun provideOkHttpClient(
+ //    private static OkHttpClient ApiOkHttpClient;
+   var okHttPclient : OkHttpClient?= null
+     fun provideOkHttpClient(
         timeOut: Int = 30,
     ): OkHttpClient {
+        if(okHttPclient!=null){
+            return okHttPclient!!
+        }
         /*if (ApiOkHttpClient != null) {
             return ApiOkHttpClient;
         }*/
@@ -183,7 +187,8 @@ class SDKUseCase @Inject constructor(
             e.printStackTrace()
         }
         //ApiOkHttpClient = okHttpClient.build();
-        return okHttpClient.build()
+         okHttPclient = okHttpClient.build()
+        return okHttPclient!!
     }
 
     suspend fun sendToImpl(endpoint: String?, data: ByteArray?): Boolean {
