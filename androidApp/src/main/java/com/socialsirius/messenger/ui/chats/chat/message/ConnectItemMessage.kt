@@ -2,6 +2,7 @@ package com.socialsirius.messenger.ui.chats.chat.message
 
 
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnResponse
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
 import com.sirius.library.agent.listener.Event
 import com.sirius.library.mobile.helpers.ScenarioHelper

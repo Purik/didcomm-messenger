@@ -85,9 +85,9 @@ class MessageRepository @Inject constructor() : BaseRepository<LocalMessage, Str
     }
 
 
-    fun getAllUnacceptedMessages(): LiveData<List<LocalMessage>> {
+    fun getUnacceptedInvitationMessages(): LiveData<List<LocalMessage>> {
         val livedata = MutableLiveData<List<LocalMessage>>()
-        livedata.postValue(getDatabase().getMainActionsMessages())
+        livedata.postValue(getDatabase().getUnacceptedInvitationsMessages())
         return livedata
         /*   val map = HashMap<String, Boolean>()
            map["isAccepted"] = false

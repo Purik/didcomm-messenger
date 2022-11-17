@@ -25,6 +25,9 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
         holder.bind(item,position)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return if (getItem(position).id == "invitation") 1 else 0
+    }
 
     fun updateItem(item: Chats) {
     /*    for (i in 0 until items.size) {
@@ -97,11 +100,14 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
         }
     }*/
 
+
+
     inner class ChatsViewHolder(itemView: View) : SimpleViewHolder<ItemChatBinding,Chats>(itemView) {
 
 
 
         override fun bind(chat: Chats, position: Int) {
+            val itemType = getItemViewType(position)
             binding?.avatarImageView?.setOnClickListener {
                 onCustomBtnClick?.onBtnClick(100,chat,position)
             }
@@ -115,6 +121,7 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
 
             binding?.typingImageView?.visibility = View.GONE
             binding?.mutedImageView?.visibility = if (chat.isInSilentMode) View.VISIBLE else View.GONE
+
             binding?.avatarImageView?.update(chat)
             val local = LocalMessageTransform.toBaseItemMessage(chat.lastMessage)
             binding?.senderMessageTextView?.text = local.getText()
@@ -125,6 +132,15 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
             }else{
                 binding?.sentStatusImageView?.visibility = View.GONE
             }
+            if (itemType==1){
+                binding?.avatarImageView?.visibility = View.GONE
+                binding?.senderMessageTextView?.text = "Uncompleted invitations or requests is here"
+                        //  binding?.senderMessageTextView?.visibility = View.GONE
+                    binding?.timeTextView?.visibility = View.GONE
+                binding?.typingImageView?.visibility = View.GONE
+                binding?.senderTextView?.visibility = View.GONE
+            }
+
             when (chat.lastMessage?.status) {
                 ChatMessageStatus.sent -> {
                     binding?.sentStatusImageView?.setImageDrawable(ContextCompat.getDrawable(itemView.context, R.color.transparent))

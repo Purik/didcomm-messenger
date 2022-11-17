@@ -556,4 +556,9 @@ class SDKUseCase @Inject constructor(
     fun changeLabel() {
         SiriusSDK.label = userRepository.myUser.name
     }
+
+    fun chahgeLabel(){
+
+
+    }
 }

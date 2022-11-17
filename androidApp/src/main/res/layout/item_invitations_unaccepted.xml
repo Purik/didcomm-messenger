@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.socialsirius.messenger.models.ui.ItemTutorial" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="@dimen/common_gap_16"
+            android:layout_marginLeft="@dimen/common_gap_16">
+            <TextView
+                android:id="@+id/nameTextView"
+                style="@style/Headline6"
+                android:layout_width="match_parent"
+                android:padding="16dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                tools:text="Jessica jhgjsdfsdfdsfdsfsdfsdf"
+
+               />
+
+
+
+            <TextView
+                android:id="@+id/statusTextView"
+                style="@style/Headline6"
+                android:layout_width="wrap_content"
+                android:padding="16dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                tools:text="80%"
+
+                android:lines="1"/>
+
+
+        </LinearLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/divider"
+            android:background="@color/lightDividerColor"
+            />
+    </LinearLayout>
+
+</layout>

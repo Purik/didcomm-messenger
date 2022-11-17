@@ -1,19 +1,25 @@
 package  com.socialsirius.messenger.ui.chats.allChats
 
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.base.ui.OnAdapterItemClick
+import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentAllChatsBinding
+import com.socialsirius.messenger.databinding.ViewContactInfoBinding
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.ui.activities.scan.ScanActivity
+import com.socialsirius.messenger.ui.chats.invitations.InvitationsListFragment
 import com.socialsirius.messenger.ui.inviteUser.InviteUserFragment
 import com.socialsirius.messenger.ui.scan.MenuScanQrFragment
 import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
@@ -46,9 +52,41 @@ class AllChatsFragment : BaseFragment<FragmentAllChatsBinding, AllChatsViewModel
                 model.onSelectChat(item)
             }
         }
+        adapter!!.onCustomBtnClick = object : OnCustomBtnClick<Chats>{
+            override fun onBtnClick(btnId: Int, item: Chats?, position: Int) {
+                if(btnId == 100) {
+                    item?.let {      showContactAlert(item)
+                    }
+
+                }
+            }
+
+            override fun onLongBtnClick(btnId: Int, item: Chats?, position: Int) {
+
+            }
+
+
+        }
         dataBinding.chatsRecyclerView.adapter = adapter
     }
 
+    fun showContactAlert(chat : Chats){
+       val builder =  AlertDialog.Builder(requireContext())
+        val view = layoutInflater.inflate(R.layout.view_contact_info,null, false)
+       val binding =  DataBindingUtil.bind<ViewContactInfoBinding>(view)
+        binding?.let {
+            it.avatarImageView.update(chat)
+            it.nameTextView.text = chat.title
+            it.didTextView.text = chat.id
+           val pairwise =  PairwiseHelper.getPairwise(theirDid = chat.id)
+
+            it.verkeyTextView.text =   pairwise?.their?.verkey
+            it.metaTextView.text  =  pairwise?.their?.endpointAddress
+        }
+
+        builder.setView(view)
+        builder.show()
+    }
     override fun subscribe() {
         model.emptyStateLiveData.observe(this, Observer {
            dataBinding.emptyStateView.visibility = if (it) View.VISIBLE else View.GONE
@@ -75,7 +113,14 @@ class AllChatsFragment : BaseFragment<FragmentAllChatsBinding, AllChatsViewModel
         model.chatsSelectLiveData.observe(this, Observer { chat ->
             if (   chat!=null ){
                 model.chatsSelectLiveData.value = null
-                MessageActivity.newInstance(requireContext(),chat)
+                if (chat.id  == "invitation"){
+                   val invitations =   InvitationsListFragment()
+                   baseActivity.pushPage(invitations)
+
+                }else{
+                    MessageActivity.newInstance(requireContext(),chat)
+                }
+
             }
 
         })

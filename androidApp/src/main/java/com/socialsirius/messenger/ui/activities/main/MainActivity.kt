@@ -133,24 +133,24 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
                 R.id.nav_create_group -> {
                     GroupCreateActivity.newInstance(this)
                 }
-                R.id.nav_contacts -> {
+             /*   R.id.nav_contacts -> {
 
-                }
-                R.id.nav_calls -> {
+                }*/
+               /* R.id.nav_calls -> {
 
-                }
-                R.id.nav_favorites -> {
+                }*/
+              /*  R.id.nav_favorites -> {
 
-                }
+                }*/
                 R.id.nav_settings -> {
                     SettingsActivity.newInstance(this)
                 }
                 R.id.nav_invite -> {
                     InviteActivity.newInstance(this)
                 }
-                R.id.nav_about -> {
+               /* R.id.nav_about -> {
 
-                }
+                }*/
                 R.id.nav_credentials -> {
                     CredentialsActivity.newInstance(this)
                 }

@@ -14,6 +14,7 @@ import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.models.LocalMessage
 
 import com.sirius.library.agent.aries_rfc.feature_0036_issue_credential.messages.ProposeCredentialMessage
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnResponse
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.ui.chats.chat.message.*
 
@@ -38,7 +39,7 @@ class LocalMessageTransform {
                 id = localMessage.pairwiseDid
                 title = pairwise.their.label ?:""
             }
-            val contact = Chats(id ?: "", title, Date())
+            val contact = Chats(id ?: "", title)
             return contact
         }
 
@@ -55,6 +56,10 @@ class LocalMessageTransform {
                  val message = ConnectItemMessage(localMessage)
                  return message
              }
+            if(message is ConnResponse){
+                val message = ConnectItemMessage(localMessage)
+                return message
+            }
             if (message is OfferCredentialMessage) {
                 return OfferItemMessage(localMessage)
             }

@@ -84,6 +84,7 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
         model.showErrorBottomSheetLiveData.observe(this, Observer {
             if(it!=null){
                 model.showErrorBottomSheetLiveData.value = null
+                mScannerView?.stopCameraPreview()
                 baseActivity.model.showErrorBottomSheetLiveData.postValue(it)
             }
         })

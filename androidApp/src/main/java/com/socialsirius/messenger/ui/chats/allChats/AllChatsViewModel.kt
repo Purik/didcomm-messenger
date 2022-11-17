@@ -12,6 +12,7 @@ import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.repository.UserRepository
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.transform.PairwiseTransform
+import com.socialsirius.messenger.utils.extensions.observeOnce
 import com.socialsirius.messenger.utils.extensions.observeUntilDestroy
 
 import javax.inject.Inject
@@ -91,8 +92,8 @@ class AllChatsViewModel @Inject constructor(
     }
 
     fun getChatList() {
-        val list: List<Chats> = createList()
-        updateList(list)
+        createList()
+
     }
 
     fun onSelectChat(chat: Chats) {
@@ -172,16 +173,29 @@ class AllChatsViewModel @Inject constructor(
         scanQrLiveData.postValue(true)
     }
 
-    private fun createList(): List<Chats> {
+    private fun createList() {
         val pairwises = PairwiseHelper.getAllPairwise()
+
         val list = pairwises.map {
            val lastMess =  messageRepository.getLastMessagesForPairwiseDid2(it.their.did?:"")
            val unreadCount =  messageRepository.getUnreadcountForDid(it.their.did?:"")
             val chats = PairwiseTransform.pairwiseToItemContacts(it,lastMess)
             chats.unreadMessageNotInDB = unreadCount
             return@map chats
-        }.filter { it.title != "Mediator" }
-        return list
+        }.filter { it.title != "Mediator" }.sortedByDescending {  it.lastMessage?.sentTime }.toMutableList()
+
+         messageRepository.getUnacceptedInvitationMessages().observeOnce(this){listMessage->
+             if(listMessage.isNotEmpty()){
+                 val invitationChat = Chats()
+                 invitationChat.title = "Invitations"
+                 invitationChat.id = "invitation"
+                 invitationChat.unreadMessageNotInDB = listMessage.count()
+                 list.add(0,invitationChat)
+                 updateList(list)
+             }
+        }
+        updateList(list)
+
     }
 
 }

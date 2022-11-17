@@ -338,7 +338,7 @@ class ChatViewModel @Inject constructor(
     val messageActionLiveData = MutableLiveData<List<MessageActionItem>>()
 
     private fun onResendMessage(message: TextItemMessage) {
-        //    messagesRepository.resendMessage(message.id, getCurrentChat()?.id ?: "")
+        sendMessageText(message.getText())
     }
 
     private fun onDeleteMessage(message: TextItemMessage) {
@@ -413,13 +413,22 @@ class ChatViewModel @Inject constructor(
     fun onMessageShortClick(message: IChatItem?) {
         if (message is TextItemMessage) {
             if (message.isMine) {
-                messageActionLiveData.value = listOf(
-                    MessageActionItem(
-                        MessageActionItemType.DELETE,
-                        message,
-                        this::onDeleteMessage
-                    )
+                var list  : MutableList<MessageActionItem> = mutableListOf()
+                val  deleteItem = MessageActionItem(
+                MessageActionItemType.DELETE,
+                message,
+                this::onDeleteMessage
                 )
+                val  resendItem = MessageActionItem(
+                    MessageActionItemType.RESEND,
+                    message,
+                    this::onResendMessage
+                )
+                list.add(deleteItem)
+                if (message.status == ChatMessageStatus.error){
+                    list.add(resendItem)
+                }
+                messageActionLiveData.value = list
             }
         }
     }

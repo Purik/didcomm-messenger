@@ -27,6 +27,7 @@ import com.socialsirius.messenger.ui.chats.allChats.AllChatsViewModel
 import com.socialsirius.messenger.ui.chats.chat.ChatViewModel
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateFragment
 import com.socialsirius.messenger.ui.chats.groupChatCreate.GroupChatCreateViewModel
+import com.socialsirius.messenger.ui.chats.invitations.InvitationsListViewModel
 import com.socialsirius.messenger.ui.chats.userProfile.UserProfileViewModel
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardViewModel
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionRequestDetailViewModel
@@ -289,6 +290,12 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CredentialsViewModel::class)
     internal abstract fun bindCredentialsViewModel(viewModel: CredentialsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(InvitationsListViewModel::class)
+    internal abstract fun bindInvitationsListViewModel(viewModel: InvitationsListViewModel): ViewModel
+
 
 
 

@@ -11,9 +11,10 @@ class PairwiseTransform {
 
     companion object {
         fun pairwiseToItemContacts(pairwise: Pairwise, lastMessage : LocalMessage?) : Chats {
-          val chats =   Chats(pairwise.their.did?:"",pairwise.their.label?:"", Date())
+          val chats =   Chats(pairwise.their.did?:"",pairwise.their.label?:"")
             chats.lastMessage = lastMessage
            return chats
         }
+
     }
 }

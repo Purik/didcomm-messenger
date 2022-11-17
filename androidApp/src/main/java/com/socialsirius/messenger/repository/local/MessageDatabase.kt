@@ -82,6 +82,17 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
         return listOf()
     }
 
+    fun getUnacceptedInvitationsMessages(): List<LocalMessage> {
+        try {
+            return getQueryeBuilder().where().eq("isAccepted", false).
+            and().eq("isCanceled", false)
+                .and().eq("type", "invitation").query().orEmpty()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return listOf()
+    }
+
     fun updateErrorAccepted(
         id: String,
         isAccepted: Boolean,

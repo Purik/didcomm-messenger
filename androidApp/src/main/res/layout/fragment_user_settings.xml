@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,8 +10,7 @@
             type="com.socialsirius.messenger.ui.userSettings.UserSettingsViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor"
@@ -73,6 +74,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
                 <EditText
                     android:id="@+id/nameEditText"
                     android:layout_width="match_parent"
@@ -81,16 +83,14 @@
                     android:layout_marginTop="@dimen/common_gap_16"
                     android:layout_marginEnd="@dimen/common_gap_8"
                     android:focusable="true"
-                    android:maxLength="20"
                     android:focusedByDefault="true"
-                    android:inputType="textPersonName"
                     android:hint="@string/first_middle_name"
-
+                    android:inputType="textPersonName"
+                    android:maxLength="20"
+                    android:enabled="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/accountTitle"
                     tools:text="Joe" />
-
-
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phoneLayout"
@@ -141,6 +141,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="@dimen/common_gap_16"
+                        android:visibility="gone"
                         android:background="@color/lightDividerColor" />
 
                     <Switch
@@ -152,6 +153,7 @@
                         android:layout_marginTop="@dimen/common_gap_8"
                         android:layout_marginEnd="@dimen/common_gap_16"
                         android:text="@string/user_sync_contacts"
+                        android:visibility="gone"
                         tools:checked="true" />
 
                     <View

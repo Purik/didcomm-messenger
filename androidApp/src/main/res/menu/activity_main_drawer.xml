@@ -8,24 +8,24 @@
             android:id="@+id/nav_create_group"
             android:icon="@drawable/nav_create_group"
             android:title="@string/menu_group" />
-        <item
+    <!--    <item
             android:id="@+id/nav_contacts"
             android:icon="@drawable/nav_contact"
-            android:title="@string/menu_contacts" />
-        <item
+            android:title="@string/menu_contacts" />-->
+     <!--   <item
             android:id="@+id/nav_calls"
             android:icon="@drawable/nav_callse"
-            android:title="@string/menu_calls" />
+            android:title="@string/menu_calls" />-->
         <item
             android:id="@+id/nav_credentials"
             android:icon="@drawable/ic_connection_credentials2"
             android:title="@string/menu_credentials" />
 
 
-        <item
+<!--        <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/nav_favorite"
-            android:title="@string/menu_favorites" />
+            android:title="@string/menu_favorites" />-->
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/nav_settings"
@@ -35,9 +35,9 @@
             android:id="@+id/nav_invite"
             android:icon="@drawable/nav_add_contact"
             android:title="@string/menu_invite" />
-        <item
+      <!--  <item
             android:id="@+id/nav_about"
             android:icon="@drawable/nav_about"
-            android:title="@string/menu_about" />
+            android:title="@string/menu_about" />-->
     </group>
 </menu>

@@ -319,10 +319,14 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
             })*/
 
         model.messageActionLiveData.observe(this, Observer {
-            MessageActionDialogFragment(it).show(
-                parentFragmentManager,
-                MessageActionDialogFragment::class.java.simpleName
-            )
+            if(it.isNotEmpty()){
+                model.messageActionLiveData.value = listOf()
+                MessageActionDialogFragment(it).show(
+                    parentFragmentManager,
+                    MessageActionDialogFragment::class.java.simpleName
+                )
+            }
+
         })
         model.updateMessageLiveData.observe(this, Observer {
             model.updateMessageStatus(it)
