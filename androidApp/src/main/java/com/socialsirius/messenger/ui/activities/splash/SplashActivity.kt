@@ -3,6 +3,7 @@ package com.socialsirius.messenger.ui.activities.splash
 
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatDelegate
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppPref
@@ -45,6 +46,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashActivityModel>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         if (AppPref.getInstance().isLoggedIn()) {
             finishAffinity()
             if (model.isMediatorConnected()) {

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
@@ -80,6 +81,7 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         // MessageActivity.newInstance(this,Chat())
         if (AppPref.getInstance().getPin().isNullOrEmpty() && !AppPref.getInstance()
                 .getUseBiometric()

@@ -21,11 +21,11 @@ class PingScenarioImpl(val sdkUseCase: SDKUseCase) : BaseScenario() {
         return Pair(true, null)
     }
 
-    override fun onScenarioStart(id: String) {
+    override fun onScenarioStart(id: String,event: Event) {
 
     }
 
-    override fun onScenarioEnd(id: String, success: Boolean, error: String?) {
+    override fun onScenarioEnd(id: String,event: Event, success: Boolean, error: String?) {
 
     }
 }

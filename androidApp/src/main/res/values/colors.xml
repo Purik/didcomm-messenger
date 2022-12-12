@@ -49,7 +49,7 @@
     <color name="black">#FF000000</color>
 
     <!-- design colors -->
-    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundColor">#FFFFFA</color>
     <color name="backgroundColorWithAlpha">#BBFFFFFF</color>
     <color name="defaultColor">#000743</color>
     <color name="secondaryColor">#000C7C</color>

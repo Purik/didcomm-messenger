@@ -22,11 +22,11 @@ class PongScenarioImpl(val eventRepository: EventRepository, val messageReposito
 
 
 
-    override fun onScenarioEnd(id: String,success: Boolean, error: String?) {
+    override fun onScenarioEnd(id: String,event: Event,success: Boolean, error: String?) {
         messageRepository.pongMutableLiveData.postValue(Pair(true, error?:""))
     }
 
-    override fun onScenarioStart(id: String) {
+    override fun onScenarioStart(id: String,event: Event) {
 
        /* val localMessage = messageRepository.getItemBy(id)
         val label = localMessage?.restorePairwise()?.their?.label

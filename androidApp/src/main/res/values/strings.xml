@@ -26,7 +26,7 @@
     <string name="tutorial_text_4">We have nothing to hide. All our code is open sourced. You can check yourself or read more about us on Web. If you interested in check our website or source code </string>
 
     <string name="auth_first_title">Introduce yourself</string>
-    <string name="auth_first_title_hint">Please, introduce yourself. This name will be visible to other people in our system</string>
+    <string name="auth_first_title_hint">Please, introduce yourself and choose your nickname. This name will be visible to other people in our system. \n\n This cannot be changed.</string>
 
     <string name="auth_btn_start_chat">Start chat</string>
     <string name="auth_btn_phrase">Continue</string>

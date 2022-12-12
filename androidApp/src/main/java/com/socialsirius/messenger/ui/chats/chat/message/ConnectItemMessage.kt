@@ -1,10 +1,12 @@
 package com.socialsirius.messenger.ui.chats.chat.message
 
 
+import android.util.Log
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnResponse
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
 import com.sirius.library.agent.listener.Event
+import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.sirius.library.mobile.helpers.ScenarioHelper
 import com.sirius.library.mobile.scenario.EventAction
 import com.sirius.library.mobile.scenario.EventActionListener
@@ -23,6 +25,12 @@ class ConnectItemMessage : BaseItemMessage {
         }else if(message is ConnRequest){
             val connRequest =  message as? ConnRequest
             name = connRequest?.label ?:""
+
+        }else if(message is ConnResponse){
+            val pairwise3 = localMessage.restorePairwise()
+            pairwise3?.let {
+                name = pairwise3.their.label ?:""
+            }
         }
 
     }

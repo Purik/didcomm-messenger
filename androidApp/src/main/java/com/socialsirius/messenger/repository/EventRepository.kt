@@ -9,6 +9,7 @@ import com.sirius.library.agent.aries_rfc.feature_0037_present_proof.messages.Re
 import com.sirius.library.agent.aries_rfc.feature_0113_question_answer.messages.QuestionMessage
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
+import com.sirius.library.agent.listener.Event
 import com.sirius.library.messaging.Message
 import com.sirius.library.mobile.scenario.EventStorageAbstract
 
@@ -65,6 +66,13 @@ class EventRepository @Inject constructor(val messageRepository: MessageReposito
 
     override fun eventRemove(id: String) {
         //   messageRepository.r
+    }
+
+    fun eventToEvent(event:Event): Pair<String, Message>?{
+        event.message()?.let {
+            return Pair(event.pairwise?.their?.did ?: "", it)
+        }
+        return null
     }
 
     override fun getEvent(id: String): Pair<String, Message>? {

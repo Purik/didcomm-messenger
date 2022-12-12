@@ -19,12 +19,12 @@ class AckScenarioImpl(val eventRepository: EventRepository, val messageRepositor
 
 
 
-    override fun onScenarioEnd(id: String,success: Boolean, error: String?) {
+    override fun onScenarioEnd(id: String,event: Event,success: Boolean, error: String?) {
 
 
     }
 
-    override fun onScenarioStart(id: String) {
+    override fun onScenarioStart(id: String,event: Event) {
 
        /* val localMessage = messageRepository.getItemBy(id)
         val label = localMessage?.restorePairwise()?.their?.label
