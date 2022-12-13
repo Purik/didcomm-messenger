@@ -128,7 +128,7 @@ class OfferItemMessage : BaseItemMessage {
                     isError = !success
                     isAccepted = success
                     errorString = error
-                    commentString = error
+                    commentString = comment
                     stopLoading(id)
                 }
 
@@ -153,7 +153,7 @@ class OfferItemMessage : BaseItemMessage {
                     isError = !success
                     isAccepted = success
                     errorString = error
-                    commentString = error
+                    commentString = null
                     stopLoading(id)
                 }
 

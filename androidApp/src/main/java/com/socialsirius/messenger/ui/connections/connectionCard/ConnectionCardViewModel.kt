@@ -111,12 +111,14 @@ class ConnectionCardViewModel @Inject constructor() : BaseViewModel() {
         var action1Text: String? = null
         var action2Text: String? = "Details"
         var action3Text: String? = null
-        val dateTime = DateUtils.parseDateToHhmmString(item.date)
+        val dateTime = DateUtils.getStringFromDate(item.date,DateUtils.PATTERN_DATETIME_DOT,false)
         val status = item.getStatusString()
-        connectionDateLiveData.postValue("$status:$dateTime")
         if (item.isAccepted) {
+            connectionDateLiveData.postValue("$status at $dateTime")
         } else if (item.isError) {
+            connectionDateLiveData.postValue("$status at $dateTime")
         } else {
+            connectionDateLiveData.postValue(status)
             action1Text = "Accept"
             action3Text = "Cancel"
         }

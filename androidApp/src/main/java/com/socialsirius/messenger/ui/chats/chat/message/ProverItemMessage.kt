@@ -176,7 +176,7 @@ class ProverItemMessage : BaseItemMessage {
                 isError = !success
                 isAccepted = success
                 errorString = error
-                commentString = error
+                commentString = comment
                 stopLoading(id)
             }
 
@@ -200,7 +200,7 @@ class ProverItemMessage : BaseItemMessage {
                     isError = !success
                     isAccepted = success
                     errorString = error
-                    commentString = error
+                    commentString = comment
                     stopLoading(id)
                 }
             })

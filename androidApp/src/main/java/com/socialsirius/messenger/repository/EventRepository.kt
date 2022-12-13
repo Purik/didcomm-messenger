@@ -18,15 +18,40 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
+enum class EventFields{
+    isCanceled,
+    isAccepted,
+    canceledCause,
+    acceptedComment
+}
+
+
 @Singleton
 class EventRepository @Inject constructor(val messageRepository: MessageRepository) :
     EventStorageAbstract {
 
 
-    override fun eventStore(id: String, event: Pair<String?, Message?>?, accepted: Boolean) {
+    companion object {
+        fun createParams(isCanceled: Boolean? = null, canceledCause : String? = null,
+                         isAccepted: Boolean? = null,acceptedComment : String? = null) : Map<String,Any?>{
+            val map = mutableMapOf<String,Any?>()
+            isCanceled?.let { map.put(EventFields.isCanceled.name,isCanceled) }
+            canceledCause?.let { map.put(EventFields.canceledCause.name,canceledCause) }
+            isAccepted?.let { map.put(EventFields.isAccepted.name,isAccepted) }
+            acceptedComment?.let { map.put(EventFields.acceptedComment.name,acceptedComment) }
+            return map
+
+        }
+    }
+
+    override fun eventStore(
+        id: String,
+        event: Pair<String?, Message?>?,
+        fields: Map<String, Any?>?
+    ) {
         val localMessage = LocalMessage(id, event?.first)
         localMessage.message = event?.second?.serialize()
-        localMessage.isAccepted = accepted
+
         if (event?.second is com.sirius.library.agent.aries_rfc.feature_0095_basic_message.Message) {
             localMessage.type = "text"
         } else if (event?.second is Invitation) {
@@ -60,6 +85,20 @@ class EventRepository @Inject constructor(val messageRepository: MessageReposito
             localMessage.sentTime = Date()
         }
 
+        fields?.let {
+            val isCanceled =  fields.get(EventFields.isCanceled.name) as? Boolean
+            isCanceled?.let {  localMessage.isCanceled = isCanceled }
+
+            val canceledCause =  fields.get(EventFields.canceledCause.name) as? String
+            canceledCause?.let {  localMessage.canceledCause = canceledCause }
+
+            val isAccepted =  fields.get(EventFields.isAccepted.name) as? Boolean
+            isAccepted?.let {    localMessage.isAccepted = isAccepted}
+
+            val acceptedComment =  fields.get(EventFields.acceptedComment.name) as? String
+            acceptedComment?.let {   localMessage.acceptedComment = acceptedComment}
+
+        }
         messageRepository.createOrUpdateItem(localMessage)
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,7 +10,6 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,14 +43,17 @@
                 app:tint="@color/backgroundColor" />
 
             <TextView
-                android:id="@+id/topViewName"
+
                 style="@style/Body2"
                 android:textColor="@color/backgroundColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/list_of_connections" />
+                android:id="@+id/connectionTypeTextView"
+                tools:text="Connection type"
+
+                />
 
         </LinearLayout>
 
@@ -93,29 +96,35 @@
 
                 <TextView
                     style="@style/Headline6"
-                    android:id="@+id/connectionUserTextView"
+                    android:id="@+id/connectionSubheaderTextView"
+                    tools:text="Check status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    tools:text="Connection User"/>
+                   />
 
                 <TextView
                     style="@style/Subtitle1"
                     android:textColor="@color/hintColor"
-                    android:id="@+id/connectionTypeTextView"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    tools:text="Connection name"/>
+
+                    android:id="@+id/connectionUserTextView"
+                    tools:text="Connection User"
+                    />
 
                 <TextView
                     style="@style/Subtitle2"
                     android:layout_marginTop="2dp"
-                    android:id="@+id/connectionSubheaderTextView"
+                    android:id="@+id/topViewName"
+                    android:text="@string/list_of_connections"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    tools:text="Check status"/>
+
+                   />
 
                 <TextView
                     style="@style/Body2"
@@ -144,7 +153,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/common_gap_16"
-                        android:text="DETAILS"/>
+                        android:textAllCaps="true"
+                        android:text="Attributes"/>
 
                     <TextView
                         android:id="@+id/warningTextView"
@@ -170,13 +180,13 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/detailsRecyclerView"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/common_gap_8"
-                        android:orientation="vertical"
-                        tools:itemCount="4"
-                        tools:listitem="@layout/item_details_data"
                         android:nestedScrollingEnabled="false"
+                        android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:layout_height="wrap_content"/>
+                        tools:itemCount="4"
+                        tools:listitem="@layout/item_details_data" />
 
                 </LinearLayout>
 

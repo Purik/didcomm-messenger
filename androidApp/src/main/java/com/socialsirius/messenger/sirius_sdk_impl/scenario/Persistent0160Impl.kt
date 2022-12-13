@@ -90,10 +90,11 @@ class Persistent0160Impl(
                val id =  invitationEvent?.id
                val pairwise =  WalletPairwiseList.restorePairwise(JSONObject(error))
                 invitationEvent?.let {
+                   val params =  EventRepository.createParams(isAccepted = pairwise != null )
                     eventStorage.eventStore(
                         id ?: "",
                         Pair(pairwise?.their?.did, invitationEvent.message()),
-                        pairwise != null
+                        params
                     )
                 }
 
