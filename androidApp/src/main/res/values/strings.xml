@@ -256,4 +256,7 @@
     <string name="create_group_title">Create group</string>
     <string name="create_group_hint">To invite users to group choose users from chats , show QR-code to implicity scan or share via other channel like SMS or messenger</string>
     <string name="create_group_name_placeholder">Enter group name</string>
+
+    <string name="try_again_btn">Try again</string>
+    <string name="try_again_text">Something went wrong.\n Try again by clicking on the button or open the application later</string>
 </resources>

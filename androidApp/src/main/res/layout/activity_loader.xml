@@ -37,9 +37,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:progressTint="@color/yellow"
-                android:progressBackgroundTint="@color/yellow"
+
                 android:layout_gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:id="@+id/tryAgainLayout">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    style="@style/Regular19"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/black"
+                    android:text="@string/try_again_text"
+                    android:id="@+id/tryAgainText"/>
+
+                <TextView
+                    android:id="@+id/tryAgainBtn"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:padding="16dp"
+                    android:layout_margin="32dp"
+                    style="@style/AccentButtonRoundedBigCorners"
+
+                    android:text="@string/try_again_btn"
+                    />
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <FrameLayout

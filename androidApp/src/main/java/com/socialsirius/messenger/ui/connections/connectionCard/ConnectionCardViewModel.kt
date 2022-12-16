@@ -2,9 +2,12 @@ package com.socialsirius.messenger.ui.connections.connectionCard
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.util.Log
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.sirius.library.utils.ExceptionHandler
+import com.sirius.library.utils.ExceptionListener
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 
@@ -16,6 +19,7 @@ import com.socialsirius.messenger.ui.chats.chat.message.ProverItemMessage
 import com.socialsirius.messenger.ui.connections.connectionCard.items.DetailsBaseItem
 import com.socialsirius.messenger.utils.DateUtils
 import kotlinx.android.synthetic.main.item_chat_connection.view.*
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 
@@ -47,8 +51,21 @@ class ConnectionCardViewModel @Inject constructor() : BaseViewModel() {
 
     var item: BaseItemMessage? = null
     var titleUser : String? = null
-    fun onAction1ButtonClick(v: View?) {
+    val exceptionListener : ExceptionListener = object : ExceptionListener {
+        override fun handleException(e: Throwable) {
+            if(e is TimeoutException){
+                onShowAlertDialogLiveData.postValue(Pair("An error has occurred" , "Timed out waiting for a response. Please try another time."))
+            }
+           // Log.d("mylog2090","handleException = ${e}")
+        }
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        ExceptionHandler.removeOneTimeListener(exceptionListener)
+    }
+    fun onAction1ButtonClick(v: View?) {
+        ExceptionHandler.addOneTimeListener(exceptionListener)
         item?.accept()
     }
 
