@@ -19,44 +19,85 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/common_gap_16"
             android:layout_marginRight="@dimen/common_gap_16"
-            android:layout_marginLeft="@dimen/common_gap_16">
-            <TextView
-                android:id="@+id/nameTextView"
-                style="@style/Headline6"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:padding="16dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                tools:text="Jessica jhgjsdfsdfdsfdsfsdfsdf"
 
-               />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    style="@style/Headline6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Jessica"
+
+                    />
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    style="@style/Body2"
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+
+                    tools:text="16.06.2022 11:44" />
 
 
+                <TextView
+                    android:id="@+id/verkeyTextView"
+                    style="@style/Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:text="jhgjsdfsdfdsfdsfsdfsdf"
 
-            <TextView
-                android:id="@+id/statusTextView"
-                style="@style/Headline6"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:padding="16dp"
-                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                tools:text="80%"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical">
 
-                android:lines="1"/>
+                <ImageView
+                    android:id="@+id/statusImageView"
+                    style="@style/Headline6"
+                    android:layout_width="wrap_content"
+                    app:tint="@color/blue"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:lines="1"
+                    android:visibility="gone"
+                    android:src="@drawable/inbox"
+                   />
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
 
 
+
         <View
+            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:id="@+id/divider"
-            android:background="@color/lightDividerColor"
-            />
+            android:background="@color/lightDividerColor" />
     </LinearLayout>
 
 </layout>

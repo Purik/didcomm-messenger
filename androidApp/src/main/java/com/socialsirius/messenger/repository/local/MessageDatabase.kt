@@ -84,7 +84,7 @@ class MessageDatabase(ctx: Context?) : BaseDatabase<LocalMessage, String>(ctx) {
 
     fun getUnacceptedInvitationsMessages(): List<LocalMessage> {
         try {
-            return getQueryeBuilder().where().eq("isAccepted", false).
+            return getQueryeBuilder().orderBy("sentTime", false).where().eq("isAccepted", false).
             and().eq("isCanceled", false)
                 .and().eq("type", "invitation").query().orEmpty()
         } catch (e: Exception) {

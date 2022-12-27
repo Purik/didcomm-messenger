@@ -4,8 +4,10 @@ import android.app.Application
 import com.socialsirius.messenger.repository.UserRepository
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
+import com.socialsirius.messenger.ui.activities.base.SimpleActivity
 import com.socialsirius.messenger.ui.activities.credentials.CredentialsActivity
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivity
+import com.socialsirius.messenger.ui.activities.invitations.InvitationsActivity
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
@@ -90,6 +92,8 @@ interface AppComponent {
     fun inject(activity: GroupCreateActivity)
     fun inject(activity: HandleWebInviteActivity)
     fun inject(activity: CredentialsActivity)
+    fun inject(activity: SimpleActivity)
+    fun inject(activity: InvitationsActivity)
 
 
     //Fragments

@@ -111,17 +111,13 @@ class MenuScanQrFragment : BaseFragment<FragmentMenuScanQrBinding, MenuScanQrVie
 
 */
 
- /*       model.invitationSuccessLiveData.observe(this, Observer {
+      model.goToNewSecretChatLiveData.observe(this, Observer {
             if (it != null) {
-                model.invitationSuccessLiveData.value = null
-                model.isConnectionInvit = true
-                val item = model.getMessage(it)
-                dialog?.cancel()
+                model.goToNewSecretChatLiveData.value = null
                 baseActivity.finish()
-                MessageActivity.newInstance(requireContext(), item)
-                //   popPage(ChatsFragment.newInstance(item))
+                MessageActivity.newInstance(requireContext(), it)
             }
-        })*/
+        })
 
      /*   model.invitationPolicemanSuccessLiveData.observe(this, Observer {
             if (it != null) {

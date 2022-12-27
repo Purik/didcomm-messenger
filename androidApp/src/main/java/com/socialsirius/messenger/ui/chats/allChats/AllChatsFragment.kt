@@ -16,6 +16,7 @@ import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentAllChatsBinding
 import com.socialsirius.messenger.databinding.ViewContactInfoBinding
 import com.socialsirius.messenger.models.Chats
+import com.socialsirius.messenger.ui.activities.invitations.InvitationsActivity
 import com.socialsirius.messenger.ui.activities.invite.InviteActivity
 import com.socialsirius.messenger.ui.activities.message.MessageActivity
 import com.socialsirius.messenger.ui.activities.scan.ScanActivity
@@ -114,9 +115,8 @@ class AllChatsFragment : BaseFragment<FragmentAllChatsBinding, AllChatsViewModel
             if (   chat!=null ){
                 model.chatsSelectLiveData.value = null
                 if (chat.id  == "invitation"){
-                   val invitations =   InvitationsListFragment()
-                   baseActivity.pushPage(invitations)
 
+                    InvitationsActivity.newInstance(baseActivity)
                 }else{
                     MessageActivity.newInstance(requireContext(),chat)
                 }

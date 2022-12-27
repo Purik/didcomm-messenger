@@ -7,6 +7,7 @@ import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.base.ui.BaseViewModel
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.transform.PairwiseTransform
 import com.socialsirius.messenger.utils.extensions.observeOnce
 import javax.inject.Inject
@@ -17,7 +18,7 @@ class InvitationsListViewModel @Inject constructor(val messageRepository: Messag
     // val chatsLiveData = chatsRepository.result
     val chatsListLiveData = MutableLiveData<List<Chats>>(listOf())
     var originalList : List<Chats> = listOf()
-    val chatsSelectLiveData = MutableLiveData<Chats>()
+    val chatsSelectLiveData = MutableLiveData<Chats?>()
 
 
     override fun onCreateview() {
@@ -49,8 +50,8 @@ class InvitationsListViewModel @Inject constructor(val messageRepository: Messag
                 }
 
                 val chats =   Chats(it.pairwiseDid ?:"",label)
+                chats.lastMessage = it
                 return@map chats
-                //chats.lastMessage = lastMessage
             }
             updateList(list)
 

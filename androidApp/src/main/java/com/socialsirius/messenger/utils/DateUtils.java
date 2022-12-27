@@ -227,6 +227,18 @@ public class DateUtils {
 
     }
 
+    public static String parseDateToDdMMyyyyHHMMString(Date date) {
+        String formatedDate = "";
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(PATTERN_ddMMyyyyHHmm);
+
+        formatedDate = dateFormat.format(date);
+
+
+        return formatedDate;
+
+    }
+
     public static Calendar parseDateFromHHmm(String time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(0);

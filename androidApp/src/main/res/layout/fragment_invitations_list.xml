@@ -12,6 +12,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/topView"
+        style="@style/TopBarStyle"
+        android:layout_width="match_parent"
+        android:background="@color/backgroundColor"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            style="@style/BackButton"
+            android:layout_width="@dimen/common_button_size"
+            android:layout_height="@dimen/common_button_size"
+            android:onClick="@{viewModel::onBackButtonClick}"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_button_size"
+            android:layout_marginStart="@dimen/common_gap_8"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/topBarView"
+                style="@style/Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:text="Connection request" />
+
+            <TextView
+                android:id="@+id/detailsBarView"
+                style="@style/Caption"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/defaultColor"
+                tools:text="5 members" />
+
+        </LinearLayout>
+
+<!--        <ImageButton
+            android:id="@+id/moreButton"
+            style="@style/BackButton"
+            android:layout_width="@dimen/common_button_size"
+            android:layout_height="@dimen/common_button_size"
+            android:onClick="@{viewModel::onMoreButtonClick}"
+            android:src="@drawable/ic_more"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />-->
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivityModel
+import com.socialsirius.messenger.ui.activities.base.SimpleActivityModel
 import com.socialsirius.messenger.ui.activities.credentials.CredentialsActivityModel
 import com.socialsirius.messenger.ui.activities.groupCreate.GroupCreateActivityModel
+import com.socialsirius.messenger.ui.activities.invitations.InvitationsActivityModel
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivityModel
 import com.socialsirius.messenger.ui.activities.invite.InviteActivityModel
@@ -107,6 +109,15 @@ abstract class ViewModelModule {
     @ViewModelKey(MessageActivityModel::class)
     internal abstract fun bindMessageActivityModel(viewModel: MessageActivityModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(SimpleActivityModel::class)
+    internal abstract fun bindSimpleActivityModel(viewModel: SimpleActivityModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(InvitationsActivityModel::class)
+    internal abstract fun bindInvitationsActivityModel(viewModel: InvitationsActivityModel): ViewModel
 
 
 
