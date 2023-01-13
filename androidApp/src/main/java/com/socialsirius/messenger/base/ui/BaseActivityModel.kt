@@ -11,13 +11,14 @@ import com.sirius.library.mobile.helpers.ChanelHelper
 import com.sirius.library.mobile.helpers.ScenarioHelper
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
-import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.design.BottomNavView
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.repository.models.LocalMessage
 import com.socialsirius.messenger.service.SiriusWebSocketListener
 import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 import com.socialsirius.messenger.transform.LocalMessageTransform
+import com.socialsirius.messenger.ui.chats.chat.message.BaseItemMessage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -45,10 +46,16 @@ abstract class BaseActivityModel(val messageRepository: MessageRepository) : Bas
         SiriusWebSocketListener.isForeground = true
     }
 
-    fun getMessage(id: String): Chats {
+    fun getChats(id: String): Chats {
         val localMessage = messageRepository.getItemBy(id)
         return LocalMessageTransform.toItemContacts(localMessage)
     }
+
+    fun getMessage(id: String): LocalMessage? {
+        val localMessage = messageRepository.getItemBy(id)
+        return localMessage
+    }
+
 
     fun connect(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->

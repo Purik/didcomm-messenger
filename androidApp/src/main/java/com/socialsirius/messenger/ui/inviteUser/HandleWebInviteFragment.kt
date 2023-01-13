@@ -16,6 +16,8 @@ import com.socialsirius.messenger.databinding.ViewErrorBootomSheetBinding
 import com.socialsirius.messenger.databinding.ViewInvitationBootomSheetBinding
 import com.socialsirius.messenger.design.InvitationBottomSheet
 import com.socialsirius.messenger.ui.activities.main.MainActivity
+import com.socialsirius.messenger.ui.activities.message.MessageActivity
+import kotlinx.android.synthetic.main.fragment_menu_scan_qr.*
 
 
 class HandleWebInviteFragment :
@@ -103,6 +105,23 @@ class HandleWebInviteFragment :
                 baseActivity.model.showErrorBottomSheetLiveData.postValue(it)
                // model.setError(it)
               //  showErrorSheet(it ?: "")
+            }
+        })
+
+        model.goToNewSecretChatLiveData.observe(this, Observer {
+            if (it != null) {
+                model.goToNewSecretChatLiveData.value = null
+                baseActivity.finish()
+                MessageActivity.newInstance(requireContext(), it)
+            }
+        })
+
+        baseActivity.model.invitationSheetDismissLiveData.observe(this, Observer {
+            if(it){
+                baseActivity.model.invitationSheetDismissLiveData.value = false
+                if(!baseActivity.model.isConnecting){
+                    baseActivity.finish()
+                }
             }
         })
     }

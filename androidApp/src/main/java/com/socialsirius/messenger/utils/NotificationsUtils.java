@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import static android.media.AudioManager.STREAM_NOTIFICATION;
 
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest;
 import com.socialsirius.messenger.R;
 import com.socialsirius.messenger.base.App;
 import com.socialsirius.messenger.models.Chats;
@@ -284,7 +285,9 @@ public class NotificationsUtils {
         }
     }
 
-    public static void callNewConnectionNotify(String title, String jidFrom) {
+    public static void callNewConnectionNotify(ConnRequest connRequest ) {
+        String title = connRequest.getLabel();
+        String jidFrom = connRequest.theirDid();
         int hash = jidFrom.hashCode();
         NotificationManager notificationManager = (NotificationManager) App.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         long time = System.currentTimeMillis();
@@ -301,7 +304,7 @@ public class NotificationsUtils {
         Intent notificationIntent = new Intent(App.getContext(), MainActivity.class);
         notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+        notificationIntent.putExtra("invitation",connRequest.getId());
 
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(App.getContext(), hash, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
         builder.setContentIntent(notificationPendingIntent);

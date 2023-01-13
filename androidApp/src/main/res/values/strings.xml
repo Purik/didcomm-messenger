@@ -175,7 +175,8 @@
     <string name="menu_fragment_messages_chat_del_from_favorite">Remove from favorites</string>
     <string name="menu_fragment_messages_chat_profile">Profile</string>
     <string name="menu_fragment_messages_chat_add_users">Add people</string>
-    <string name="menu_fragment_messages_chat_clear">Clear chat</string>
+    <string name="menu_fragment_messages_chat_clear">Clear history</string>
+    <string name="menu_fragment_messages_contact_info">Contact info</string>
     <string name="menu_fragment_messages_create_secret_chat">Invite to secret chat</string>
 
     <string name="menu_fragment_messages_group_users">Group participant</string>

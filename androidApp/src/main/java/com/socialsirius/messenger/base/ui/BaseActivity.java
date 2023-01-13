@@ -27,7 +27,6 @@ import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messa
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest;
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation;
 import com.sirius.library.mobile.SiriusSDK;
-import com.sirius.library.mobile.helpers.PairwiseHelper;
 import com.sirius.library.mobile.helpers.ScenarioHelper;
 import com.socialsirius.messenger.R;
 import com.socialsirius.messenger.base.App;
@@ -316,7 +315,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
                     }
 
                     if(model.isConnecting()){
-                        Chats item = model.getMessage(s);
+                        Chats item = model.getChats(s);
                         if(BaseActivity.this instanceof MainActivity){
                             MessageActivity.Companion.newInstance( BaseActivity.this, item);
                         }else{
@@ -442,7 +441,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
     }
 
     public void showConnectedSheet(String id) {
-        Chats chats = model.getMessage(id);
+        Chats chats = model.getChats(id);
         InvitationBottomSheet invitationSheet = new InvitationBottomSheet(this);
         View view = LayoutInflater.from(this).inflate(R.layout.view_invitation_bootom_sheet, null, false);
         ViewInvitationBootomSheetBinding binding = DataBindingUtil.bind(view);

@@ -53,7 +53,7 @@ class Persistent0160Impl(
             if (SiriusWebSocketListener.isForeground) {
                 messageRepository.invitationStartLiveData.postValue(connRequest)
             } else {
-                NotificationsUtils.callNewConnectionNotify(connRequest.label,connRequest.theirDid())
+                NotificationsUtils.callNewConnectionNotify(connRequest)
             }
             //     val message = messageRepository.getItemBy(id)
             /*  ScenarioHelper.getInstance().acceptScenario("Invitee", message?.getId() as? String ?: "", "", object :

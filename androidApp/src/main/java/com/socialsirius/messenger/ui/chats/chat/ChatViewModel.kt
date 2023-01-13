@@ -56,7 +56,7 @@ class ChatViewModel @Inject constructor(
     //  val messageUseCase: MessagesUseCase,
     //   val downloadRepository: DownloadRepository
 ) : BaseViewModel() {
-    private var currentChat: Chats? = null
+    var currentChat: Chats? = null
     val chatLiveData = MutableLiveData<Chats?>()
     val adapterListLiveData: MutableLiveData<List<BaseItemMessage>> = MutableLiveData(listOf())
     val clearTextLiveData: MutableLiveData<Boolean> = MutableLiveData()
@@ -446,6 +446,7 @@ class ChatViewModel @Inject constructor(
     fun onMoreButtonClick(v: View?) {
         moreActionLiveData.value = listOf(
             resourceProvider.getString(R.string.menu_fragment_messages_chat_clear)
+           , resourceProvider.getString(R.string.menu_fragment_messages_contact_info)
         )
         /*  val favorites: Favorites? = DaoUtilsFavorites.readFavoritesWithKey(Favorites.Category.user, getCurrentChat()?.id
               ?: "")

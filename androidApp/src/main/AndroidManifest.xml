@@ -136,7 +136,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter>
+         <!--   <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -145,8 +145,8 @@
                 <data
                     android:scheme="https"
                     android:host="messenger.socialsirius.com"
-                    android:pathPrefix="/invitation" />
-            </intent-filter>
+                    android:pathPattern="/.*/invitation" />
+            </intent-filter>-->
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -156,18 +156,8 @@
                 <data
                     android:scheme="https"
                     android:host="*"
-                    android:pathPrefix="/invitation" />
+                    android:pathPattern="/.*/invitation" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="http"
-                    android:host="messenger.socialsirius.com"
-                    android:pathPrefix="/invitation" />
-            </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -175,8 +165,18 @@
                 <data
                     android:scheme="http"
                     android:host="*"
-                    android:pathPrefix="/invitation" />
+                    android:pathPattern="/.*/invitation" />
             </intent-filter>
+
+      <!--      <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="*"
+                    android:pathPrefix="/invitation" />
+            </intent-filter>-->
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

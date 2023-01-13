@@ -22,6 +22,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.navigation.NavigationView
+import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppPref
@@ -64,6 +65,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
         if (intent?.hasExtra("toChat") == true) {
             val chats = intent?.getSerializableExtra("toChat") as? Chats
             MessageActivity.newInstance(this, chats)
+        }
+        if (intent?.hasExtra("invitation") == true) {
+            val invitationId = intent.getStringExtra("invitation") ?:""
+            val connRequestMessage =   model.getMessage(invitationId)?.message() as? ConnRequest
+            model.invitationStartLiveData.postValue(connRequestMessage)
+
         }
     }
 

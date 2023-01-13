@@ -2,6 +2,7 @@ package com.socialsirius.messenger.base.dagger;
 
 import android.app.Application
 import com.socialsirius.messenger.repository.UserRepository
+import com.socialsirius.messenger.sirius_sdk_impl.SDKUseCase
 
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.base.SimpleActivity
@@ -74,13 +75,15 @@ interface AppComponent {
         fun build(): AppComponent?
     }
 
-    fun inject(activity: MainActivity)
     fun provideUserRepository(): UserRepository?
+    fun provideSDKUseCase(): SDKUseCase?
+
+
     /**
      * Add all fragment with ViewModel Here
      */
     //Activities
-
+    fun inject(activity: MainActivity)
     fun inject(activity: AuthActivity)
     fun inject(activity: TutorialActivity)
     fun inject(activity: SplashActivity)

@@ -13,16 +13,19 @@ import android.webkit.MimeTypeMap
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.base.ui.OnAdapterItemClick
 import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentChatBinding
+import com.socialsirius.messenger.databinding.ViewContactInfoBinding
 import com.socialsirius.messenger.design.AvatarView
 import com.socialsirius.messenger.design.chat.ChatPanelView
 
@@ -225,6 +228,26 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         adapter?.notifyDataSetChanged()
     }
 
+    fun showContactAlert(chat : Chats?){
+        if(chat==null){
+            return
+        }
+        val builder =  AlertDialog.Builder(requireContext())
+        val view = layoutInflater.inflate(R.layout.view_contact_info,null, false)
+        val binding =  DataBindingUtil.bind<ViewContactInfoBinding>(view)
+        binding?.let {
+            it.avatarImageView.update(chat)
+            it.nameTextView.text = chat.title
+            it.didTextView.text = chat.id
+            val pairwise =  PairwiseHelper.getPairwise(theirDid = chat.id)
+
+            it.verkeyTextView.text =   pairwise?.their?.verkey
+            it.metaTextView.text  =  pairwise?.their?.endpointAddress
+        }
+
+        builder.setView(view)
+        builder.show()
+    }
 
     override fun subscribe() {
         model.adapterListLiveData.observe(this, Observer {
@@ -261,15 +284,16 @@ class ChatFragment() : BaseFragment<FragmentChatBinding, ChatViewModel>() {
                     options.forEach { menu.add(it) }
                     setOnMenuItemClickListener {
                         when (it.title) {
-                            /*  getString(R.string.menu_fragment_messages_chat_add_to_favorite) -> {
-                                  model.addToFavorite()
+                            getString(R.string.menu_fragment_messages_contact_info) -> {
+                                showContactAlert(model.currentChat)
                               }
-                              getString(R.string.menu_fragment_messages_chat_del_from_favorite) -> {
-                                  model.deleteFromFavorite()
-                              }
-                              getString(R.string.menu_fragment_messages_create_secret_chat) -> {
-                                  model.inviteToSecret()
-                              }*/
+                            /*
+                            getString(R.string.menu_fragment_messages_chat_del_from_favorite) -> {
+                                model.deleteFromFavorite()
+                            }
+                            getString(R.string.menu_fragment_messages_create_secret_chat) -> {
+                                model.inviteToSecret()
+                            }*/
                             getString(R.string.menu_fragment_messages_chat_clear) -> {
                                 model.deleteChatRequest()
                             }
