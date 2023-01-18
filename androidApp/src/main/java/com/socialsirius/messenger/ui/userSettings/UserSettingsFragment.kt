@@ -137,9 +137,15 @@ class UserSettingsFragment : BaseFragment<FragmentUserSettingsBinding, UserSetti
         model.changePinClickLiveData.observe(this, Observer {
             if (it) {
                 model.changePinClickLiveData.value = false
-                var enterPin = EnterPinFragment()
-                enterPin.goToAfterSuccess = GoToAfterSuccess.CreatePin
-                baseActivity.pushPageAdd(enterPin)
+                if(AppPref.getInstance().getUseBiometric() || AppPref.getInstance().getPin().isNotEmpty()){
+                    var enterPin = EnterPinFragment()
+                    enterPin.goToAfterSuccess = GoToAfterSuccess.CreatePin
+                    baseActivity.pushPageAdd(enterPin)
+                }else{
+                    baseActivity.pushPageAdd( CreatePinFragment())
+
+                }
+
             }
         })
         model.lastBackupTimeLiveData.observe(this, Observer {

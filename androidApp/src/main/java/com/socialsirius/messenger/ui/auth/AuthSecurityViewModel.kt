@@ -16,25 +16,14 @@ class AuthSecurityViewModel @Inject constructor(val userRepository: UserReposito
     val startClickLiveData = MutableLiveData<Boolean>()
     val showNowClickLiveData = MutableLiveData<Boolean>()
     val createPinClickLiveData = MutableLiveData<Boolean>()
-    var authName  = MutableLiveData<String>("")
-
-    fun saveUserPass(){
-        userRepository.myUser.pass = authName.value
-        userRepository.saveUserToPref()
-    }
 
     fun onStartClick(v : View){
         startClickLiveData.postValue(true)
-        saveUserPass()
     }
-
-
-    val passPhraseListLiveData = MutableLiveData<List<PassPhraseItem>>()
-
 
     override fun setupViews() {
         super.setupViews()
-        createPhrase()
+
     }
 
     fun showNow(v : View){
@@ -44,14 +33,7 @@ class AuthSecurityViewModel @Inject constructor(val userRepository: UserReposito
     fun createPinClick(v : View){
         createPinClickLiveData.postValue(true)
     }
-    fun createPhrase() {
-        val mnemonicCode: Mnemonics.MnemonicCode = Mnemonics.MnemonicCode(Mnemonics.WordCount.COUNT_12)
-        val list: MutableList<String> = mutableListOf()
-        mnemonicCode.words.forEach {
-            list.add(it.concatToString())
-        }
 
-    }
 
 
 
