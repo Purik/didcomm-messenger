@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.os.PersistableBundle
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.sirius.library.errors.IndyException
-import com.sirius.library.errors.indy_exceptions.WalletAlreadyOpenedException
 import com.sirius.library.utils.ExceptionHandler
 import com.sirius.library.utils.ExceptionListener
 import com.socialsirius.messenger.R
@@ -18,11 +18,9 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.ui.BaseActivity
 import com.socialsirius.messenger.databinding.ActivityLoaderBinding
-import com.socialsirius.messenger.databinding.ActivitySplashBinding
-import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.invite.HandleWebInviteActivity
 import com.socialsirius.messenger.ui.activities.main.MainActivity
-import com.socialsirius.messenger.ui.activities.message.MessageActivity
+import com.socialsirius.messenger.ui.errors.BaseErrorFragment
 import com.socialsirius.messenger.ui.pinEnter.EnterPinFragment
 import java.util.concurrent.TimeoutException
 
@@ -43,6 +41,7 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
 
     val exceptionListener : ExceptionListener = object : ExceptionListener {
         override fun handleException(e: Throwable) {
+            showPage(BaseErrorFragment.newInstance(e))
             if(e is TimeoutException){
                 //onShowAlertDialogLiveData.postValue(Pair("An error has occurred" , "Timed out waiting for a response. Please try another time."))
             }else if(e  is IndyException){
@@ -56,12 +55,18 @@ class LoaderActivity : BaseActivity<ActivityLoaderBinding, LoaderActivityModel>(
 
     override fun onDestroy() {
         super.onDestroy()
-        ExceptionHandler.removeOneTimeListener(exceptionListener)
+        ExceptionHandler.removeExpireExceptionListener(exceptionListener)
     }
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        ExceptionHandler.addOneTimeListener(exceptionListener)
+
+
+
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        ExceptionHandler.addnoExpireExceptionListener(exceptionListener)
     }
+
+
 
     override fun getRootFragmentId(): Int {
         return R.id.mainLayout

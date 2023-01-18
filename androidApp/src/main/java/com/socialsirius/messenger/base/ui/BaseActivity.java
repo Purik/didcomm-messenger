@@ -75,7 +75,7 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
     public abstract int getLayoutRes();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (isUseDataBinding()) {

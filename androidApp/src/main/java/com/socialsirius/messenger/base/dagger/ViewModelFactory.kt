@@ -34,6 +34,7 @@ import com.socialsirius.messenger.ui.chats.userProfile.UserProfileViewModel
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionCardViewModel
 import com.socialsirius.messenger.ui.connections.connectionCard.ConnectionRequestDetailViewModel
 import com.socialsirius.messenger.ui.credentials.CredentialsViewModel
+import com.socialsirius.messenger.ui.errors.BaseErrorViewModel
 import com.socialsirius.messenger.ui.inviteUser.HandleWebInviteViewModel
 import com.socialsirius.messenger.ui.inviteUser.InviteUserViewModel
 import com.socialsirius.messenger.ui.main.MainViewModel
@@ -306,6 +307,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(InvitationsListViewModel::class)
     internal abstract fun bindInvitationsListViewModel(viewModel: InvitationsListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BaseErrorViewModel::class)
+    internal abstract fun bindBaseErrorViewModel(viewModel: BaseErrorViewModel): ViewModel
 
 
 

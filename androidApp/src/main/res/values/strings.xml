@@ -137,6 +137,7 @@
 
     <string name="save_as_qr_btn">Save as QR-code</string>
     <string name="error">Error</string>
+    <string name="error_is_occurred">Error is occurred</string>
 
     <!--Строки для настроек-->
 

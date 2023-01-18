@@ -1,9 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.socialsirius.messenger.ui.errors.BaseErrorViewModel" />
+    </data>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="72dp"
+            android:src="@drawable/logo_sirius"
+            android:id="@+id/logo"
+            />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/Regular19"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            android:textAllCaps="true"
+
+            android:id="@+id/splashText"/>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:id="@+id/tryAgainLayout">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                style="@style/Regular19"
+                android:layout_margin="16dp"
+                android:textColor="@color/black"
+                android:text="@{viewModel.errorTextLiveData}"
+                android:id="@+id/tryAgainText"/>
+
+            <TextView
+                android:id="@+id/tryAgainBtn"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:padding="16dp"
+                android:layout_margin="32dp"
+                style="@style/AccentButtonRoundedBigCorners"
+                android:onClick="@{viewModel::onTryAgainBtnClick}"
+                android:text="@{viewModel.tryAgainBtnTextLiveData}"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
 </LinearLayout>
 </layout>
