@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.sirius.library.agent.BaseSender
 import com.sirius.library.agent.aries_rfc.AriesProtocolMessage
@@ -23,7 +24,9 @@ import com.sirius.library.mobile.SiriusSDK
 import com.sirius.library.mobile.helpers.ChanelHelper
 import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.sirius.library.mobile.helpers.ScenarioHelper
+import com.sirius.library.mobile.helpers.WalletHelper
 import com.sirius.library.mobile.models.CredentialsRecord
+import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.data.api.HttpLoggingInterceptorMy
 import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.FileAttach
@@ -73,6 +76,10 @@ class SDKUseCase @Inject constructor(
         context.startService(intent)
     }
 
+    public fun closeSocketService(context: Context) {
+        val intent = Intent(context, WebSocketService::class.java)
+        context.stopService(intent)
+    }
 
     private fun connectToSocket(context: Context, url: String) {
         try {
@@ -327,6 +334,7 @@ class SDKUseCase @Inject constructor(
     fun deleteWallet(context: Context) {
         userRepository.logout()
         logoutFromSDK()
+
         val mainDirPath = context.filesDir.absolutePath
         val walletDirPath = mainDirPath + File.separator + "wallet"
         FileUtils.cleanDirectory(File(walletDirPath))
@@ -548,7 +556,11 @@ class SDKUseCase @Inject constructor(
     }
 
     fun logoutFromSDK() {
+        WalletHelper.deleteDefaultWallet(null)
         SiriusSDK.cleanInstance()
+        messageRepository.deleteAll()
+        FirebaseMessaging.getInstance().deleteToken()
+        closeSocketService(App.getContext())
         //TODO close websoket, delete firebase Token and some other
         //  WebSocketService.
     }

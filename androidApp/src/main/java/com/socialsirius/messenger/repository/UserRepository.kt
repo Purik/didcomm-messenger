@@ -1,6 +1,7 @@
 package com.socialsirius.messenger.repository
 
 import androidx.annotation.WorkerThread
+import com.sirius.library.mobile.helpers.WalletHelper
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.AppExecutors
 import com.socialsirius.messenger.base.AppPref
@@ -36,6 +37,9 @@ class UserRepository @Inject constructor(private val appExecutors: AppExecutors)
         AppPref.getInstance().setPin(null)
         AppPref.getInstance().setUseBiometric(false)
         myUser = User()
+
+        WalletHelper.cleanInstance()
+
         //TODO remove all data from db
     }
 

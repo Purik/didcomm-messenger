@@ -22,6 +22,18 @@ class InvitationsAdapter(override val layoutRes: Int = R.layout.item_invitations
             binding?.nameTextView?.text = chat.title
             binding?.verkeyTextView?.text = chat.id
             binding?.dateTextView?.text = DateUtils.parseDateToDdMMyyyyHHMMString(chat.lastMessage?.sentTime)
+            val message =  chat.lastMessage?.message()
+            var isIncome = false
+            if (message is ConnRequest){
+                isIncome = true
+            }
+            if(isIncome){
+                binding?. imageView?.setImageResource(R.drawable.inbox)
+                binding?. statusTextView?.text = "Tap to answer for request"
+            }else{
+                binding?. imageView?.setImageResource(R.drawable.outbox)
+                binding?. statusTextView?.text = "Wait for response"
+            }
      //       val lastMessage = chat.lastMessage?.message()
          /*   if(lastMessage is Invitation){
                 binding?.statusImageView?.setImageResource(R.drawable.outbox)

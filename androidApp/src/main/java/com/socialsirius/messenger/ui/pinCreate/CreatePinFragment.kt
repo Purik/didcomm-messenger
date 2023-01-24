@@ -22,12 +22,30 @@ import com.socialsirius.messenger.ui.pinEnter.BasePinFragment
 
 class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinViewModel>() {
 
+
+    companion object {
+        fun newInstance(fromSettings : Boolean = false): CreatePinFragment{
+            val args = Bundle()
+            args.putBoolean("fromSettings",fromSettings)
+            val fragment = CreatePinFragment()
+            fragment.arguments = args
+            return fragment
+        }
+
+    }
     override fun getLayoutRes() = R.layout.fragment_create_pin
 
     override fun initDagger() {
         App.getInstance().appComponent.inject(this)
     }
 
+    override fun setupViews() {
+        model.fromSettings = arguments?.getBoolean("fromSettings", false) ?: false
+        super.setupViews()
+        if(model.fromSettings){
+           dataBinding.topView.visibility = View.VISIBLE
+        }
+    }
     override fun setModel() {
         dataBinding!!.viewModel = model
     }
@@ -57,8 +75,14 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
             openFingerprintDialog()
         }
         builder.setNegativeButton(R.string.cancel){dialog, pos ->
-            baseActivity.finishAffinity()
-            LoaderActivity.newInstance(requireContext(), null)
+            if(model.fromSettings){
+                dialog.cancel()
+                baseActivity.popPage()
+            }else{
+                dialog.cancel()
+                baseActivity.finishAffinity()
+                LoaderActivity.newInstance(requireContext(), null)
+            }
         }
         builder.setCancelable(false)
         builder.show()
@@ -168,8 +192,13 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 model.protectUseBiometric()
-                baseActivity.finishAffinity()
-                LoaderActivity.newInstance(requireContext(), null)
+                if(model.fromSettings){
+                    baseActivity.popPage()
+                }else{
+                    baseActivity.finishAffinity()
+                    LoaderActivity.newInstance(requireContext(), null)
+                }
+
               //  showAdditionalPinCodeAlert()
                 Log.d("TAG", "Authentication was successful")
                 // Proceed with viewing the private encrypted message.

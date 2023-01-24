@@ -160,6 +160,10 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
         }
         dataBinding.mainLayout.setOnClickListener(View.OnClickListener { })
 
+
+        if(AppPref.getInstance().getUseBiometric()){
+            openFingerprintDialog()
+        }
         //  Utils.hideKeyboardWitoutAnimWithView(activity, rootView)
     }
 
@@ -244,7 +248,7 @@ class EnterPinFragment : BasePinFragment<FragmentEnterPinBinding, EnterPinViewMo
     }
 
     private fun goToCreatePin() {
-        baseActivity.pushPageAdd(CreatePinFragment())
+        baseActivity.pushPageAdd(CreatePinFragment.newInstance(true))
 
     }
 

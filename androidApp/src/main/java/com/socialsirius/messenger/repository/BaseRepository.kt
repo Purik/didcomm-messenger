@@ -15,6 +15,9 @@ abstract class BaseRepository<T, M> {
         return databaseHolder!!
     }
 
+    fun deleteAll(){
+        getDatabase().deleteAll()
+    }
     abstract fun createDatabase(): BaseDatabase<T, M>
 
     open fun isExist(item: T): LiveData<Boolean> {

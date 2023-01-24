@@ -1,5 +1,7 @@
 package com.socialsirius.messenger.ui.chats.invitations
 
+import android.view.View
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.ConnRequest
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
@@ -8,9 +10,9 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.base.ui.OnAdapterItemClick
 import com.socialsirius.messenger.databinding.FragmentInvitationsListBinding
+import com.socialsirius.messenger.databinding.ViewInvitationBootomSheetBinding
+import com.socialsirius.messenger.design.InvitationBottomSheet
 import com.socialsirius.messenger.models.Chats
-import com.socialsirius.messenger.ui.activities.message.MessageActivity
-import com.socialsirius.messenger.ui.chats.allChats.ChatsAdapter
 
 class InvitationsListFragment :
     BaseFragment<FragmentInvitationsListBinding, InvitationsListViewModel>() {
@@ -44,7 +46,7 @@ class InvitationsListFragment :
                 model.chatsSelectLiveData.value = null
                 val message = item.lastMessage?.message()
                 if (message is Invitation) {
-                    baseActivity.model.showInvitationBottomSheetLiveData.postValue(message)
+                    model.showInvitationBottomSheetLiveData.postValue(message)
                 } else if (message is ConnRequest) {
                     baseActivity.model.invitationStartLiveData.postValue(message)
                 } else {
@@ -53,6 +55,53 @@ class InvitationsListFragment :
             }
 
         })
+
+        model.showInvitationBottomSheetLiveData.observe(this,
+            Observer<Invitation?> { invitation ->
+                if (invitation != null) {
+                    // mScannerView ?.stopCameraPreview()
+                    model.showInvitationBottomSheetLiveData.setValue(null)
+                    showInvitationSheet(invitation)
+                }
+            })
+    }
+
+    fun showInvitationSheet(invitation: Invitation) {
+        val invitationSheet = InvitationBottomSheet(requireContext())
+      //  currentBottomSheet = invitationSheet
+        val view = layoutInflater.inflate(R.layout.view_invitation_bootom_sheet, null, false)
+        val binding: ViewInvitationBootomSheetBinding? = DataBindingUtil.bind(view)
+        binding?.labelText?.setText(invitation.label())
+     //   binding?.invitationTitle?.text = "I"
+        binding?.receipentLabel?.setText(
+            String.format(
+                App.getContext().getString(R.string.recipient_keys), invitation.label()
+            )
+        )
+        if (invitation.recipientKeys().size > 0) {
+            binding?.receipentKeyText?.setText(invitation.recipientKeys()[0])
+        }
+        binding?.deleteBtn?.setVisibility(View.GONE)
+
+     //   if (invitation.endpoint() == model.getMyEndpoint()) {
+            binding?.connectButton?.setVisibility(View.GONE)
+        //}
+        binding?.connectButton?.setOnClickListener(View.OnClickListener {
+            invitationSheet.dismiss()
+           // model.connectToInvitation(invitation)
+        })
+        binding?.moreBtn?.setOnClickListener(
+            View.OnClickListener {
+                binding?.receipentLabel?.setVisibility(View.VISIBLE)
+                binding?.receipentKeyText?.setVisibility(View.VISIBLE)
+                //    binding?.endpointLabel?.visibility = View.VISIBLE
+                //    binding?.endpointText?.visibility = View.VISIBLE
+                binding?.moreBtn.setVisibility(View.GONE)
+            }
+        )
+        invitationSheet.setContentView(view)
+        invitationSheet.show()
+        //invitationSheet.setOnDismissListener { model.invitationSheetDismissLiveData.postValue(true) }
     }
 
     override fun setModel() {

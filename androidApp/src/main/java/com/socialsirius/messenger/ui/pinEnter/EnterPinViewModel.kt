@@ -3,6 +3,7 @@ package  com.socialsirius.messenger.ui.pinEnter
 import android.os.Handler
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.sirius.library.mobile.helpers.WalletHelper
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.base.providers.ResourcesProvider
@@ -85,6 +86,7 @@ class EnterPinViewModel @Inject constructor(
 
     fun logout(forceLogout: Boolean) {
         userRepository.logout()
+
         sdkUseCase.logoutFromSDK()
 
         /*     showProgressDialog()
@@ -124,7 +126,7 @@ class EnterPinViewModel @Inject constructor(
             if (isSuccessFromBiometric) {
                 onSuccess()
             } else {
-                onFail()
+              //  onFail()
             }
         }
 

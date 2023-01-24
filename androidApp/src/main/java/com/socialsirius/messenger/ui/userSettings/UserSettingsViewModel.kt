@@ -3,6 +3,7 @@ package  com.socialsirius.messenger.ui.userSettings
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.sirius.library.mobile.SiriusSDK
+import com.sirius.library.mobile.helpers.WalletHelper
 import com.sirius.library.utils.SDK
 import com.socialsirius.messenger.BuildConfig
 import com.socialsirius.messenger.R

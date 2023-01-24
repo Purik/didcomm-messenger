@@ -38,7 +38,7 @@ class AuthSecurityFragment : BaseFragment<FragmentAuthSecurityBinding,AuthSecuri
         model.createPinClickLiveData.observe(this, Observer {
             if(it){
                 model.createPinClickLiveData.value = false
-                baseActivity.pushPage(CreatePinFragment())
+                baseActivity.pushPage(CreatePinFragment.newInstance())
             }
         })
     }

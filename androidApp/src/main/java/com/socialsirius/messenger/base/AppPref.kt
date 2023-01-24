@@ -154,6 +154,10 @@ class AppPref {
         }
     }
 
+    fun clearAll(){
+
+    }
+
     fun getUser(): User? {
         try {
             val userKey = getEncryptionDefault().encryptOrNull("user") ?: ""

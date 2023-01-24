@@ -41,15 +41,14 @@
                     />
 
                 <TextView
-                    android:id="@+id/dateTextView"
-                    style="@style/Body2"
-                    android:layout_width="wrap_content"
-
+                    android:id="@+id/statusTextView"
+                    style="@style/Body1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    tools:text="Wait for response"
 
-                    android:lines="1"
+                    />
 
-                    tools:text="16.06.2022 11:44" />
 
 
                 <TextView
@@ -86,6 +85,29 @@
 
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/inbox"
+                    android:id="@+id/imageView"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/dateTextView"
+                    style="@style/Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_height="wrap_content"
+
+                    android:lines="1"
+
+                    tools:text="16.06.2022 11:44" />
+            </LinearLayout>
+
 
 
         </LinearLayout>

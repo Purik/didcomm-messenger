@@ -142,7 +142,7 @@ class UserSettingsFragment : BaseFragment<FragmentUserSettingsBinding, UserSetti
                     enterPin.goToAfterSuccess = GoToAfterSuccess.CreatePin
                     baseActivity.pushPageAdd(enterPin)
                 }else{
-                    baseActivity.pushPageAdd( CreatePinFragment())
+                    baseActivity.pushPageAdd( CreatePinFragment.newInstance(true))
 
                 }
 

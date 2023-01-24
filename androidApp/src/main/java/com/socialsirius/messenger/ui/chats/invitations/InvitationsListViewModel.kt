@@ -19,7 +19,7 @@ class InvitationsListViewModel @Inject constructor(val messageRepository: Messag
     val chatsListLiveData = MutableLiveData<List<Chats>>(listOf())
     var originalList : List<Chats> = listOf()
     val chatsSelectLiveData = MutableLiveData<Chats?>()
-
+    val showInvitationBottomSheetLiveData = MutableLiveData<Invitation?>()
 
     override fun onCreateview() {
         super.onCreateview()

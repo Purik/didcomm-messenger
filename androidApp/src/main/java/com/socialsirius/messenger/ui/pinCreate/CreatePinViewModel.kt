@@ -21,7 +21,7 @@ class CreatePinViewModel @Inject constructor(
     val indicatorErrorLiveData = MutableLiveData<Boolean>()
     val indicatorSuccessLiveData = MutableLiveData<Boolean>()
     val nextButtonClick = MutableLiveData<Boolean>()
-
+    var fromSettings : Boolean = false
     var countForDigit: Int = 0
 
     override fun onViewCreated() {
