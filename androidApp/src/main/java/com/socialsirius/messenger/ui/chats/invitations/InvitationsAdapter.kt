@@ -8,6 +8,7 @@ import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.ui.SimpleBaseRecyclerViewAdapter
 import com.socialsirius.messenger.databinding.ItemChatBinding
 import com.socialsirius.messenger.databinding.ItemInvitationsUnacceptedBinding
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.utils.DateUtils
 
@@ -34,6 +35,14 @@ class InvitationsAdapter(override val layoutRes: Int = R.layout.item_invitations
                 binding?. imageView?.setImageResource(R.drawable.outbox)
                 binding?. statusTextView?.text = "Wait for response"
             }
+            if( chat.lastMessage?.status == ChatMessageStatus.acknowlege){
+                binding?.newTextView?.visibility = View.GONE
+            }else{
+                binding?.newTextView?.visibility = View.VISIBLE
+            }
+
+
+
      //       val lastMessage = chat.lastMessage?.message()
          /*   if(lastMessage is Invitation){
                 binding?.statusImageView?.setImageResource(R.drawable.outbox)
@@ -52,6 +61,9 @@ class InvitationsAdapter(override val layoutRes: Int = R.layout.item_invitations
     override fun onBind(holder: InvitationsChatsViewHolder, item: Chats, position: Int) {
         super.onBind(holder, item, position)
         holder.bind(item, position)
+        if( item.lastMessage?.status != ChatMessageStatus.acknowlege){
+            onCustomBtnClick?.onBtnClick(-10,item, position)
+        }
     }
     override fun getViewHolder(
         parent: ViewGroup?,

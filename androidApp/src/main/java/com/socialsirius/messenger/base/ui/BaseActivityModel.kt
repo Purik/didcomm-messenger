@@ -73,6 +73,7 @@ abstract class BaseActivityModel(val messageRepository: MessageRepository) : Bas
 
     override fun onPause() {
         super.onPause()
+
         SiriusWebSocketListener.isForeground = false
     }
 

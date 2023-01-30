@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.base.providers.ResourcesProvider
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.models.ui.ItemContacts
 import com.socialsirius.messenger.repository.MessageRepository
@@ -189,7 +190,8 @@ class AllChatsViewModel @Inject constructor(
                  val invitationChat = Chats()
                  invitationChat.title = "Invitations"
                  invitationChat.id = "invitation"
-                 invitationChat.unreadMessageNotInDB = listMessage.count()
+                 invitationChat.allMessageCount = listMessage.count()
+                 invitationChat.unreadMessageNotInDB = listMessage.filter { it.status != ChatMessageStatus.acknowlege }.count()
                  list.add(0,invitationChat)
                  updateList(list)
              }

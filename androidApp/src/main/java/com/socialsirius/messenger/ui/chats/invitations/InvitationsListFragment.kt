@@ -9,6 +9,7 @@ import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.base.ui.OnAdapterItemClick
+import com.socialsirius.messenger.base.ui.OnCustomBtnClick
 import com.socialsirius.messenger.databinding.FragmentInvitationsListBinding
 import com.socialsirius.messenger.databinding.ViewInvitationBootomSheetBinding
 import com.socialsirius.messenger.design.InvitationBottomSheet
@@ -30,6 +31,17 @@ class InvitationsListFragment :
         adapter!!.onAdapterItemClick = object : OnAdapterItemClick<Chats> {
             override fun onItemClick(item: Chats) {
                 model.onSelectChat(item)
+
+            }
+        }
+        adapter!!.onCustomBtnClick = object : OnCustomBtnClick<Chats> {
+
+
+            override fun onBtnClick(btnId: Int, item: Chats?, position: Int) {
+                model.readUnread(item)
+            }
+
+            override fun onLongBtnClick(btnId: Int, item: Chats?, position: Int) {
 
             }
         }
@@ -64,15 +76,23 @@ class InvitationsListFragment :
                     showInvitationSheet(invitation)
                 }
             })
+
+        baseActivity.model.invitationSheetDismissLiveData.observe(this, Observer {
+            if (it) {
+                baseActivity.model.invitationSheetDismissLiveData.value = false
+                model.createList()
+            }
+
+        })
     }
 
     fun showInvitationSheet(invitation: Invitation) {
         val invitationSheet = InvitationBottomSheet(requireContext())
-      //  currentBottomSheet = invitationSheet
+        //  currentBottomSheet = invitationSheet
         val view = layoutInflater.inflate(R.layout.view_invitation_bootom_sheet, null, false)
         val binding: ViewInvitationBootomSheetBinding? = DataBindingUtil.bind(view)
         binding?.labelText?.setText(invitation.label())
-     //   binding?.invitationTitle?.text = "I"
+        //   binding?.invitationTitle?.text = "I"
         binding?.receipentLabel?.setText(
             String.format(
                 App.getContext().getString(R.string.recipient_keys), invitation.label()
@@ -83,12 +103,12 @@ class InvitationsListFragment :
         }
         binding?.deleteBtn?.setVisibility(View.GONE)
 
-     //   if (invitation.endpoint() == model.getMyEndpoint()) {
-            binding?.connectButton?.setVisibility(View.GONE)
+        //   if (invitation.endpoint() == model.getMyEndpoint()) {
+        binding?.connectButton?.setVisibility(View.GONE)
         //}
         binding?.connectButton?.setOnClickListener(View.OnClickListener {
             invitationSheet.dismiss()
-           // model.connectToInvitation(invitation)
+            // model.connectToInvitation(invitation)
         })
         binding?.moreBtn?.setOnClickListener(
             View.OnClickListener {

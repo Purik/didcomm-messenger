@@ -435,6 +435,9 @@ class SDKUseCase @Inject constructor(
                     .build()
             return message
         }
+        if(type == "ping"){
+            return Ping.builder().setResponseRequested(true).build()
+        }
         return com.sirius.library.messaging.Message()
     }
 

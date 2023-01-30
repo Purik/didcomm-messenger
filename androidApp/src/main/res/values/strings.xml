@@ -54,6 +54,8 @@
     <string name="yes">Yes</string>
     <string name="alert_confirm">Confirm</string>
     <string name="lock_screen_title_pf_not_created_wallet">Create a PIN code for the secure store</string>
+    <string name="lock_screen_title_pf_not_created_wallet_change_pin">Change or delete PIN code for the secure store</string>
+    <string name="lock_screen_title_pf_not_created_wallet_change_pin_title">Change PIN code</string>
     <string name="request_add_to_contact">%s is not in your list of contacts. Want to add %s to your contact list?</string>
     <string name="lock_screen_title_pf_not_created_wallet_hint">Remember this code, without it you won’t be able to access your sensitive data stored in the secure storage</string>
     <string name="lock_screen_title_try_count_pf">Attempts left: </string>

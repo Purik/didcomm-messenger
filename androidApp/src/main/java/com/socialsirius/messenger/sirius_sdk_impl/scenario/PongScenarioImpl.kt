@@ -9,6 +9,7 @@ import com.sirius.library.mobile.scenario.BaseScenario
 import com.sirius.library.mobile.scenario.EventTransform
 import com.socialsirius.messenger.repository.EventRepository
 import com.socialsirius.messenger.repository.MessageRepository
+import com.socialsirius.messenger.service.SiriusWebSocketListener
 import com.socialsirius.messenger.transform.LocalMessageTransform
 import com.socialsirius.messenger.use_cases.EventUseCase
 import com.socialsirius.messenger.utils.NotificationsUtils
@@ -23,7 +24,7 @@ class PongScenarioImpl(val eventRepository: EventRepository, val messageReposito
 
 
     override fun onScenarioEnd(id: String,event: Event,success: Boolean, error: String?) {
-        messageRepository.pongMutableLiveData.postValue(Pair(true, error?:""))
+            messageRepository.pongMutableLiveData.postValue(Pair(true, error?:""))
     }
 
     override fun onScenarioStart(id: String,event: Event) {
@@ -35,7 +36,7 @@ class PongScenarioImpl(val eventRepository: EventRepository, val messageReposito
     }
 
     override suspend fun start(event: Event): Pair<Boolean, String?> {
-        Log.d("mylog2090","PongScenarioImpl event="+event.messageObj)
+        Log.d("TRUST PING ","PongScenarioImpl event="+event.messageObj)
         return Pair(true,event.pairwise?.their?.did)
     }
 

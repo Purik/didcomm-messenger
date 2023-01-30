@@ -114,7 +114,12 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
             binding?.nameTextView?.text = chat.title
             if (chat.unreadMessageNotInDB > 0) {
                 binding?.unreadTextView?.visibility = View.VISIBLE
-                binding?.unreadTextView?.text = chat.unreadMessageNotInDB.toString()
+                if (itemType==1){
+                    binding?.unreadTextView?.text = "${chat.unreadMessageNotInDB.toString()} new"
+                }else{
+                    binding?.unreadTextView?.text = chat.unreadMessageNotInDB.toString()
+                }
+
             } else {
                 binding?.unreadTextView?.visibility = View.GONE
             }
@@ -136,7 +141,7 @@ class ChatsAdapter(override val layoutRes: Int = R.layout.item_chat) : SimpleBas
                 binding?.avatarImageView?.visibility = View.GONE
                 binding?.senderMessageTextView?.text = "Uncompleted invitations or requests is here"
                         //  binding?.senderMessageTextView?.visibility = View.GONE
-                    binding?.timeTextView?.visibility = View.GONE
+                binding?.timeTextView?.text = "All: ${chat.allMessageCount.toString()}"
                 binding?.typingImageView?.visibility = View.GONE
                 binding?.senderTextView?.visibility = View.GONE
             }

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.socialsirius.messenger.R
 import com.socialsirius.messenger.base.App
+import com.socialsirius.messenger.base.AppPref
 import com.socialsirius.messenger.databinding.FragmentCreatePinBinding
 import com.socialsirius.messenger.ui.activities.auth.AuthActivity
 import com.socialsirius.messenger.ui.activities.loader.LoaderActivity
@@ -64,6 +65,11 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
         dataBinding.calculatorView.enableIdentityButton(true)
         dataBinding.mainLayout.setOnClickListener(View.OnClickListener { })
         // Utils.hideKeyboardWitoutAnimWithView(activity, rootView)
+        if(AppPref.getInstance().getUseBiometric() || AppPref.getInstance().getPin().isNotEmpty()){
+            dataBinding.enterCodeTextView.text = model.resourcesProvider.getString(R.string.lock_screen_title_pf_not_created_wallet_change_pin)
+            dataBinding.deleteButton.visibility = View.VISIBLE
+            dataBinding.topBarView.text =  model.resourcesProvider.getString(R.string.lock_screen_title_pf_not_created_wallet_change_pin_title)
+        }
     }
 
     fun showFingerPrintPromt(){
@@ -101,6 +107,7 @@ class CreatePinFragment : BasePinFragment<FragmentCreatePinBinding, CreatePinVie
             showFingerPrintPromt()
 
         })
+
         model.indicatorCodeFillLiveData.observe(
             this,
             Observer { dataBinding.nextButton.isEnabled = it })

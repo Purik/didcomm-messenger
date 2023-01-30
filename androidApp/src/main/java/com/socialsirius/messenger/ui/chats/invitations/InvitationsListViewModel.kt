@@ -5,6 +5,7 @@ import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messa
 import com.sirius.library.agent.aries_rfc.feature_0160_connection_protocol.messages.Invitation
 import com.sirius.library.mobile.helpers.PairwiseHelper
 import com.socialsirius.messenger.base.ui.BaseViewModel
+import com.socialsirius.messenger.models.ChatMessageStatus
 import com.socialsirius.messenger.models.Chats
 import com.socialsirius.messenger.repository.MessageRepository
 import com.socialsirius.messenger.transform.LocalMessageTransform
@@ -35,7 +36,7 @@ class InvitationsListViewModel @Inject constructor(val messageRepository: Messag
         chatsListLiveData.postValue(list)
     }
 
-    private fun createList() {
+    public fun createList() {
         messageRepository.getUnacceptedInvitationMessages().observeOnce(this){listMessage->
             val list = listMessage.map {
                 var label = ""
@@ -58,5 +59,15 @@ class InvitationsListViewModel @Inject constructor(val messageRepository: Messag
         }
 
 
+    }
+
+    fun readUnread(item: Chats?) {
+        item?.lastMessage?.let {
+            if(it.status != ChatMessageStatus.acknowlege){
+                it.id?.let {
+                    messageRepository.updateStatus(it,ChatMessageStatus.acknowlege)
+                }
+            }
+        }
     }
 }

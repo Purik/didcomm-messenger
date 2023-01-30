@@ -91,6 +91,14 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
         subscribe();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(model!=null){
+            model.onPause();
+        }
+    }
+
     //FRAGMENTS
     @IdRes
     public int getRootFragmentId() {
@@ -491,6 +499,8 @@ public abstract class BaseActivity<VB extends ViewDataBinding, M extends BaseAct
             @Override
             public void onClick(View view) {
                 invitationSheet.dismiss();
+                model.getMessageRepository().updateErrorAccepted(connRequest.getId(),true, false,null,null);
+
                 ScenarioHelper.INSTANCE.acceptScenario(SDKUseCase.Scenario.PersistentInvitation.getName(), connRequest.getId(),
                         null, null);
 

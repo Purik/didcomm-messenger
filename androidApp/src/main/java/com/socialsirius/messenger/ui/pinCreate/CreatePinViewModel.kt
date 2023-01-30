@@ -21,6 +21,7 @@ class CreatePinViewModel @Inject constructor(
     val indicatorErrorLiveData = MutableLiveData<Boolean>()
     val indicatorSuccessLiveData = MutableLiveData<Boolean>()
     val nextButtonClick = MutableLiveData<Boolean>()
+    val deleteButtonClick = MutableLiveData<Boolean>()
     var fromSettings : Boolean = false
     var countForDigit: Int = 0
 
@@ -74,6 +75,13 @@ class CreatePinViewModel @Inject constructor(
 
     fun onNextButtonClick(v: View) {
         nextButtonClick.value = true
+    }
+
+    fun onDeleteButtonClick(v: View) {
+        AppPref.getInstance().setPin(null)
+        AppPref.getInstance().setUseBiometric(false)
+        deleteButtonClick.value = true
+        onBackClickLiveData.postValue(true)
     }
 
     fun onIdentityClick() {

@@ -79,17 +79,33 @@ class ChatViewModel @Inject constructor(
     override fun onResume() {
         super.onResume()
         messageRepository.visiblePairwiseDid = currentChat?.id
+        startSendingTrustPing()
+    }
+
+    val handler = Handler()
+    val handlerResponse = Handler()
+
+    fun startSendingTrustPing(){
+        sendPingMessage()
+        handler.postDelayed({
+            startSendingTrustPing()
+        }, 10*1000)
+    }
+
+    fun stopSendingTrustPing(){
+        handler.removeCallbacksAndMessages(null)
     }
 
     override fun onPause() {
         super.onPause()
         messageRepository.visiblePairwiseDid = null
+        stopSendingTrustPing()
     }
 
     override fun setupViews() {
         super.setupViews()
         subscribe()
-        updateLastActivity()
+       // updateLastActivity()
 
     }
 
@@ -98,7 +114,10 @@ class ChatViewModel @Inject constructor(
         pongLiveData.observeUntilDestroy(this) {
             Log.d("mylog2090", "pongLiveData= ${it?.second} ${currentChat?.id} ")
             if (it?.second == currentChat?.id) {
+                handlerResponse.removeCallbacksAndMessages(null)
+
                 isOnlineLiveData.postValue(it?.first ?: false)
+
             }
         }
 
@@ -205,6 +224,13 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    fun sendPingMessage(){
+        sdkUseCase.sendTrustPingMessageForPairwise(currentChat?.id ?: "")
+        handlerResponse.postDelayed({
+            messageRepository.pongMutableLiveData.postValue(Pair(false, currentChat?.id ?: ""))
+        }, 11)
+
+    }
     fun sendMessageText(messageText: String) {
         val message = sdkUseCase.createMessage("text", messageText)
         val localMessage = sdkUseCase.createLocalMessage("text", currentChat?.id ?: "", message)
