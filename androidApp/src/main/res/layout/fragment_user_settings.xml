@@ -119,6 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/common_gap_16"
+                    android:visibility="gone"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -190,6 +191,16 @@
 
 
 
+
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -208,124 +219,125 @@
                         android:textAllCaps="true"
                         android:textColor="@color/hintColor" />
 
-                </LinearLayout>
-
-
-
-                <LinearLayout
-                    android:id="@+id/askPinLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:orientation="horizontal"
-                    android:paddingTop="12dp"
-                    app:layout_constraintStart_toStartOf="@+id/nameEditText"
-                    app:layout_constraintTop_toBottomOf="@+id/divider3">
-
-                    <TextView
-                        android:id="@+id/pinCodeText"
-                        style="@style/Body1"
+                    <LinearLayout
+                        android:id="@+id/askPinLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/ask_pin"
-                        />
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="12dp"
+                        app:layout_constraintStart_toStartOf="@+id/nameEditText"
+                        app:layout_constraintTop_toBottomOf="@+id/divider3">
 
-                    <TextView
-                        android:id="@+id/pinCodeValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableEnd="@drawable/ic_dialpad"
-                        android:drawablePadding="@dimen/common_gap_8"
-                        android:gravity="center_vertical"
-                        tools:text="After 30 sec" />
-                </LinearLayout>
-                <View
-                    android:id="@+id/divider3"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="@dimen/common_gap_16"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="@dimen/common_gap_16"
-                    android:background="@color/lightDividerColor"
-                    android:visibility="visible"
-                    app:layout_constraintTop_toBottomOf="@+id/changePinText" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/changePinText"
-                    android:padding="16dp"
-                    android:onClick="@{viewModel::onChangePinClick}"
-                    app:layout_constraintStart_toStartOf="@+id/nameEditText"
-                    app:layout_constraintTop_toBottomOf="@+id/container1" >
 
-                    <TextView
+                        <TextView
+                            android:id="@+id/pinCodeText"
+                            style="@style/Body1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/ask_pin"
+                            />
 
-                        style="@style/Body1"
+                        <TextView
+                            android:id="@+id/pinCodeValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:drawableEnd="@drawable/ic_dialpad"
+                            android:drawablePadding="@dimen/common_gap_8"
+                            android:gravity="center_vertical"
+                            tools:text="After 30 sec" />
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/divider3"
                         android:layout_width="match_parent"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-
-                        android:text="@string/change_pin"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/common_gap_16"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="@dimen/common_gap_16"
+                        android:background="@color/lightDividerColor"
                         android:visibility="visible"
-                        />
-
-                    <ImageButton
-                        android:id="@+id/changePinButton"
-                        style="@style/NotAccentButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_arrow_right"
-                        app:layout_constraintBottom_toBottomOf="@id/changePinText"
-                        app:layout_constraintEnd_toEndOf="parent"
-
-                        app:layout_constraintTop_toTopOf="@+id/changePinText" />
-                </LinearLayout>
-
-
-                <View
-                    android:id="@+id/divider4"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/common_gap_16"
-                    android:background="@color/lightDividerColor"
-                    app:layout_constraintTop_toBottomOf="@+id/askPinLayout" />
-
-
-
-
-                <LinearLayout
-                    android:id="@+id/deleteAskPinLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:orientation="horizontal"
-                    android:visibility="visible"
-                    android:paddingTop="12dp"
-                    app:layout_constraintStart_toStartOf="@+id/nameEditText"
-                    app:layout_constraintTop_toBottomOf="@+id/divider4">
-
-                    <TextView
-                        android:id="@+id/deletePinCodeText"
-                        style="@style/Body1"
+                        app:layout_constraintTop_toBottomOf="@+id/changePinText" />
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingBottom="16dp"
-                        android:text="@string/delete_wallet_and_create" />
+                        android:orientation="horizontal"
+                        android:id="@+id/changePinText"
+                        android:padding="16dp"
+                        android:onClick="@{viewModel::onChangePinClick}"
+                        app:layout_constraintStart_toStartOf="@+id/nameEditText"
+                        app:layout_constraintTop_toBottomOf="@+id/container1" >
 
+                        <TextView
+
+                            style="@style/Body1"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+
+                            android:text="@string/change_pin"
+                            android:visibility="visible"
+                            />
+
+                        <ImageButton
+                            android:id="@+id/changePinButton"
+                            style="@style/NotAccentButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_arrow_right"
+                            app:layout_constraintBottom_toBottomOf="@id/changePinText"
+                            app:layout_constraintEnd_toEndOf="parent"
+
+                            app:layout_constraintTop_toTopOf="@+id/changePinText" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/common_gap_16"
+                        android:background="@color/lightDividerColor"
+                        app:layout_constraintTop_toBottomOf="@+id/askPinLayout" />
+
+
+
+
+                    <LinearLayout
+                        android:id="@+id/deleteAskPinLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal"
+                        android:visibility="visible"
+                        android:paddingTop="12dp"
+                        app:layout_constraintStart_toStartOf="@+id/nameEditText"
+                        app:layout_constraintTop_toBottomOf="@+id/divider4">
+
+                        <TextView
+                            android:id="@+id/deletePinCodeText"
+                            style="@style/Body1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingBottom="16dp"
+                            android:text="@string/delete_wallet_and_create" />
+
+                    </LinearLayout>
                 </LinearLayout>
+
+
 
                 <LinearLayout
                     android:id="@+id/backupLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:visibility="gone"
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="@+id/nameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/deleteAskPinLayout">
