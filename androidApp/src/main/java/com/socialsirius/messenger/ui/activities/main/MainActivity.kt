@@ -139,9 +139,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityModel>() {
 
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_create_group -> {
+               /* R.id.nav_create_group -> {
                     GroupCreateActivity.newInstance(this)
-                }
+                }*/
              /*   R.id.nav_contacts -> {
 
                 }*/
