@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SocialSirius Messenger</string>
+    <string name="app_name">SSI communicator</string>
     <string name="ok_button">ok</string>
     <string name="please_wait">Please wait...</string>
     <string name="title_activity_main">MainActivity</string>
