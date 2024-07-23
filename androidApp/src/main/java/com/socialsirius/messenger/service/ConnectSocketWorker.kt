@@ -24,8 +24,8 @@ class ConnectSocketWorker(appContext: Context, workerParams: WorkerParameters):
                     Log.w("TAG", "Fetching FCM registration token failed", task.exception)
                     SiriusSDK.connectToMediator()
                 }else{
-                    val token = task.result
-                    SiriusSDK.connectToMediator(token)
+                   // val token = task.result
+                    SiriusSDK.connectToMediator()
                 }
             }
         })

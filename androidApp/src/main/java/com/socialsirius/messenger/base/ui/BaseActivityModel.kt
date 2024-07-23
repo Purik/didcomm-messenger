@@ -65,7 +65,7 @@ abstract class BaseActivityModel(val messageRepository: MessageRepository) : Bas
                     SiriusSDK.connectToMediator()
                 }else{
                     val token = task.result
-                    SiriusSDK.connectToMediator(token)
+                    SiriusSDK.connectToMediator()
                 }
             }
         })

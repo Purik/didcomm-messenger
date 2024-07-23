@@ -31,7 +31,7 @@ class NetworkStateReceiver : BroadcastReceiver() {
                     SiriusSDK.connectToMediator()
                 }else{
                     val token = task.result
-                    SiriusSDK.connectToMediator(token)
+                    SiriusSDK.connectToMediator()
                 }
             }
 

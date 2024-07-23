@@ -1,7 +1,13 @@
 package com.socialsirius.messenger.ui.auth.createPhrase
 
+import android.R.attr.label
+import android.R.attr.text
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.socialsirius.messenger.R
@@ -9,7 +15,6 @@ import com.socialsirius.messenger.base.App
 import com.socialsirius.messenger.base.ui.BaseFragment
 import com.socialsirius.messenger.databinding.FragmentCreatePhraseSecondBinding
 import com.socialsirius.messenger.models.ui.PassPhraseItem
-import com.socialsirius.messenger.ui.activities.main.MainActivity
 
 
 class CreatePhraseSecondFragment :
@@ -27,8 +32,13 @@ class CreatePhraseSecondFragment :
 
         model.startClickLiveData.observe(this, Observer {
             if(it){
+                val passphraseString = model.passPhraseListLiveData.value?.joinToString(separator = ",") { it.title }
                 model.startClickLiveData.value = false
-               model.onShowToastLiveData.postValue("QR-code saved in folder")
+                val clipboard: ClipboardManager? =
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+                val clip = ClipData.newPlainText("Passphrase", passphraseString)
+                clipboard?.setPrimaryClip(clip)
+                model.onShowToastLiveData.postValue("Your passphrase copied to clipboard")
             }
         })
     }

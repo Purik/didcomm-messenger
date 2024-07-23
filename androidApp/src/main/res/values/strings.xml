@@ -37,8 +37,8 @@
     <string name="auth_tutorial_create_text">On the next step you will see 12 words, this is the passphrase of your wallet, please save it somewhere in secure place.</string>
     <string name="auth_tutorial_create_phrase_hint">To make it easier for you, we will create a code that you can save and read  later in the application to restore your wallet </string>
 
-    <string name="auth_tutorial_phrase_title2">Your secret passpharse</string>
-    <string name="auth_tutorial_phrase_text2">Write or copy yhis words in right order and save it in secure place</string>
+    <string name="auth_tutorial_phrase_title2">Your secret passphrase</string>
+    <string name="auth_tutorial_phrase_text2">Write or copy your words in right order and save it in secure place</string>
 
     <string name="all_chats_hint">Start to chat here</string>
     <string name="no_credentials">Get your first credentials here</string>
@@ -138,6 +138,7 @@
     <string name="auth_second_create_pin_btn">Create Pin</string>
 
     <string name="save_as_qr_btn">Save as QR-code</string>
+    <string name="copy_passphrase">Copy passphrase</string>
     <string name="error">Error</string>
     <string name="error_is_occurred">Error is occurred</string>
 

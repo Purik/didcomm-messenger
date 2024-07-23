@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.os.*
 import android.util.Log
 import androidx.lifecycle.LifecycleService
+import com.neovisionaries.ws.client.OpeningHandshakeException
 import com.neovisionaries.ws.client.WebSocket
 import com.neovisionaries.ws.client.WebSocketException
 import com.neovisionaries.ws.client.WebSocketExtension
@@ -212,6 +213,17 @@ class WebSocketService : LifecycleService() {
                 .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
                 .setPingInterval((60 * 3 * 1000).toLong())
                 .connect()
+        } catch (e : OpeningHandshakeException) {
+            // Get the status code.
+            val statusCode = e.getStatusLine().getStatusCode();
+
+            // If the status code is in the range of 300 to 399.
+            if (statusCode in 300..399)
+            {
+                // Location header should hold the redirection URL.
+                val location = e.getHeaders().get("Location")?.get(0);
+                Log.d("mylog500","location=$location e.getHeaders()=${e.getHeaders()}" )
+            }
         } catch (e: WebSocketException) {
             e.printStackTrace()
         } catch (e: IOException) {

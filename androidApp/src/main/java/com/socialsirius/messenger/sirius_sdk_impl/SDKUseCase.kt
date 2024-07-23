@@ -263,8 +263,23 @@ class SDKUseCase @Inject constructor(
             }
 
         }
-        val mediatorAddress = "wss://mediator.socialsirius.com/ws"
-        val recipientKeys = "DjgWN49cXQ6M6JayBkRCwFsywNhomn8gdAXHJ4bb98im"
+
+
+   /*     {
+            "@id": "16c21ea332d647f9b99fc97f890a4125",
+            "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0/invitation",
+            "label": "Mediator",
+            "recipientKeys": [
+            "DK31peQrqhUmdQ5Pap5pzQMptZaYNgF8Wgp8THUNimac"
+            ],
+            "routingKeys": [],
+            "serviceEndpoint": "ws://mediator.ruswift.ru/ws"
+        }*/
+
+
+
+        val mediatorAddress = "wss://mediator.ruswift.ru/ws"
+        val recipientKeys = "DK31peQrqhUmdQ5Pap5pzQMptZaYNgF8Wgp8THUNimac"
 
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
@@ -292,7 +307,7 @@ class SDKUseCase @Inject constructor(
                 recipientKeys,
                 label,
                 sender,
-                token,
+                null,
                 onInitListener
             )
         })

@@ -1,12 +1,16 @@
 package com.socialsirius.messenger.ui.auth
 
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import cash.z.ecc.android.bip39.Mnemonics
@@ -21,7 +25,9 @@ import java.nio.charset.Charset
 
 
 class PhraseListFragment : BottomSheetDialogFragment() {
-    var dataBinding: FragmentCreatePhraseSecondBinding?  = null
+    var dataBinding: FragmentCreatePhraseSecondBinding? = null
+    var list: List<PassPhraseItem> = listOf()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,31 +36,33 @@ class PhraseListFragment : BottomSheetDialogFragment() {
         val v: View = inflater.inflate(R.layout.fragment_create_phrase_second, container, false)
         dataBinding = DataBindingUtil.bind<FragmentCreatePhraseSecondBinding>(v)
         setupViews()
-        val list = createList()
+        list = createList()
         updateAdapter(list)
         return v
     }
+
     val userRepository = App.getInstance().appComponent.provideUserRepository()
 
 
-    fun updateAdapter(list : List<PassPhraseItem>){
+    fun updateAdapter(list: List<PassPhraseItem>) {
         adapter?.dataList = list.toMutableList()
         adapter?.notifyDataSetChanged()
     }
 
     fun createList(): List<PassPhraseItem> {
-        val mnemonicCode: Mnemonics.MnemonicCode = Mnemonics.MnemonicCode(userRepository?.myUser?.pass!!)
+        val mnemonicCode: Mnemonics.MnemonicCode =
+            Mnemonics.MnemonicCode(userRepository?.myUser?.pass!!)
         val list: MutableList<PassPhraseItem> = mutableListOf()
         mnemonicCode.words.forEachIndexed { index, chars ->
-            val int =  index+1
-            println(" chars.concatToString()="+ chars.concatToString())
+            val int = index + 1
+            println(" chars.concatToString()=" + chars.concatToString())
             list.add(PassPhraseItem(int.toString(), chars.concatToString()))
         }
         return list
     }
 
     var adapter: PassPhraseAdapter? = null
-     fun setupViews() {
+    fun setupViews() {
 
         val chipsLayoutManager =
             ChipsLayoutManager.newBuilder(requireContext()) //set vertical gravity for all items in a row. Default = Gravity.CENTER_VERTICAL
@@ -71,6 +79,22 @@ class PhraseListFragment : BottomSheetDialogFragment() {
 
         dataBinding?.passPhraseList?.layoutManager = chipsLayoutManager
         dataBinding?.passPhraseList?.adapter = adapter
+
+
+        dataBinding?.nextBtn?.setOnClickListener {
+            val passphraseString = list.joinToString(separator = ",") { it.title }
+
+            val clipboard: ClipboardManager? =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+            val clip = ClipData.newPlainText("Passphrase", passphraseString)
+            clipboard?.setPrimaryClip(clip)
+            Toast.makeText(
+                requireContext(),
+                "Your passphrase copied to clipboard",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
     }
 
 

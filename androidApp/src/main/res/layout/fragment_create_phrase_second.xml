@@ -47,8 +47,8 @@
 
             android:layout_margin="32dp"
             style="@style/AccentButtonRoundedBigCorners"
-            android:onClick="@{viewModel::onStartClick}"
-            android:text="@string/save_as_qr_btn"
+
+            android:text="@string/copy_passphrase"
             />
 
 
